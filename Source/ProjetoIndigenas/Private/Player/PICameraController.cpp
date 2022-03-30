@@ -23,12 +23,14 @@ void APICameraController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	if (!_targetCharacter.IsValid()) return;
 	if (!_springArmComponent.IsValid()) return;
 
 	_cameraRotator.Pitch += _cameraVector.Y * _cameraSpeed * DeltaSeconds;
 	_cameraRotator.Yaw += _cameraVector.Z * _cameraSpeed * DeltaSeconds;
 
 	_springArmComponent->SetRelativeRotation(_cameraRotator);
+	SetActorRelativeLocation(_targetCharacter->GetRootComponent()->GetRelativeLocation());
 }
 
 const FRotator& APICameraController::GetCameraRotator() const

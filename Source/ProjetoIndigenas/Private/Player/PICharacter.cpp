@@ -1,24 +1,39 @@
 ﻿#include "Player/PICharacter.h"
 
+#include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+
 void APICharacter::MoveXInputBinding(float value)
 {
-	_moveVector.Y = value;
+	_inputVector.Y = value;
 
 	UpdateMovementSpeed();
 }
 
 void APICharacter::MoveYInputBinding(float value)
 {
-	_moveVector.X = value;
+	_inputVector.X = value;
 	
 	UpdateMovementSpeed();
 }
 
-void APICharacter::UpdateMovementSpeed() const
+void APICharacter::RunInputBinding()
+{
+	_run = !_run;
+
+	UpdateMovementSpeed();
+}
+
+void APICharacter::UpdateMovementSpeed()
 {
 	if (!_animInstance.IsValid()) return;
 
-	_animInstance->MovementSpeed = _moveVector.GetClampedToMaxSize(1.f).Size();
+	if (_inputVector == FVector::ZeroVector) _run = false;
+
+	const float runMultiplier = _run ? 2.f : 1.f;
+	
+	MovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
+	_animInstance->MovementSpeed = MovementSpeed;
 }
 
 void APICharacter::BeginPlay()
@@ -34,6 +49,7 @@ void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APICharacter::MoveXInputBinding);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APICharacter::MoveYInputBinding);
+	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &APICharacter::RunInputBinding);
 }
 
 void APICharacter::Tick(float DeltaSeconds)
@@ -42,7 +58,23 @@ void APICharacter::Tick(float DeltaSeconds)
 
 	if (!_cameraController.IsValid()) return;
 
-	_characterRotator.Yaw = _cameraController->GetCameraRotator().Yaw;
-	
-	SetActorRotation(_characterRotator);
+	if (_inputVector != FVector::ZeroVector)
+	{
+		const FRotator cameraRotator(0.f, _cameraController->GetCameraRotator().Yaw, 0.f);
+		const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
+
+		_characterRotator = cameraRotator + inputRotator;
+
+		const FVector& directionVector = _characterRotator.Vector();
+		const FVector& movementVelocity = directionVector * Velocity * MovementSpeed * DeltaSeconds;
+
+		const FVector& currentLocation = GetRootComponent()->GetRelativeLocation();
+		SetActorRelativeLocation(currentLocation + movementVelocity);
+		SetActorRelativeRotation(_characterRotator);
+	}
+}
+
+void APICharacter::SetCameraController(APICameraController* cameraController)
+{
+	_cameraController = cameraController;
 }
