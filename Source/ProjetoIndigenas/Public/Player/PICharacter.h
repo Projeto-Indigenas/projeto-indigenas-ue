@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "PICharacterAnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -11,6 +12,8 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	TWeakObjectPtr<UPICharacterAnimInstance> _animInstance;
+	
 	FVector _moveVector;
 	FVector _cameraVector;
 	FRotator _cameraRotator;
@@ -20,7 +23,7 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 	void CameraXInputBinding(float value);
 	void CameraYInputBinding(float value);
 
-	void UpdateMovementSpeed();
+	void UpdateMovementSpeed() const;
 	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)

@@ -24,9 +24,11 @@ void APICharacter::CameraYInputBinding(float value)
 	_cameraVector.Y = value;
 }
 
-void APICharacter::UpdateMovementSpeed()
+void APICharacter::UpdateMovementSpeed() const
 {
-	MovementSpeed = _moveVector.Size();
+	if (!_animInstance.IsValid()) return;
+
+	_animInstance->MovementSpeed = _moveVector.Size();
 }
 
 void APICharacter::BeginPlay()
@@ -36,6 +38,7 @@ void APICharacter::BeginPlay()
 	if (!_springArmComponent.IsValid()) return;
 	
 	_cameraRotator = _springArmComponent->GetRelativeRotation();
+	_animInstance = Cast<UPICharacterAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
