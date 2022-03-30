@@ -67,3 +67,4 @@ DerivedDataCache/*
 # Custom Ignores
 Plugins/ExodusImport/*
 *.DotSettings.user
+.idea/*
