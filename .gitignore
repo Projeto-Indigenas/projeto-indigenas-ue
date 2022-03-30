@@ -66,3 +66,7 @@ DerivedDataCache/*
 
 # Custom Ignores
 Plugins/ExodusImport/*
+*.DotSettings.user
+.idea/*
+*-0*.dll
+*-0*.pdb
