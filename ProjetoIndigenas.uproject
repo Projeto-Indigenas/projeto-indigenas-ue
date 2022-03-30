@@ -12,10 +12,6 @@
 	],
 	"Plugins": [
 		{
-			"Name": "ExodusImport",
-			"Enabled": true
-		},
-		{
 			"Name": "ControlRig",
 			"Enabled": true
 		}

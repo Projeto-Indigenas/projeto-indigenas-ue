@@ -14,30 +14,17 @@ void APICharacter::MoveYInputBinding(float value)
 	UpdateMovementSpeed();
 }
 
-void APICharacter::CameraXInputBinding(float value)
-{
-	_cameraVector.Z = value;
-}
-
-void APICharacter::CameraYInputBinding(float value)
-{
-	_cameraVector.Y = value;
-}
-
 void APICharacter::UpdateMovementSpeed() const
 {
 	if (!_animInstance.IsValid()) return;
 
-	_animInstance->MovementSpeed = _moveVector.Size();
+	_animInstance->MovementSpeed = _moveVector.GetClampedToMaxSize(1.f).Size();
 }
 
 void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!_springArmComponent.IsValid()) return;
-	
-	_cameraRotator = _springArmComponent->GetRelativeRotation();
 	_animInstance = Cast<UPICharacterAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
@@ -45,20 +32,17 @@ void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	InputComponent->BindAxis(TEXT("MoveX"), this, &APICharacter::MoveXInputBinding);
-	InputComponent->BindAxis(TEXT("MoveY"), this, &APICharacter::MoveYInputBinding);
-	InputComponent->BindAxis(TEXT("CameraX"), this, &APICharacter::CameraXInputBinding);
-	InputComponent->BindAxis(TEXT("CameraY"), this, &APICharacter::CameraYInputBinding);
+	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APICharacter::MoveXInputBinding);
+	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APICharacter::MoveYInputBinding);
 }
 
 void APICharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (!_springArmComponent.IsValid()) return;
+	if (!_cameraController.IsValid()) return;
+
+	_characterRotator.Yaw = _cameraController->GetCameraRotator().Yaw;
 	
-	_cameraRotator.Pitch += _cameraVector.Y * CameraSpeed * DeltaSeconds;
-	_cameraRotator.Yaw += _cameraVector.Z * CameraSpeed * DeltaSeconds;
-	
-	_springArmComponent->SetRelativeRotation(_cameraRotator);
+	SetActorRotation(_characterRotator);
 }
