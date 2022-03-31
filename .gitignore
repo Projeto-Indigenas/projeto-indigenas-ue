@@ -70,3 +70,4 @@ Plugins/ExodusImport/*
 .idea/*
 *-0*.dll
 *-0*.pdb
+.vscode/*
