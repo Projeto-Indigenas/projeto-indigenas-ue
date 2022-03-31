@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterAnimationState.h"
 #include "PICharacterAnimInstance.generated.h"
 
 UCLASS()
@@ -11,4 +12,7 @@ class PROJETOINDIGENAS_API UPICharacterAnimInstance : public UAnimInstance
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float MovementSpeed;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	ECharacterAnimationState State;
 };
