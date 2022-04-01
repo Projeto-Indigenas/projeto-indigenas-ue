@@ -24,6 +24,13 @@ void APICharacter::RunInputBinding()
 	UpdateMovementSpeed();
 }
 
+void APICharacter::DodgeInputBinding()
+{
+	if (!_animInstance.IsValid()) return;
+
+	_animInstance->ShouldDodge = true;
+}
+
 void APICharacter::UpdateMovementSpeed()
 {
 	if (!_animInstance.IsValid()) return;
@@ -50,6 +57,7 @@ void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APICharacter::MoveXInputBinding);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APICharacter::MoveYInputBinding);
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &APICharacter::RunInputBinding);
+	PlayerInputComponent->BindAction(TEXT("Dodge"), IE_Pressed, this, &APICharacter::DodgeInputBinding);
 }
 
 void APICharacter::Tick(float DeltaSeconds)

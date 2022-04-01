@@ -13,6 +13,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float MovementSpeed;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	bool ShouldDodge;
+
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	ECharacterAnimationState State;
 };

@@ -21,6 +21,7 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 	void MoveXInputBinding(float value);
 	void MoveYInputBinding(float value);
 	void RunInputBinding();
+	void DodgeInputBinding();
 	void UpdateMovementSpeed();
 	
 public:
