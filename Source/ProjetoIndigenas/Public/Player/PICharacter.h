@@ -22,10 +22,6 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 	void MoveYInputBinding(float value);
 	void RunInputBinding();
 	void UpdateMovementSpeed();
-
-protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float Velocity = 100.f;
 	
 public:
 	UPROPERTY(BlueprintReadOnly)

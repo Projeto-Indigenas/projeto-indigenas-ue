@@ -65,11 +65,6 @@ void APICharacter::Tick(float DeltaSeconds)
 
 		_characterRotator = cameraRotator + inputRotator;
 
-		const FVector& directionVector = _characterRotator.Vector();
-		const FVector& movementVelocity = directionVector * Velocity * MovementSpeed * DeltaSeconds;
-
-		const FVector& currentLocation = GetRootComponent()->GetRelativeLocation();
-		SetActorRelativeLocation(currentLocation + movementVelocity);
 		SetActorRelativeRotation(_characterRotator);
 	}
 }
