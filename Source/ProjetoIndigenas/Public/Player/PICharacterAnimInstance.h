@@ -10,12 +10,12 @@ class PROJETOINDIGENAS_API UPICharacterAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float MovementSpeed;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool ShouldDodge;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ECharacterAnimationState State;
 };
