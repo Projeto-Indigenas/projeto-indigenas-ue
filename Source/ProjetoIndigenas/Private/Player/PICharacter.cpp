@@ -24,6 +24,13 @@ void APICharacter::RunInputBinding()
 	UpdateMovementSpeed();
 }
 
+void APICharacter::DodgeInputBinding()
+{
+	if (!_animInstance.IsValid()) return;
+
+	_animInstance->ShouldDodge = true;
+}
+
 void APICharacter::UpdateMovementSpeed()
 {
 	if (!_animInstance.IsValid()) return;
@@ -41,6 +48,7 @@ void APICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	_animInstance = Cast<UPICharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	_characterRotator.SetAcceleration(RotationAcceleration);
 }
 
 void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -50,6 +58,7 @@ void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APICharacter::MoveXInputBinding);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APICharacter::MoveYInputBinding);
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &APICharacter::RunInputBinding);
+	PlayerInputComponent->BindAction(TEXT("Dodge"), IE_Pressed, this, &APICharacter::DodgeInputBinding);
 }
 
 void APICharacter::Tick(float DeltaSeconds)
@@ -58,19 +67,17 @@ void APICharacter::Tick(float DeltaSeconds)
 
 	if (!_cameraController.IsValid()) return;
 
+	_characterRotator.Tick(DeltaSeconds);
+
 	if (_inputVector != FVector::ZeroVector)
 	{
 		const FRotator cameraRotator(0.f, _cameraController->GetCameraRotator().Yaw, 0.f);
 		const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
-
-		_characterRotator = cameraRotator + inputRotator;
-
-		const FVector& directionVector = _characterRotator.Vector();
-		const FVector& movementVelocity = directionVector * Velocity * MovementSpeed * DeltaSeconds;
-
-		const FVector& currentLocation = GetRootComponent()->GetRelativeLocation();
-		SetActorRelativeLocation(currentLocation + movementVelocity);
-		SetActorRelativeRotation(_characterRotator);
+		const FRotator targetRotator = cameraRotator + inputRotator;
+		
+		_characterRotator.SetTarget(targetRotator.Vector());
+		
+		SetActorRelativeRotation(_characterRotator.GetRotator());
 	}
 }
 
