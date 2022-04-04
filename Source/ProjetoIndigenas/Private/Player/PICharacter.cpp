@@ -48,6 +48,7 @@ void APICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	_animInstance = Cast<UPICharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	_characterRotator.SetAcceleration(RotationAcceleration);
 }
 
 void APICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -66,14 +67,17 @@ void APICharacter::Tick(float DeltaSeconds)
 
 	if (!_cameraController.IsValid()) return;
 
+	_characterRotator.Tick(DeltaSeconds);
+
 	if (_inputVector != FVector::ZeroVector)
 	{
 		const FRotator cameraRotator(0.f, _cameraController->GetCameraRotator().Yaw, 0.f);
 		const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
-
-		_characterRotator = cameraRotator + inputRotator;
-
-		SetActorRelativeRotation(_characterRotator);
+		const FRotator targetRotator = cameraRotator + inputRotator;
+		
+		_characterRotator.SetTarget(targetRotator.Vector());
+		
+		SetActorRelativeRotation(_characterRotator.GetRotator());
 	}
 }
 

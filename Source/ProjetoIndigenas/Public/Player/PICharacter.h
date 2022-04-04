@@ -4,6 +4,7 @@
 #include "PICameraController.h"
 #include "PICharacterAnimInstance.h"
 #include "GameFramework/Character.h"
+#include "Misc/Vectors.h"
 #include "PICharacter.generated.h"
 
 UCLASS()
@@ -15,7 +16,7 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 	TWeakObjectPtr<APICameraController> _cameraController;
 	
 	FVector _inputVector;
-	FRotator _characterRotator;
+	FAcceleratedVector _characterRotator;
 	bool _run;
 	
 	void MoveXInputBinding(float value);
@@ -27,6 +28,9 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 public:
 	UPROPERTY(BlueprintReadOnly)
 	float MovementSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float RotationAcceleration = 1.f;
 
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
