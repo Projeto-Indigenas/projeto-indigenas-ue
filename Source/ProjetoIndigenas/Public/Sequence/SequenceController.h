@@ -8,7 +8,11 @@ UCLASS()
 class PROJETOINDIGENAS_API ASequenceController : public AActor
 {
 	GENERATED_BODY()
-	
+
+	void DelayToStartTimerAction();
+	void SequenceCompleted();
+
+protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float _delayToStart;
 
@@ -17,9 +21,6 @@ class PROJETOINDIGENAS_API ASequenceController : public AActor
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	USequence* _sequence;
-
-	void DelayToStartTimerAction();
-	void SequenceCompleted();
 
 public:
 	FSequenceCompletedDelegate SequenceCompletedDelegate;

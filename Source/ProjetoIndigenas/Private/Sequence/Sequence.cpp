@@ -16,11 +16,11 @@ void USequence::StepFinished(USequenceStep* step)
 	ExecuteNextStep();
 }
 
-void USequence::BeginPlay()
+void USequence::BeginPlay(UGameInstance* gameInstance)
 {
 	for (USequenceStep* step : _steps)
 	{
-		step->BeginPlay();
+		step->BeginPlay(gameInstance);
 	}
 }
 

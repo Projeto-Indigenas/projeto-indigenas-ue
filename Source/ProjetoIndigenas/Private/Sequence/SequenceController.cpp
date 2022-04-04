@@ -30,7 +30,7 @@ void ASequenceController::BeginPlay()
 	Super::BeginPlay();
 
 	_sequence->SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
-	_sequence->BeginPlay();
+	_sequence->BeginPlay(GetGameInstance());
 
 	if (!_startAutomatically) return;
 

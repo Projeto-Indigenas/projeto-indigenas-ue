@@ -10,19 +10,21 @@ class PROJETOINDIGENAS_API USequenceStep : public UObject
 {
     GENERATED_BODY()
 
+    TWeakObjectPtr<UGameInstance> _gameInstance;
+
+protected:
     UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
     bool _skipStep;
 
     UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
     float _delay;
-
-protected:
+    
     virtual void ExecuteStep();
     virtual void Finish();
     
 public:
     FSequenceStepFinishedDelegate SequenceStepFinishedDelegate;
     
-    virtual void BeginPlay();
+    virtual void BeginPlay(UGameInstance* gameInstance);
     void Execute();
 };
