@@ -21,7 +21,7 @@ FVector FPIPathMakerEditor::GetWorldLocation(const UWorld* world, const FViewpor
 	return hit.Location;
 }
 
-int FPIPathMakerEditor::FindNearestPoint(FVector location) const
+int FPIPathMakerEditor::FindNearestVector(const FVector& location) const
 {
 	FVector nearestLocation = FVector::ZeroVector;
 	
@@ -39,7 +39,7 @@ int FPIPathMakerEditor::FindNearestPoint(FVector location) const
 	return nearestIndex;
 }
 
-void FPIPathMakerEditor::CreateNewNode(FVector location)
+void FPIPathMakerEditor::CreateNewVector(const FVector& location)
 {
 	if (_currentNode != nullptr) return;
 
@@ -54,7 +54,7 @@ void FPIPathMakerEditor::CreateNewNode(FVector location)
 
 	MakeInfoText(TEXT("Create new node"));
 	
-	const int nearestIndex = FindNearestPoint(location);
+	const int nearestIndex = FindNearestVector(location);
 
 	if (nearestIndex == _targetPath->Nodes.Num() - 1)
 	{
@@ -71,12 +71,12 @@ void FPIPathMakerEditor::CreateNewNode(FVector location)
 	_currentNodeIndex = insertIndex;
 }
 
-void FPIPathMakerEditor::GrabNearestVector(FVector location)
+void FPIPathMakerEditor::GrabNearestVector(const FVector& location)
 {
 	if (_targetPath == nullptr) return;
 	if (_targetPath->Nodes.Num() == 0) return;
 
-	const int nearestIndex = FindNearestPoint(location);
+	const int nearestIndex = FindNearestVector(location);
 
 	if (nearestIndex < 0 || nearestIndex >= _targetPath->Nodes.Num()) return;
 
@@ -86,7 +86,7 @@ void FPIPathMakerEditor::GrabNearestVector(FVector location)
 	_currentNodeIndex = nearestIndex;
 }
 
-void FPIPathMakerEditor::DeleteNearestVector(FVector location) const
+void FPIPathMakerEditor::DeleteNearestVector(const FVector& location) const
 {
 	if (_currentNodeIndex != -1)
 	{
@@ -96,7 +96,7 @@ void FPIPathMakerEditor::DeleteNearestVector(FVector location) const
 		return;
 	}
 
-	const int nearestIndex = FindNearestPoint(location);
+	const int nearestIndex = FindNearestVector(location);
             
 	if (nearestIndex < 0 || nearestIndex >= _targetPath->Nodes.Num()) return;
 
@@ -104,6 +104,11 @@ void FPIPathMakerEditor::DeleteNearestVector(FVector location) const
 
 	_targetPath->Nodes.RemoveAt(nearestIndex);
 	_targetPath->MarkPackageDirty();
+}
+
+void FPIPathMakerEditor::FocusNearestVector(const FVector& location) const
+{
+	
 }
 
 void FPIPathMakerEditor::FinishPlacingNode()
@@ -196,7 +201,6 @@ void FPIPathMakerEditor::Render(const FSceneView* View, FViewport* Viewport, FPr
 	constexpr ESceneDepthPriorityGroup depthPriority = SDPG_Foreground;
 
 	const int& nodesCount = _targetPath->Nodes.Num();
-	const FMaterialRenderProxy* materialRenderProxy = GEngine->VertexColorMaterial->GetRenderProxy();
 	
 	for (int index = 0; index < nodesCount; ++index)
 	{
@@ -236,7 +240,7 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 		
 		if (Key == EKeys::N) // new
 		{
-			CreateNewNode(mouseLocation);
+			CreateNewVector(mouseLocation);
 			return true;
 		}
 
@@ -255,6 +259,13 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 		if (Key == EKeys::D) // delete nearest
 		{
 			DeleteNearestVector(mouseLocation);
+			return true;
+		}
+
+		if (Key == EKeys::F)
+		{
+			FocusNearestVector(mouseLocation);
+			ViewportClient->viewport
 			return true;
 		}
 

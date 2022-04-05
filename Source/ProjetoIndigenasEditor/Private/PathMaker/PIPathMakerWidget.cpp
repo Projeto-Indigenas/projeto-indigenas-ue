@@ -56,6 +56,7 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 					"M -> Mark point position;\n"
 					"G -> Grab point nearest to mouse;\n"
 					"D -> Delete point nearest to mouse;\n"
+					"F -> Focus on point;\n"
 					"S -> Mark Dirty (Save);"
 				)))
 			]

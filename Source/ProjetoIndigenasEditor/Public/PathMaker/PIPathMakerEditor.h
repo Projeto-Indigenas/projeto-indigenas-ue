@@ -10,10 +10,11 @@ class FPIPathMakerEditor : public FEdMode
 	int _currentNodeIndex = -1;
 
 	static FVector GetWorldLocation(const UWorld* world, const FViewportCursorLocation& mouseLocation);
-	int FindNearestPoint(FVector location) const;
-	void CreateNewNode(FVector location);
-	void GrabNearestVector(FVector location);
-	void DeleteNearestVector(FVector location) const;
+	int FindNearestVector(const FVector& location) const;
+	void CreateNewVector(const FVector& location);
+	void GrabNearestVector(const FVector& location);
+	void DeleteNearestVector(const FVector& location) const;
+	void FocusNearestVector(const FVector& location) const;
 	void FinishPlacingNode();
 	void MarkDirtyAndSave();
 	void MakeInfoText(FString currentState) const;
