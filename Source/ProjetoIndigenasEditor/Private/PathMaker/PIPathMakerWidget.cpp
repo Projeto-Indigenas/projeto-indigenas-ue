@@ -8,16 +8,14 @@
 
 FString SPIPathMakerWidget::GetPathObject() const
 {
-	return _objectPath;	
+	return ObjectPath;	
 }
 
-void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData)
+void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData) const
 {
-	_objectPath = FString();
 	UObject* object = assetData.GetAsset();
 	if (object == nullptr) return;
 	if (!object->IsA<UPIPathData>()) return;
-	_objectPath = object->GetPathName();
 	GetEdMode()->SetEditingPath(Cast<UPIPathData>(object));
 }
 
@@ -60,6 +58,16 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 					"D -> Delete point nearest to mouse;\n"
 					"S -> Mark Dirty (Save);"
 				)))
+			]
+			+ SVerticalBox::Slot()
+			.Padding(0.f, 10.f, 0.f, 0.f)
+			.AutoHeight()
+			[
+				SNew(STextBlock)
+				.Text_Lambda([this]()-> FText
+				{
+					return FText::FromString(InfoText);
+				})
 			]
 		]
 	];

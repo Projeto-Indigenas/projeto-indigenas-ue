@@ -28,3 +28,15 @@ TSharedPtr<SWidget> FPIPathMakerToolkit::GetInlineContent() const
 {
 	return _modeWidget;
 }
+
+void FPIPathMakerToolkit::SetInfoText(const FString& infoText) const
+{
+	if (!_modeWidget.IsValid()) return;
+	_modeWidget->InfoText = infoText;
+}
+
+void FPIPathMakerToolkit::SetObjectPath(const FString& objectPath) const
+{
+	if (!_modeWidget.IsValid()) return;
+	_modeWidget->ObjectPath = objectPath;
+}

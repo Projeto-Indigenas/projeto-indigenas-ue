@@ -2,15 +2,17 @@
 
 class SPIPathMakerWidget : public SCompoundWidget
 {
-	FString _objectPath;
 	TSharedPtr<FAssetThumbnailPool> _thumbnailPool;
 
 	FString GetPathObject() const;
-	void OnPathObjectChanged(const FAssetData& assetData);
+	void OnPathObjectChanged(const FAssetData& assetData) const;
 	
 public:
 	SLATE_BEGIN_ARGS(SPIPathMakerWidget) { }
 	SLATE_END_ARGS()
+
+	FString ObjectPath;
+	FString InfoText;
 
 	void Construct(const FArguments& inArgs);
 
