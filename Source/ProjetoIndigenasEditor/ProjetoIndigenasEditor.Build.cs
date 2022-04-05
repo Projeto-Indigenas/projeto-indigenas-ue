@@ -14,7 +14,11 @@ public class ProjetoIndigenasEditor : ModuleRules
             "SlateCore",
 			"Slate",
             "Toolbox",
-            "PropertyEditor",
+            "PropertyEditor", 
+            "Blutility",
+            "UMG",
+            "UMGEditor",
+            "InputCore",
         });
         
         PrivateDependencyModuleNames.AddRange(new[] 

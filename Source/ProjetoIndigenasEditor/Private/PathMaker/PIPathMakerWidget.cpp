@@ -34,14 +34,12 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 		[
 			SNew(SVerticalBox)
 			+ SVerticalBox::Slot()
-			.VAlign(VAlign_Top)
 			.AutoHeight()
 			[
 				SNew(STextBlock)
 				.Text(FText::FromString(TEXT("Select the Path to edit:")))
 			]
 			+ SVerticalBox::Slot()
-			.VAlign(VAlign_Top)
 			.AutoHeight()
 			[
 				SNew(SObjectPropertyEntryBox)
@@ -50,6 +48,18 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 				.OnObjectChanged(this, &SPIPathMakerWidget::OnPathObjectChanged)
 				.DisplayThumbnail(true)
 				.ThumbnailPool(_thumbnailPool)
+			]
+			+ SVerticalBox::Slot()
+			.AutoHeight()
+			[
+				SNew(STextBlock)
+				.Text(FText::FromString(TEXT(
+					"N -> Insert new next to the mouse position;\n"
+					"M -> Mark point position;\n"
+					"G -> Grab point nearest to mouse;\n"
+					"D -> Delete point nearest to mouse;\n"
+					"S -> Mark Dirty (Save);"
+				)))
 			]
 		]
 	];

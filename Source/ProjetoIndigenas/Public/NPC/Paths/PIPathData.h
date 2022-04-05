@@ -7,4 +7,8 @@ UCLASS()
 class PROJETOINDIGENAS_API UPIPathData : public UDataAsset
 {
     GENERATED_BODY()
+
+public:
+    UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+    TArray<FVector> Nodes;
 };
