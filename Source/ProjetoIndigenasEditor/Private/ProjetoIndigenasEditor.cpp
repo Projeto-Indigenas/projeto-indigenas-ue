@@ -1,5 +1,4 @@
 #include "ProjetoIndigenasEditor.h"
-
 #include "PathMaker/PIPathMakerEditor.h"
 
 IMPLEMENT_GAME_MODULE(FProjetoIndigenasEditor, ProjetoIndigenasEditor)

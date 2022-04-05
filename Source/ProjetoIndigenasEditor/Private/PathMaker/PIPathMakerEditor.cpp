@@ -265,7 +265,7 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 		if (Key == EKeys::F)
 		{
 			FocusNearestVector(mouseLocation);
-			ViewportClient->viewport
+			//ViewportClient->viewport
 			return true;
 		}
 
