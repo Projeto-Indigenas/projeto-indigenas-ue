@@ -44,6 +44,7 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 				.AllowedClass(UPIPathData::StaticClass())
 				.ObjectPath(this, &SPIPathMakerWidget::GetPathObject)
 				.OnObjectChanged(this, &SPIPathMakerWidget::OnPathObjectChanged)
+				.AllowClear(true)
 				.DisplayThumbnail(true)
 				.ThumbnailPool(_thumbnailPool)
 			]

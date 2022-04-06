@@ -1,5 +1,5 @@
 #include "PathMaker/PIPathMakerEditor.h"
-
+#include "NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "SEditorViewport.h"
@@ -107,9 +107,24 @@ void FPIPathMakerEditor::DeleteNearestVector(const FVector& location) const
 	_targetPath->MarkPackageDirty();
 }
 
-void FPIPathMakerEditor::FocusNearestVector(const FVector& location) const
+void FPIPathMakerEditor::FocusNearestVector(
+	FEditorViewportClient* viewportClient, 
+	const FVector& mouseLocation) const
 {
-	
+	const int& nearestVector = FindNearestVector(mouseLocation);
+
+	if (nearestVector < 0 || nearestVector >= _targetPath->Nodes.Num()) return;
+
+	const FVector& targetLocation = _targetPath->Nodes[nearestVector];
+
+	TWeakPtr<SEditorViewport> editorViewport = viewportClient->GetEditorViewportWidget();
+	FViewportCameraTransform& transform = viewportClient->ViewTransformPerspective;
+
+	const float distance = -100.f;
+	const FVector cameraOffsetVector = transform.GetRotation().Vector() * distance;
+
+	transform.SetLookAt(targetLocation);
+	transform.TransitionToLocation(targetLocation + cameraOffsetVector, editorViewport, false);
 }
 
 void FPIPathMakerEditor::FinishPlacingNode()
@@ -130,8 +145,6 @@ void FPIPathMakerEditor::MarkDirtyAndSave()
 	TArray<UPackage*> toSave;
 	toSave.Add(_targetPath->GetPackage());
 	UEditorLoadingAndSavingUtils::SavePackages(toSave, true);
-
-	SetEditingPath(nullptr);
 
 	MakeInfoText(TEXT("Saved path"));
 }
@@ -265,10 +278,7 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 
 		if (Key == EKeys::F)
 		{
-			//FocusNearestVector(mouseLocation);
-			TWeakPtr<SEditorViewport> editorViewport = ViewportClient->GetEditorViewportWidget();
-			FViewportCameraTransform& transform = ViewportClient->ViewTransformPerspective;
-			transform.TransitionToLocation(mouseLocation, editorViewport, false);
+			FocusNearestVector(ViewportClient, mouseLocation);
 			return true;
 		}
 
