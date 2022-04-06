@@ -1,7 +1,8 @@
 #pragma once
 
 #include "UnrealEd.h"
-#include "NPC/Paths/PIPathData.h"
+
+class UPIPathData;
 
 class FPIPathMakerEditor : public FEdMode
 {
@@ -9,12 +10,14 @@ class FPIPathMakerEditor : public FEdMode
 	FVector* _currentNode = nullptr;
 	int _currentNodeIndex = -1;
 
-	static FVector GetWorldLocation(const UWorld* world, const FViewportCursorLocation& mouseLocation);
+	static FVector GetWorldLocation(const UWorld* world, 
+		const FViewportCursorLocation& mouseLocation);
 	int FindNearestVector(const FVector& location) const;
 	void CreateNewVector(const FVector& location);
 	void GrabNearestVector(const FVector& location);
 	void DeleteNearestVector(const FVector& location) const;
-	void FocusNearestVector(const FVector& location) const;
+	void FocusNearestVector(FEditorViewportClient * viewportClient, 
+		const FVector & mouseLocation) const;
 	void FinishPlacingNode();
 	void MarkDirtyAndSave();
 	void MakeInfoText(FString currentState) const;

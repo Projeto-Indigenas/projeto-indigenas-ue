@@ -1,7 +1,8 @@
 #include "PathMaker/PIPathMakerEditor.h"
-
+#include "NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
+#include "SEditorViewport.h"
 
 const FEditorModeID FPIPathMakerEditor::EditorModeID = FEditorModeID(TEXT("PathMakerEditorMode"));
 
@@ -106,9 +107,24 @@ void FPIPathMakerEditor::DeleteNearestVector(const FVector& location) const
 	_targetPath->MarkPackageDirty();
 }
 
-void FPIPathMakerEditor::FocusNearestVector(const FVector& location) const
+void FPIPathMakerEditor::FocusNearestVector(
+	FEditorViewportClient* viewportClient, 
+	const FVector& mouseLocation) const
 {
-	
+	const int& nearestVector = FindNearestVector(mouseLocation);
+
+	if (nearestVector < 0 || nearestVector >= _targetPath->Nodes.Num()) return;
+
+	const FVector& targetLocation = _targetPath->Nodes[nearestVector];
+
+	TWeakPtr<SEditorViewport> editorViewport = viewportClient->GetEditorViewportWidget();
+	FViewportCameraTransform& transform = viewportClient->ViewTransformPerspective;
+
+	const float distance = -100.f;
+	const FVector cameraOffsetVector = transform.GetRotation().Vector() * distance;
+
+	transform.SetLookAt(targetLocation);
+	transform.TransitionToLocation(targetLocation + cameraOffsetVector, editorViewport, false);
 }
 
 void FPIPathMakerEditor::FinishPlacingNode()
@@ -129,8 +145,6 @@ void FPIPathMakerEditor::MarkDirtyAndSave()
 	TArray<UPackage*> toSave;
 	toSave.Add(_targetPath->GetPackage());
 	UEditorLoadingAndSavingUtils::SavePackages(toSave, true);
-
-	SetEditingPath(nullptr);
 
 	MakeInfoText(TEXT("Saved path"));
 }
@@ -210,16 +224,21 @@ void FPIPathMakerEditor::Render(const FSceneView* View, FViewport* Viewport, FPr
 		{
 			const FVector& next = _targetPath->Nodes[index + 1];
 
-			PDI->DrawPoint(current, FColor::Blue, 10.f, depthPriority);
-			PDI->DrawLine(current, next, FLinearColor::Red, depthPriority, 1.f);
+			FColor color;
+			float size;
+			if (index == 0) 
+			{
+				color = FColor::Green;
+				size = 20.f;
+			}
+			else 
+			{
+				color = FColor::Blue;
+				size = 10.f;
+			}
+			PDI->DrawPoint(current, color, size, depthPriority);
 			
-
-			const FVector& direction = next - current;
-			const float& distance = FVector::Distance(next, current);
-			const float& length = distance * .2f;
-			const float& arrowSize = length * .1f;
-			const FMatrix matrix = FLookFromMatrix(current, direction, FVector::UpVector).GetMatrixWithoutScale();
-			DrawDirectionalArrow(PDI, matrix, FLinearColor::Green, length, arrowSize, depthPriority);
+			PDI->DrawLine(current, next, FLinearColor::Red, depthPriority, 1.f);
 
 			continue;
 		}
@@ -264,8 +283,7 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 
 		if (Key == EKeys::F)
 		{
-			FocusNearestVector(mouseLocation);
-			//ViewportClient->viewport
+			FocusNearestVector(ViewportClient, mouseLocation);
 			return true;
 		}
 

@@ -9,7 +9,7 @@ void FProjetoIndigenasEditor::StartupModule()
 
 	FEditorModeRegistry::Get().RegisterMode<FPIPathMakerEditor>(
 		FPIPathMakerEditor::EditorModeID,
-		FText::FromString(TEXT("Path Maker Editor")),
+		FText::FromString(TEXT("Path Maker")),
 		FSlateIcon(), true);
 }
 

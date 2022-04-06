@@ -14,8 +14,12 @@ FString SPIPathMakerWidget::GetPathObject() const
 void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData) const
 {
 	UObject* object = assetData.GetAsset();
-	if (object == nullptr) return;
-	if (!object->IsA<UPIPathData>()) return;
+
+	if (object != nullptr && !object->IsA<UPIPathData>())
+	{
+		object = nullptr;
+	}
+
 	GetEdMode()->SetEditingPath(Cast<UPIPathData>(object));
 }
 
@@ -44,6 +48,7 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 				.AllowedClass(UPIPathData::StaticClass())
 				.ObjectPath(this, &SPIPathMakerWidget::GetPathObject)
 				.OnObjectChanged(this, &SPIPathMakerWidget::OnPathObjectChanged)
+				.AllowClear(true)
 				.DisplayThumbnail(true)
 				.ThumbnailPool(_thumbnailPool)
 			]
@@ -61,7 +66,7 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 				)))
 			]
 			+ SVerticalBox::Slot()
-			.Padding(0.f, 10.f, 0.f, 0.f)
+			.Padding(0.f, 20.f, 0.f, 0.f)
 			.AutoHeight()
 			[
 				SNew(STextBlock)
