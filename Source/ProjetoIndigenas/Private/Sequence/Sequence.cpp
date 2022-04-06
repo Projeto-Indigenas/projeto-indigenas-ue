@@ -1,6 +1,6 @@
 #include "Sequence/Sequence.h"
 
-bool USequence::NextIndex()
+bool FSequence::NextIndex()
 {
 	++_sequenceIndex;
 	if (_sequenceIndex < _steps.Num()) return true;
@@ -9,14 +9,14 @@ bool USequence::NextIndex()
 	return true;
 }
 
-void USequence::StepFinished(USequenceStep* step)
+void FSequence::StepFinished(USequenceStep* step)
 {
 	step->SequenceStepFinishedDelegate.Unbind();
 
 	ExecuteNextStep();
 }
 
-void USequence::BeginPlay(UGameInstance* gameInstance)
+void FSequence::BeginPlay(UGameInstance* gameInstance)
 {
 	for (USequenceStep* step : _steps)
 	{
@@ -24,7 +24,7 @@ void USequence::BeginPlay(UGameInstance* gameInstance)
 	}
 }
 
-void USequence::ExecuteNextStep()
+void FSequence::ExecuteNextStep()
 {
 	if (!NextIndex())
 	{
@@ -34,6 +34,6 @@ void USequence::ExecuteNextStep()
 	}
 
 	USequenceStep* step = _steps[_sequenceIndex];
-	step->SequenceStepFinishedDelegate.BindUObject(this, &USequence::StepFinished);
+	step->SequenceStepFinishedDelegate.BindRaw(this, &FSequence::StepFinished);
 	step->Execute();
 }

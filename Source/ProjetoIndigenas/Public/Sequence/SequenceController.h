@@ -20,7 +20,7 @@ protected:
 	bool _startAutomatically;
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
-	USequence* _sequence;
+	FSequence _sequence;
 
 public:
 	FSequenceCompletedDelegate SequenceCompletedDelegate;

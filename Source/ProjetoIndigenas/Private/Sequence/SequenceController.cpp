@@ -2,7 +2,7 @@
 
 void ASequenceController::DelayToStartTimerAction()
 {
-	_sequence->ExecuteNextStep();
+	_sequence.ExecuteNextStep();
 }
 
 void ASequenceController::SequenceCompleted()
@@ -22,15 +22,15 @@ void ASequenceController::StartSequence()
 		return;
 	}
 
-	_sequence->ExecuteNextStep();
+	_sequence.ExecuteNextStep();
 }
 
 void ASequenceController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_sequence->SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
-	_sequence->BeginPlay(GetGameInstance());
+	_sequence.SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
+	_sequence.BeginPlay(GetGameInstance());
 
 	if (!_startAutomatically) return;
 

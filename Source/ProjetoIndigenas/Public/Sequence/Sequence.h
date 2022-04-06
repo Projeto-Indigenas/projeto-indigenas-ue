@@ -6,11 +6,12 @@
 
 DECLARE_DELEGATE(FSequenceCompletedDelegate)
 
-UCLASS()
-class PROJETOINDIGENAS_API USequence : public UDataAsset
+USTRUCT(BlueprintType)
+struct PROJETOINDIGENAS_API FSequence
 {
 	GENERATED_BODY()
 
+private:
 	int _sequenceIndex = -1;
 
 	bool NextIndex();
