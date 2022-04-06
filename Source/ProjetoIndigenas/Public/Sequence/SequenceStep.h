@@ -5,7 +5,7 @@
 
 DECLARE_DELEGATE_OneParam(FSequenceStepFinishedDelegate, class USequenceStep*)
 
-UCLASS(EditInlineNew)
+UCLASS(Abstract, EditInlineNew)
 class PROJETOINDIGENAS_API USequenceStep : public UObject
 {
     GENERATED_BODY()
