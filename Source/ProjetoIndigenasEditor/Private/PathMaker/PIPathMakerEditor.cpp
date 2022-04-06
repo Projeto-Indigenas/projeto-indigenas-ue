@@ -224,16 +224,21 @@ void FPIPathMakerEditor::Render(const FSceneView* View, FViewport* Viewport, FPr
 		{
 			const FVector& next = _targetPath->Nodes[index + 1];
 
-			PDI->DrawPoint(current, FColor::Blue, 10.f, depthPriority);
-			PDI->DrawLine(current, next, FLinearColor::Red, depthPriority, 1.f);
+			FColor color;
+			float size;
+			if (index == 0) 
+			{
+				color = FColor::Green;
+				size = 20.f;
+			}
+			else 
+			{
+				color = FColor::Blue;
+				size = 10.f;
+			}
+			PDI->DrawPoint(current, color, size, depthPriority);
 			
-
-			const FVector& direction = next - current;
-			const float& distance = FVector::Distance(next, current);
-			const float& length = distance * .2f;
-			const float& arrowSize = length * .1f;
-			const FMatrix matrix = FLookFromMatrix(current, direction, FVector::UpVector).GetMatrixWithoutScale();
-			DrawDirectionalArrow(PDI, matrix, FLinearColor::Green, length, arrowSize, depthPriority);
+			PDI->DrawLine(current, next, FLinearColor::Red, depthPriority, 1.f);
 
 			continue;
 		}

@@ -14,8 +14,12 @@ FString SPIPathMakerWidget::GetPathObject() const
 void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData) const
 {
 	UObject* object = assetData.GetAsset();
-	if (object == nullptr) return;
-	if (!object->IsA<UPIPathData>()) return;
+
+	if (object != nullptr && !object->IsA<UPIPathData>())
+	{
+		object = nullptr;
+	}
+
 	GetEdMode()->SetEditingPath(Cast<UPIPathData>(object));
 }
 
