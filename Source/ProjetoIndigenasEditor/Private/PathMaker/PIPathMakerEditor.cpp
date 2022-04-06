@@ -2,6 +2,7 @@
 
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
+#include "SEditorViewport.h"
 
 const FEditorModeID FPIPathMakerEditor::EditorModeID = FEditorModeID(TEXT("PathMakerEditorMode"));
 
@@ -264,8 +265,10 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 
 		if (Key == EKeys::F)
 		{
-			FocusNearestVector(mouseLocation);
-			//ViewportClient->viewport
+			//FocusNearestVector(mouseLocation);
+			TWeakPtr<SEditorViewport> editorViewport = ViewportClient->GetEditorViewportWidget();
+			FViewportCameraTransform& transform = ViewportClient->ViewTransformPerspective;
+			transform.TransitionToLocation(mouseLocation, editorViewport, false);
 			return true;
 		}
 

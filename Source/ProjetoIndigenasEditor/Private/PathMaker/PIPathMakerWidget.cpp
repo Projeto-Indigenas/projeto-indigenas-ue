@@ -61,7 +61,7 @@ void SPIPathMakerWidget::Construct(const FArguments& inArgs)
 				)))
 			]
 			+ SVerticalBox::Slot()
-			.Padding(0.f, 10.f, 0.f, 0.f)
+			.Padding(0.f, 20.f, 0.f, 0.f)
 			.AutoHeight()
 			[
 				SNew(STextBlock)
