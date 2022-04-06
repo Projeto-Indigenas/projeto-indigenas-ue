@@ -2,7 +2,7 @@ using namespace System.IO
 
 $env:PROJECT_ROOT = "$(Get-Location)"
 $env:PROJECT_PATH = [Path]::Combine("$env:PROJECT_ROOT", "ProjetoIndigenas.uproject")
-$env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binaries", "DotNET", "UnrealBuildTool.exe")
+$env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool.exe")
 
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
 Write-Output "Using project at: $env:PROJECT_PATH"
