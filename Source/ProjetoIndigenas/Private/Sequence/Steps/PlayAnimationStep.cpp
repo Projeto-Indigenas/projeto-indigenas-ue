@@ -28,15 +28,16 @@ void UPlayAnimationStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 		return;
 	}
 
+	animInstance->State = _animationStateToPlay;
+	
 	if (_waitForAnimationCompletedEvent)
 	{
 		animInstance->AnimationCompletedDelegate.BindDynamic(this, &UPlayAnimationStep::AnimationCompleted);
+
+		return;
 	}
-	animInstance->State = _animationStateToPlay;
-	if (!_waitForAnimationCompletedEvent)
-	{
-		Finish();
-	}
+	
+	Finish();
 }
 
 void UPlayAnimationStep::AnimationCompleted()
