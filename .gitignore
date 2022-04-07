@@ -72,3 +72,4 @@ Plugins/ExodusImport/*
 *.pdb
 .vscode/*
 **/RiderLink/*
+*.exp

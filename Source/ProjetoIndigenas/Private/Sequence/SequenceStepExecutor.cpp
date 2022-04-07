@@ -1,8 +1,8 @@
-﻿#include "Sequence/Steps/StepExecutor.h"
+﻿#include "Sequence/SequenceStepExecutor.h"
 
 #include "Sequence/SequenceExecutorComponent.h"
 
-void IStepExecutor::SetupExecutorComponent(AActor* targetActor)
+void ISequenceStepExecutor::SetupExecutorComponent(AActor* targetActor)
 {
 	UActorComponent* newComponent = targetActor->AddComponentByClass(USequenceExecutorComponent::StaticClass(),
 		false, FTransform::Identity, true);

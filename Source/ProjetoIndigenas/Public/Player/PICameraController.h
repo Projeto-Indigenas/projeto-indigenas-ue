@@ -10,9 +10,7 @@ UCLASS()
 class PROJETOINDIGENAS_API APICameraController : public AActor
 {
 	GENERATED_BODY()
-
-	TWeakObjectPtr<ACharacter> _targetCharacter;
-
+	
 	FVector _cameraVector;
 	FRotator _cameraRotator;
 
@@ -20,6 +18,9 @@ class PROJETOINDIGENAS_API APICameraController : public AActor
 	void CameraYInputBinding(float value);
 
 protected:
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	TWeakObjectPtr<AActor> _targetActor;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _cameraSpeed = 50.f;
 
@@ -29,7 +30,6 @@ protected:
 	TWeakObjectPtr<USpringArmComponent> _springArmComponent;
 
 public:
-	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
 	const FRotator& GetCameraRotator() const;
@@ -37,5 +37,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetupPlayerInputComponent(APlayerController* playerController);
 	UFUNCTION(BlueprintCallable)
-	void SetTargetCharacter(ACharacter* character);
+	void SetCameraRotation(const FRotator& rotator);
 };

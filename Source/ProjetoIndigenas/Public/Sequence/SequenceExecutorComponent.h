@@ -3,19 +3,19 @@
 #include "CoreMinimal.h"
 #include "SequenceExecutorComponent.generated.h"
 
-class IStepExecutor;
+class ISequenceStepExecutor;
 
 UCLASS()
 class PROJETOINDIGENAS_API USequenceExecutorComponent : public UActorComponent
 {
     GENERATED_BODY()
 
-    IStepExecutor* _stepExecutor;
+    ISequenceStepExecutor* _stepExecutor;
     
 public:
     USequenceExecutorComponent();
 
-    void SetupExecutor(IStepExecutor* stepExecutor);
+    void SetupExecutor(ISequenceStepExecutor* stepExecutor);
     
     virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaTime, ELevelTick TickType,

@@ -4,12 +4,12 @@
 
 class USequenceExecutorComponent;
 
-class PROJETOINDIGENAS_API IStepExecutor
+class PROJETOINDIGENAS_API ISequenceStepExecutor
 {
 protected:
 	TWeakObjectPtr<USequenceExecutorComponent> _sequenceExecutorComponent;
 	
-	~IStepExecutor() = default;
+	~ISequenceStepExecutor() = default;
 	
 public:
 	virtual void SetupExecutorComponent(AActor* targetActor);

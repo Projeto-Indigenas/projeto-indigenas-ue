@@ -8,9 +8,9 @@ UCLASS()
 class PROJETOINDIGENAS_API ASequenceController : public AActor
 {
 	GENERATED_BODY()
-
+	
 	void DelayToStartTimerAction();
-	void SequenceCompleted();
+	void SequenceCompleted() const;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
@@ -25,6 +25,8 @@ protected:
 public:
 	FSequenceCompletedDelegate SequenceCompletedDelegate;
 
-	void StartSequence();
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void StartSequence();
 };

@@ -1,12 +1,13 @@
 ﻿#include "Sequence/SequenceExecutorComponent.h"
-#include "Sequence/Steps/StepExecutor.h"
+
+#include "Sequence/SequenceStepExecutor.h"
 
 USequenceExecutorComponent::USequenceExecutorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void USequenceExecutorComponent::SetupExecutor(IStepExecutor* stepExecutor)
+void USequenceExecutorComponent::SetupExecutor(ISequenceStepExecutor* stepExecutor)
 {
 	_stepExecutor = stepExecutor;
 }
