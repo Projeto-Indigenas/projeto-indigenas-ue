@@ -10,27 +10,18 @@ void APICameraController::CameraYInputBinding(float value)
 	_cameraVector.Y = value;
 }
 
-void APICameraController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (!_springArmComponent.IsValid()) return;
-
-	_cameraRotator = _springArmComponent->GetRelativeRotation();
-}
-
 void APICameraController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (!_targetCharacter.IsValid()) return;
+	if (!_targetActor.IsValid()) return;
 	if (!_springArmComponent.IsValid()) return;
 
 	_cameraRotator.Pitch += _cameraVector.Y * _cameraSpeed * DeltaSeconds;
 	_cameraRotator.Yaw += _cameraVector.Z * _cameraSpeed * DeltaSeconds;
 
 	_springArmComponent->SetRelativeRotation(_cameraRotator);
-	SetActorRelativeLocation(_targetCharacter->GetRootComponent()->GetRelativeLocation());
+	SetActorRelativeLocation(_targetActor->GetRootComponent()->GetRelativeLocation());
 }
 
 const FRotator& APICameraController::GetCameraRotator() const
@@ -46,7 +37,7 @@ void APICameraController::SetupPlayerInputComponent(APlayerController* playerCon
 	playerController->InputComponent->BindAxis(TEXT("CameraY"), this, &APICameraController::CameraYInputBinding);
 }
 
-void APICameraController::SetTargetCharacter(ACharacter* character)
+void APICameraController::SetCameraRotation(const FRotator& rotator)
 {
-	_targetCharacter = character;
+	_cameraRotator = rotator;
 }
