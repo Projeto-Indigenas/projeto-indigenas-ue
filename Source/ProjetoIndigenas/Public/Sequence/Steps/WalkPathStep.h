@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "NPC/PINpcCharacter.h"
 #include "NPC/PINpcController.h"
+#include "NPC/Paths/DestinationController.h"
 #include "NPC/Paths/PIPathData.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/SequenceStepExecutor.h"
@@ -16,6 +17,11 @@ class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenc
 
 	TWeakObjectPtr<APINpcController> _targetController;
 	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
+
+	TUniquePtr<FDestinationController> _destinationController;
+
+	void MoveToNextNode();
+	void PathRequestCompleted(FAIRequestID requestId, const FPathFollowingResult& result);
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Instanced)
@@ -23,6 +29,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	UPIPathData* _pathData;
+
+	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	bool _cycleDestinations = false;
 	
 	virtual void ExecuteStep(const FSequenceQuery& sequenceQuery) override;
 	
