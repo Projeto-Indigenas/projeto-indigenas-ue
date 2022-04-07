@@ -11,11 +11,6 @@
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
 # Fortran module files
 *.mod
 
@@ -45,10 +40,6 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
-# Binary Files
-Binaries/*
-Plugins/*/Binaries/*
-
 # Builds
 Build/*
 
@@ -72,3 +63,27 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Custom Ignores
+Plugins/ExodusImport/*
+*.DotSettings.user
+.idea/*
+*-0*.dll
+*.pdb
+.vscode/*
+**/RiderLink/*
+*.exp
+Binaries/Mac
+Binaries/IOS
+Binaries/TVOS
+Binaries/**/*DebugGame*
+*.ignore
+*.code-workspace
+compile_commands.json
+.cache/
+**/.DS_Store
+ArchivedBuilds/
+tbb*.dll
+OpenImageDenoise.dll
+D3D12/
+ProjetoIndigenas.target
