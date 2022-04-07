@@ -2,7 +2,7 @@
 
 #include "GameFramework/Character.h"
 
-void USpawnActorStep::ExecuteStep(const FSequenceQuery& sequenceQuery)
+void USpawnActorStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 {
 	// TODO(anderson): some error notification here should be good
 	if (ActorClass == nullptr) return;

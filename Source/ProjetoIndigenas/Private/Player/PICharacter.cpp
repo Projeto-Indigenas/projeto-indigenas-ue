@@ -17,7 +17,7 @@ void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_animInstance = Cast<UPICharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	_animInstance = Cast<UPIAnimInstanceBase>(GetMesh()->GetAnimInstance());
 	_characterRotator.SetAcceleration(RotationAcceleration);
 }
 

@@ -11,7 +11,7 @@ class PROJETOINDIGENAS_API APICharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	TWeakObjectPtr<UPICharacterAnimInstance> _animInstance;
+	TWeakObjectPtr<UPIAnimInstanceBase> _animInstance;
 	FAcceleratedVector _characterRotator;
 	
 	FVector _inputVector;

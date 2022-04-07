@@ -18,5 +18,6 @@ public:
 	
 	bool HasDestination() const;
 	bool NextDestination(FVector& outVector);
+	FVector GetCurrentDestination() const;
 	bool IsPathCompleted() const;
 };

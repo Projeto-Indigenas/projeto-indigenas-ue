@@ -22,7 +22,7 @@ protected:
     UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
     float _delay;
     
-    virtual void ExecuteStep(const FSequenceQuery& sequenceQuery);
+    virtual void ExecuteStep(const FSequenceQuery* sequenceQuery);
     virtual void Finish();
     
 public:
@@ -31,5 +31,5 @@ public:
     FSequenceStepSpawnedActorDelegate SpawnedActorDelegate;
     
     virtual void BeginPlay(UGameInstance* gameInstance);
-    void Execute(const FSequenceQuery& sequenceQuery);
+    void Execute(const FSequenceQuery* sequenceQuery);
 };

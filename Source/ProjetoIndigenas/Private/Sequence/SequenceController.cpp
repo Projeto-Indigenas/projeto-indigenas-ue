@@ -8,6 +8,8 @@ void ASequenceController::DelayToStartTimerAction()
 void ASequenceController::SequenceCompleted() const
 {
 	SequenceCompletedDelegate.ExecuteIfBound();
+
+	UE_LOG(LogTemp, Log, TEXT("Sequence Completed"))
 }
 
 void ASequenceController::BeginPlay()

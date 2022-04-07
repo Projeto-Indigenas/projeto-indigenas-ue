@@ -23,5 +23,5 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	TWeakObjectPtr<APlayerStart> ActorPlayerStart;
 
-	virtual void ExecuteStep(const FSequenceQuery& sequenceQuery) override;
+	virtual void ExecuteStep(const FSequenceQuery* sequenceQuery) override;
 };

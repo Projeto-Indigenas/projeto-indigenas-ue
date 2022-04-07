@@ -33,7 +33,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	bool _cycleDestinations = false;
 	
-	virtual void ExecuteStep(const FSequenceQuery& sequenceQuery) override;
+	virtual void ExecuteStep(const FSequenceQuery* sequenceQuery) override;
+	virtual void Finish() override;
 	
 public:
 	virtual void BeginPlay(UGameInstance* gameInstance) override;

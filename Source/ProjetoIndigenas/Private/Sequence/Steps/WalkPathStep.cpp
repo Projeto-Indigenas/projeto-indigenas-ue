@@ -53,7 +53,7 @@ void UWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResul
 	}
 }
 
-void UWalkPathStep::ExecuteStep(const FSequenceQuery& sequenceQuery)
+void UWalkPathStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 {
 	_targetCharacter = _actorProvider->GetActor<APINpcCharacter>(sequenceQuery);
 
@@ -63,6 +63,13 @@ void UWalkPathStep::ExecuteStep(const FSequenceQuery& sequenceQuery)
 	_targetController = Cast<APINpcController>(_targetCharacter->GetController());
 	
 	SetupExecutorComponent(_targetCharacter.Get());
+}
+
+void UWalkPathStep::Finish()
+{
+	DestroyExecutorComponent();
+	
+	Super::Finish();
 }
 
 void UWalkPathStep::BeginPlay(UGameInstance* gameInstance)
@@ -88,7 +95,15 @@ void UWalkPathStep::Tick(float deltaTime)
 
 	const UPathFollowingComponent* pathComponent = _targetController->GetPathFollowingComponent();
 
-	if (!pathComponent->HasValidPath()) return;
+	const FVector& destination = _destinationController->GetCurrentDestination();
+	if (!pathComponent->HasValidPath() && !pathComponent->HasReached(destination))
+	{
+		_targetCharacter->SetActorLocation(destination);
+		
+		MoveToNextNode();
+		
+		return;
+	}
 
 	const FVector& direction = pathComponent->GetCurrentMoveInput();
 	_targetCharacter->SetXInput(direction.Y);

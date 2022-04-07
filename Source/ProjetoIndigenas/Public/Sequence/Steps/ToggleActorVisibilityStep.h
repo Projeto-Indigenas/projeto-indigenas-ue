@@ -19,5 +19,5 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	bool _visible;
 	
-	virtual void ExecuteStep(const FSequenceQuery& sequenceQuery) override;
+	virtual void ExecuteStep(const FSequenceQuery* sequenceQuery) override;
 };

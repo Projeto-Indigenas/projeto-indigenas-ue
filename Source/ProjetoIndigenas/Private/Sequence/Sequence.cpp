@@ -47,7 +47,7 @@ void FSequence::ExecuteNextStep()
 	step->FinishedDelegate.BindRaw(this, &FSequence::StepFinished);
 	step->SpawnedActorDelegate.BindRaw(this, &FSequence::SpawnedActor);
 	
-	step->Execute(*this);
+	step->Execute(this);
 }
 
 AActor* FSequence::FindActor(const FName& name) const

@@ -2,7 +2,7 @@
 
 #include "Sequence/Sequence.h"
 
-void UToggleActorVisibilityStep::ExecuteStep(const FSequenceQuery& sequenceQuery)
+void UToggleActorVisibilityStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 {
 	_targetActor = _actorProvider->GetActor<AActor>(sequenceQuery);
 

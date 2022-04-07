@@ -29,6 +29,13 @@ bool FDestinationController::NextDestination(FVector& outVector)
 	return true;
 }
 
+FVector FDestinationController::GetCurrentDestination() const
+{
+	if (IsPathCompleted()) return _nodes.Last();
+
+	return _nodes[_currentIndex];
+}
+
 bool FDestinationController::IsPathCompleted() const
 {
 	return !_cycleDestination && _currentIndex >= _nodes.Num();

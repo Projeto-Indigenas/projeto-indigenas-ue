@@ -2,14 +2,14 @@
 
 #include "Sequence/Sequence.h"
 
-void USequenceStep::ExecuteStep(const FSequenceQuery& sequenceQuery)
+void USequenceStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 {
 	UE_LOG(LogTemp, Error, TEXT("ExecuteStep not implemented"))
 }
 
 void USequenceStep::Finish()
 {
-	FinishedDelegate.ExecuteIfBound(this);	
+	FinishedDelegate.ExecuteIfBound(this);
 }
 
 void USequenceStep::BeginPlay(UGameInstance* gameInstance)
@@ -17,7 +17,7 @@ void USequenceStep::BeginPlay(UGameInstance* gameInstance)
 	_gameInstance = gameInstance;
 }
 
-void USequenceStep::Execute(const FSequenceQuery& sequenceQuery)
+void USequenceStep::Execute(const FSequenceQuery* sequenceQuery)
 {
 	if (_skipStep)
 	{
@@ -30,10 +30,7 @@ void USequenceStep::Execute(const FSequenceQuery& sequenceQuery)
 	{
 		FTimerHandle handle;
 		_gameInstance->GetTimerManager().SetTimer(handle,
-			FTimerDelegate::CreateWeakLambda(this, [this, sequenceQuery]
-			{
-				ExecuteStep(sequenceQuery);
-			}),
+			FTimerDelegate::CreateLambda([this, sequenceQuery] { ExecuteStep(sequenceQuery); }),
 			_delay, false);
 
 		return;

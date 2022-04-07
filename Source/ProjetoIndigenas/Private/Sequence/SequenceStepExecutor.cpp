@@ -11,3 +11,11 @@ void ISequenceStepExecutor::SetupExecutorComponent(AActor* targetActor)
 	targetActor->FinishAddComponent(_sequenceExecutorComponent.Get(),
 		false, FTransform::Identity);
 }
+
+void ISequenceStepExecutor::DestroyExecutorComponent()
+{
+	if (!_sequenceExecutorComponent.IsValid()) return;
+
+	_sequenceExecutorComponent->DestroyComponent();
+	_sequenceExecutorComponent.Reset();
+}
