@@ -24,8 +24,7 @@ void UWalkPathStep::MoveToNextNode()
 	// TODO(anderson): some logs here too
 	if (!_targetController.IsValid()) return;
 
-	switch (_targetController->MoveToLocation(vector, 5.f,
-		false, true, true, false))
+	switch (_targetController->MoveToLocation(vector))
 	{
 	case EPathFollowingRequestResult::Failed:
 		UE_LOG(LogTemp, Error, TEXT("AI MoveToLocation result FAILED"));
