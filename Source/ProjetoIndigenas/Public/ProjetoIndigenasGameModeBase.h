@@ -8,5 +8,4 @@ UCLASS()
 class PROJETOINDIGENAS_API AProjetoIndigenasGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };
