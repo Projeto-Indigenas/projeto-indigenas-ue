@@ -1,0 +1,8 @@
+{
+	"BuildId": "19505902",
+	"Modules": 
+	{
+		"ProjetoIndigenas": "UnrealEditor-ProjetoIndigenas.dll",
+		"ProjetoIndigenasEditor": "UnrealEditor-ProjetoIndigenasEditor.dll"
+	}
+}
