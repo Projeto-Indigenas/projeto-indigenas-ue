@@ -12,7 +12,7 @@ void APICharacter::BeginPlay()
 
 void APICharacter::Tick(float DeltaSeconds)
 {
-	if (!_animInstance.IsValid() || _animInstance->State == EPICharacterAnimationState::Movement)
+	if (!_animInstance.IsValid() || !_animInstance->IsClimbing)
 	{
 		Super::Tick(DeltaSeconds);
 

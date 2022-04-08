@@ -5,12 +5,19 @@
 
 void APICharacterBase::UpdateMovementSpeed()
 {
-	if (_inputVector == FVector::ZeroVector) _run = false;
-	const float runMultiplier = _run ? 2.f : 1.f;
-	MovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
-
 	if (!_animInstance.IsValid()) return;
 	
+	if (_animInstance->IsClimbing)
+	{
+		MovementSpeed = _inputVector.X;
+	}
+	else
+	{
+		if (_inputVector == FVector::ZeroVector) _run = false;
+		const float runMultiplier = _run ? 2.f : 1.f;
+		MovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
+	}
+
 	_animInstance->MovementSpeed = MovementSpeed;
 }
 
