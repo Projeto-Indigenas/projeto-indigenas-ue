@@ -13,6 +13,12 @@ class PROJETOINDIGENAS_API APICharacter : public APICharacterBase
 	TWeakObjectPtr<UPICharacterAnimInstance> _animInstance;
 
 protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<EPICharacterAnimationState, float> _capsuleRadiusForState;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<EPICharacterAnimationState, float> _movementAccelerationForState;
+	
 	virtual void BeginPlay() override;
 	
 public:

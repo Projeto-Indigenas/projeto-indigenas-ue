@@ -1,24 +1,21 @@
 ﻿#include "Player/PICharacterBase.h"
 
+#include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/PIAnimInstanceBase.h"
 
 void APICharacterBase::UpdateMovementSpeed()
 {
-	if (!_animInstance.IsValid()) return;
+	if (_animInstance.IsValid() && _animInstance->IsClimbing)
+	{
+		_acceleratedMovementSpeed = _inputVector.X;
+		
+		return;
+	}
 	
-	if (_animInstance->IsClimbing)
-	{
-		MovementSpeed = _inputVector.X;
-	}
-	else
-	{
-		if (_inputVector == FVector::ZeroVector) _run = false;
-		const float runMultiplier = _run ? 2.f : 1.f;
-		MovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
-	}
-
-	_animInstance->MovementSpeed = MovementSpeed;
+	if (_inputVector == FVector::ZeroVector) _run = false;
+	const float runMultiplier = _run ? 2.f : 1.f;
+	_acceleratedMovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
 }
 
 void APICharacterBase::BeginPlay()
@@ -26,14 +23,34 @@ void APICharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	_animInstance = Cast<UPIAnimInstanceBase>(GetMesh()->GetAnimInstance());
-	_characterRotator.SetAcceleration(RotationAcceleration);
+	_capsuleComponent = GetComponent<UCapsuleComponent>();
+
+	_acceleratedCharacterDirection.SetAcceleration(_rotationAcceleration);
+	_acceleratedCapsuleRadius.Acceleration = _capsuleRadiusAcceleration;
+	_acceleratedMovementSpeed.Acceleration = _defaultMovementAcceleration;
+
+	_acceleratedCapsuleRadius = _defaultCapsuleRadius;
 }
 
 void APICharacterBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	
+	_acceleratedCharacterDirection.Tick(DeltaSeconds);
+	_acceleratedCapsuleRadius.Tick(DeltaSeconds);
+	_acceleratedMovementSpeed.Tick(DeltaSeconds);
 
-	_characterRotator.Tick(DeltaSeconds);
+	if (_capsuleComponent.IsValid())
+	{
+		_capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
+	}
+
+	if (_animInstance.IsValid())
+	{
+		_animInstance->MovementSpeed = _acceleratedMovementSpeed;
+
+		if (_animInstance->IsClimbing) return;
+	}
 
 	if (_inputVector != FVector::ZeroVector)
 	{
@@ -41,9 +58,9 @@ void APICharacterBase::Tick(float DeltaSeconds)
 		const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
 		const FRotator targetRotator = cameraRotator + inputRotator;
 		
-		_characterRotator.SetTarget(targetRotator.Vector());
+		_acceleratedCharacterDirection = targetRotator.Vector();
 		
-		SetActorRelativeRotation(_characterRotator.GetRotator());
+		SetActorRelativeRotation(_acceleratedCharacterDirection);
 	}
 }
 
@@ -96,3 +113,14 @@ void APICharacterBase::SetCanStartClimbingTree(bool canStartClimbing)
 {
 	_canStartClimbingTree = canStartClimbing;
 }
+
+void APICharacterBase::SetCapsuleRadius(const float* radius)
+{
+	_acceleratedCapsuleRadius = radius ? *radius : _defaultCapsuleRadius;
+}
+
+void APICharacterBase::SetMovementAcceleration(const float* acceleration)
+{
+	_acceleratedMovementSpeed.Acceleration = acceleration ? *acceleration : _defaultMovementAcceleration;
+}
+

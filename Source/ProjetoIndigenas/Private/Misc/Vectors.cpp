@@ -12,28 +12,28 @@ FAcceleratedValue::FAcceleratedValue(float current, float acceleration) : FAccel
 
 void FAcceleratedValue::Tick(float DeltaSeconds)
 {
-	const float delta = Target - _current;
+	const float delta = _target - _current;
 
 	float step = FMath::Abs(delta) * Acceleration * DeltaSeconds;
-	if (Target < _current) step = -step;
+	if (_target < _current) step = -step;
 
 	if (FMath::Abs(step) > FMath::Abs(delta))
 	{
-		_current = Target;
+		_current = _target;
 		return;
 	}
 	
 	_current += step;
 }
 
-float FAcceleratedValue::GetCurrent() const
+FAcceleratedValue::operator float() const
 {
 	return _current;
 }
 
-FAcceleratedValue::operator float() const
+void FAcceleratedValue::operator=(float value)
 {
-	return _current;
+	_target = value;
 }
 
 #pragma endregion FAcceleratedValue
@@ -64,20 +64,25 @@ void FAcceleratedVector2D::SetAcceleration(float acceleration)
 	Y.Acceleration = acceleration;
 }
 
-void FAcceleratedVector2D::SetTarget(FVector2D value)
-{
-	X.Target = value.X;
-	Y.Target = value.Y;
-}
-
-FVector2D FAcceleratedVector2D::GetVector2D() const
+FAcceleratedVector2D::operator FVector2D() const
 {
 	return FVector2D(X, Y);
 }
 
-FRotator FAcceleratedVector2D::GetRotator() const
+FAcceleratedVector2D::operator FVector() const
+{
+	return FVector(X, Y, 0.f);
+}
+
+FAcceleratedVector2D::operator FRotator() const
 {
 	return FVector(X, Y, 0.f).Rotation();
+}
+
+void FAcceleratedVector2D::operator =(const FVector2D& value)
+{
+	X = value.X;
+	Y = value.Y;
 }
 
 #pragma endregion FAcceleratedVector2D
@@ -111,21 +116,21 @@ void FAcceleratedVector::SetAcceleration(float acceleration)
 	Z.Acceleration = acceleration;
 }
 
-void FAcceleratedVector::SetTarget(FVector value)
-{
-	FAcceleratedVector2D::SetTarget(FVector2D(value.X, value.Y));
-
-	Z.Target = value.Z;
-}
-
-FVector FAcceleratedVector::GetVector() const
+FAcceleratedVector::operator FVector() const
 {
 	return FVector(X, Y, Z);
 }
 
-FRotator FAcceleratedVector::GetRotator() const
+FAcceleratedVector::operator FRotator() const
 {
-	return GetVector().Rotation();
+	return FVector(X, Y, Z).Rotation();
+}
+
+void FAcceleratedVector::operator=(const FVector& value)
+{
+	X = value.X;
+	Y = value.Y;
+	Z = value.Z;
 }
 
 #pragma endregion FAcceleratedVector

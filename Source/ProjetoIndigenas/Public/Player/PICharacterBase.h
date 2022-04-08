@@ -13,29 +13,36 @@ class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 	GENERATED_BODY()
 
 	TWeakObjectPtr<UPIAnimInstanceBase> _animInstance;
-
-protected:
-	FAcceleratedVector _characterRotator;
+	TWeakObjectPtr<UCapsuleComponent> _capsuleComponent;
 	
-	FVector _inputVector;
-	float _directionYaw;
-	bool _run;
-	bool _canStartClimbingTree;
+	FAcceleratedVector _acceleratedCharacterDirection;
+	FAcceleratedValue _acceleratedCapsuleRadius;
+	FAcceleratedValue _acceleratedMovementSpeed;
 
+	FVector _inputVector;
+	bool _run;
+	float _directionYaw;
+	
 	void UpdateMovementSpeed();
 
-	template<typename TAnimInstance>
-	TAnimInstance* GetAnimInstance() { return Cast<TAnimInstance>(_animInstance.Get()); }
+protected:
+	bool _canStartClimbingTree;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _defaultCapsuleRadius = 34.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _defaultMovementAcceleration = 1.f;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _rotationAcceleration = 1.f;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _capsuleRadiusAcceleration = 1.f;
 	
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(BlueprintReadOnly)
-	float MovementSpeed;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float RotationAcceleration = 1.f;
-	
 	virtual void Tick(float DeltaSeconds) override;
 
 	void SetXInput(float x);
@@ -46,5 +53,30 @@ public:
 	virtual void StartClimbing();
 	virtual void StopClimbing();
 
-	void SetCanStartClimbingTree(bool canStartClimbing);
+	FORCEINLINE void SetCanStartClimbingTree(bool canStartClimbing);
+	FORCEINLINE void SetCapsuleRadius(const float* radius);
+	FORCEINLINE void SetMovementAcceleration(const float* acceleration);
+
+#pragma region Templates Declarations
+	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();
+	template<typename TComponent> TComponent* GetComponent();
+#pragma endregion Templates Declarations
 };
+
+#pragma region Templates Implementations
+
+template <typename TAnimInstance>
+TAnimInstance* APICharacterBase::GetAnimInstance()
+{
+	if (!_animInstance.IsValid()) return nullptr;
+	return Cast<TAnimInstance>(_animInstance.Get());
+}
+
+template <typename TComponent>
+TComponent* APICharacterBase::GetComponent()
+{
+	UActorComponent* component = GetComponentByClass(TComponent::StaticClass());
+	return Cast<TComponent>(component);
+}
+
+#pragma endregion Templates Implementations

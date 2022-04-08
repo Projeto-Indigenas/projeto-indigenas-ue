@@ -12,16 +12,12 @@ void APICharacter::BeginPlay()
 
 void APICharacter::Tick(float DeltaSeconds)
 {
-	if (!_animInstance.IsValid() || !_animInstance->IsClimbing)
-	{
-		Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 
-		return;
+	if (_animInstance.IsValid() && _animInstance->IsClimbing)
+	{
+		GetCharacterMovement()->Velocity = FVector::ZeroVector;
 	}
-	
-	AActor::Tick(DeltaSeconds);
-	
-	GetCharacterMovement()->Velocity = FVector::ZeroVector;
 }
 
 void APICharacter::StartClimbing()
@@ -30,7 +26,12 @@ void APICharacter::StartClimbing()
 	if (!_animInstance.IsValid()) return;
 
 	GetCharacterMovement()->MovementMode = MOVE_Flying;
-	_animInstance->State = EPICharacterAnimationState::Climbing;
+	
+	const EPICharacterAnimationState& state = EPICharacterAnimationState::Climbing;
+	_animInstance->State = state;
+
+	SetCapsuleRadius(_capsuleRadiusForState.Find(state));
+	SetMovementAcceleration(_movementAccelerationForState.Find(state));
 }
 
 void APICharacter::StopClimbing()
@@ -38,5 +39,9 @@ void APICharacter::StopClimbing()
 	if (!_animInstance.IsValid()) return;
 
 	GetCharacterMovement()->MovementMode = MOVE_Walking;
-	_animInstance->State = EPICharacterAnimationState::Movement;
+	const EPICharacterAnimationState& state = EPICharacterAnimationState::Movement;
+	_animInstance->State = state;
+	
+	SetCapsuleRadius(_capsuleRadiusForState.Find(state));
+	SetMovementAcceleration(_movementAccelerationForState.Find(state));
 }

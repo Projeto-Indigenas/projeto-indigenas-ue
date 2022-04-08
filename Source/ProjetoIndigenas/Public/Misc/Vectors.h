@@ -6,11 +6,11 @@ struct PROJETOINDIGENAS_API FAcceleratedValue
 {
 private:
 	float _current = 0.f;
+	float _target = 0.f;
 	
 public:
 	static FAcceleratedValue ZeroValue;
-
-	float Target = 0.f;
+	
 	float Acceleration = 1.f;
 	
 	FAcceleratedValue() = default;
@@ -18,8 +18,8 @@ public:
 
 	void Tick(float DeltaSeconds);
 	
-	FORCEINLINE float GetCurrent() const;
 	FORCEINLINE operator float() const;
+	FORCEINLINE void operator =(float value);
 };
 
 struct PROJETOINDIGENAS_API FAcceleratedVector2D
@@ -34,9 +34,10 @@ struct PROJETOINDIGENAS_API FAcceleratedVector2D
 	virtual void Tick(float DeltaSeconds);
 	virtual void SetAcceleration(float acceleration);
 
-	void SetTarget(FVector2D value);
-	FORCEINLINE FVector2D GetVector2D() const;
-	FORCEINLINE virtual FRotator GetRotator() const;
+	FORCEINLINE operator FVector2D() const;
+	FORCEINLINE virtual operator FVector() const;
+	FORCEINLINE virtual operator FRotator() const;
+	FORCEINLINE void operator =(const FVector2D& value);
 };
 
 struct PROJETOINDIGENAS_API FAcceleratedVector : FAcceleratedVector2D
@@ -48,8 +49,8 @@ struct PROJETOINDIGENAS_API FAcceleratedVector : FAcceleratedVector2D
 
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetAcceleration(float acceleration) override;
-
-	void SetTarget(FVector value);
-	FORCEINLINE FVector GetVector() const;
-	FORCEINLINE virtual FRotator GetRotator() const override;
+	
+	FORCEINLINE virtual operator FVector() const override;
+	FORCEINLINE virtual operator FRotator() const override;
+	FORCEINLINE void operator =(const FVector& value);
 };
