@@ -17,6 +17,8 @@ class PROJETOINDIGENAS_API APIPlayerController : public APlayerController
 	void MoveYInputBinding(float y);
 	void ToggleRunInputBinding();
 	void DodgeInputBinding();
+	void PositiveActionInputBinding();
+	void NegativeActionInputBinding();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)

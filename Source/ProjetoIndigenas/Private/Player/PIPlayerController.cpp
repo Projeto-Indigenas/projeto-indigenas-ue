@@ -28,14 +28,36 @@ void APIPlayerController::DodgeInputBinding()
 	_character->Dodge();
 }
 
+void APIPlayerController::PositiveActionInputBinding()
+{
+	//TODO(anderson): in the future provide an abstract action event that do not need to be specified
+	if (!_character.IsValid()) return;
+	_character->StartClimbing();
+}
+
+void APIPlayerController::NegativeActionInputBinding()
+{
+	if (!_character.IsValid()) return;
+	_character->StopClimbing();
+}
+
 void APIPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAxis(TEXT("MoveX"), this, &APIPlayerController::MoveXInputBinding);
-	InputComponent->BindAxis(TEXT("MoveY"), this, &APIPlayerController::MoveYInputBinding);
-	InputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &APIPlayerController::ToggleRunInputBinding);
-	InputComponent->BindAction(TEXT("Dodge"), IE_Pressed, this, &APIPlayerController::DodgeInputBinding);
+	InputComponent->BindAxis(TEXT("MoveX"), this,
+		&APIPlayerController::MoveXInputBinding);
+	InputComponent->BindAxis(TEXT("MoveY"), this,
+		&APIPlayerController::MoveYInputBinding);
+	InputComponent->BindAction(TEXT("Run"), IE_Pressed, this,
+		&APIPlayerController::ToggleRunInputBinding);
+	InputComponent->BindAction(TEXT("Dodge"), IE_Pressed, this,
+		&APIPlayerController::DodgeInputBinding);
+	InputComponent->BindAction(TEXT("PositiveAction"), IE_Pressed, this,
+		&APIPlayerController::PositiveActionInputBinding);
+	InputComponent->BindAction(TEXT("NegativeAction"), IE_Pressed, this,
+		&APIPlayerController::NegativeActionInputBinding);
+	
 }
 
 void APIPlayerController::OnPossess(APawn* InPawn)

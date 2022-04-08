@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
-enum class ENpcAnimationState : uint8
+enum class EPINpcAnimationState : uint8
 {
 	Movement,
 	Climbing,

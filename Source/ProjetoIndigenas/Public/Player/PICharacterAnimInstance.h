@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CharacterAnimationState.h"
+#include "PICharacterAnimationState.h"
 #include "PIAnimInstanceBase.h"
 #include "PICharacterAnimInstance.generated.h"
 
@@ -12,5 +12,5 @@ class PROJETOINDIGENAS_API UPICharacterAnimInstance : public UPIAnimInstanceBase
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ECharacterAnimationState State;
+	EPICharacterAnimationState State;
 };

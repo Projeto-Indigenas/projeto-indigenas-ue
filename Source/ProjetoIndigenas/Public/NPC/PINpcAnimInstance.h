@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NpcAnimationState.h"
+#include "PINpcAnimationState.h"
 #include "Player/PIAnimInstanceBase.h"
 #include "PINpcAnimInstance.generated.h"
 
@@ -20,5 +20,5 @@ public:
 	FAnimationEventDelegate AnimationCompletedDelegate;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ENpcAnimationState State;
+	EPINpcAnimationState State;
 };
