@@ -1,4 +1,6 @@
-﻿#include "Debug/PIPathDrawer.h"
+﻿#include "EditorOnly/Debug/PIPathDrawer.h"
+
+#if WITH_EDITOR
 
 void DrawPath(
 	FPrimitiveDrawInterface* PDI,
@@ -46,3 +48,5 @@ void DrawPath(
 		PDI->DrawPoint(current, endNodeColor, endNodeSize, depthPriority);
 	}
 }
+
+#endif

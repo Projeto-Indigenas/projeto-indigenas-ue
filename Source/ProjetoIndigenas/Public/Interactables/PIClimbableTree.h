@@ -24,6 +24,7 @@ protected:
 
 #if WITH_EDITOR
 public:
-	virtual void DrawVisualization(FPrimitiveDrawInterface* PDI) override;
+	virtual TSharedPtr<FPICustomEditor> GetCustomEditor() override;
+	friend class FPIClimbableTreeCustomEditor;
 #endif
 };

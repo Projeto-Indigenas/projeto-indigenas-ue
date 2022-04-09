@@ -2,6 +2,7 @@
 
 #include "UnrealEd.h"
 #include "Actors/PIActor.h"
+#include "EditorOnly/PICustomEditor.h"
 
 UPIDebugVisualizationComponent::UPIDebugVisualizationComponent()
 {
@@ -9,9 +10,23 @@ UPIDebugVisualizationComponent::UPIDebugVisualizationComponent()
 	bIsEditorOnly = true;
 }
 
-void UPIDebugVisualizationComponent::DrawVisualization(FPrimitiveDrawInterface* PDI) const
+void UPIDebugVisualizationComponent::OnRegister()
 {
+	Super::OnRegister();
+
 	APIActor* actor = Cast<APIActor>(GetOwner());
 	if (actor == nullptr) return;
-	actor->DrawVisualization(PDI);
+	_customEditor = actor->GetCustomEditor();
+}
+
+void UPIDebugVisualizationComponent::DrawVisualization(FPrimitiveDrawInterface* PDI) const
+{
+	if (!_customEditor.IsValid()) return;
+	_customEditor->DrawVisualization(PDI);
+}
+
+void UPIDebugVisualizationComponent::DrawVisualizationHUD(FCanvas* Canvas) const
+{
+	if (!_customEditor.IsValid()) return;
+	_customEditor->DrawVisualizationHUD(Canvas);
 }

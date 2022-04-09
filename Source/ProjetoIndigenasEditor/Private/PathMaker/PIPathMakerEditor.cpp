@@ -3,7 +3,7 @@
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "SEditorViewport.h"
-#include "Debug/PIPathDrawer.h"
+#include "EditorOnly/Debug/PIPathDrawer.h"
 
 const FEditorModeID FPIPathMakerEditor::EditorModeID = FEditorModeID(TEXT("PathMakerEditorMode"));
 

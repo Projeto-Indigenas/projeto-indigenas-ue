@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "PIActor.generated.h"
 
+class FPICustomEditor;
+
 UCLASS()
 class PROJETOINDIGENAS_API APIActor : public AActor
 {
@@ -10,6 +12,6 @@ class PROJETOINDIGENAS_API APIActor : public AActor
 	
 #if WITH_EDITOR
 public:
-	virtual void DrawVisualization(FPrimitiveDrawInterface* PDI) { }
+	virtual TSharedPtr<FPICustomEditor> GetCustomEditor() { return nullptr; }
 #endif
 };
