@@ -3,6 +3,7 @@
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "SEditorViewport.h"
+#include "Debug/PIPathDrawer.h"
 
 const FEditorModeID FPIPathMakerEditor::EditorModeID = FEditorModeID(TEXT("PathMakerEditorMode"));
 
@@ -212,39 +213,7 @@ void FPIPathMakerEditor::Render(const FSceneView* View, FViewport* Viewport, FPr
 
 	if (_targetPath == nullptr) return;
 
-	constexpr ESceneDepthPriorityGroup depthPriority = SDPG_Foreground;
-
-	const int& nodesCount = _targetPath->Nodes.Num();
-	
-	for (int index = 0; index < nodesCount; ++index)
-	{
-		const FVector& current = _targetPath->Nodes[index];
-
-		if (index < nodesCount - 1)
-		{
-			const FVector& next = _targetPath->Nodes[index + 1];
-
-			FColor color;
-			float size;
-			if (index == 0) 
-			{
-				color = FColor::Green;
-				size = 20.f;
-			}
-			else 
-			{
-				color = FColor::Blue;
-				size = 10.f;
-			}
-			PDI->DrawPoint(current, color, size, depthPriority);
-			
-			PDI->DrawLine(current, next, FLinearColor::Red, depthPriority, 1.f);
-
-			continue;
-		}
-
-		PDI->DrawPoint(current, FColor::Red, 20.f, depthPriority);
-	}
+	DrawPath(PDI, _targetPath->Nodes);
 }
 
 bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
