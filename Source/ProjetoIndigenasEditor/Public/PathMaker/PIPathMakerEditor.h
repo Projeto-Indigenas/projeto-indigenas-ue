@@ -1,26 +1,21 @@
 #pragma once
 
 #include "UnrealEd.h"
+#include "EditorOnly/PathEditor/PIPathEditorBase.h"
+#include "NPC/Paths/PIPathData.h"
 
-class UPIPathData;
-
-class FPIPathMakerEditor : public FEdMode
+class PROJETOINDIGENASEDITOR_API FPIPathMakerEditor : public FEdMode, FPIPathEditorBase
 {
 	UPIPathData* _targetPath = nullptr;
-	FVector* _currentNode = nullptr;
-	int _currentNodeIndex = -1;
-
+	
 	static FVector GetWorldLocation(const UWorld* world, 
 		const FViewportCursorLocation& mouseLocation);
-	int FindNearestVector(const FVector& location) const;
-	void CreateNewVector(const FVector& location);
-	void GrabNearestVector(const FVector& location);
-	void DeleteNearestVector(const FVector& location) const;
-	void FocusNearestVector(FEditorViewportClient * viewportClient, 
-		const FVector & mouseLocation) const;
-	void FinishPlacingNode();
-	void MarkDirtyAndSave();
-	void MakeInfoText(FString currentState) const;
+	void FocusNearestVector(FEditorViewportClient * viewportClient, const FVector & mouseLocation) const;
+	virtual void MarkDirty() override;
+	virtual void Save() override;
+
+protected:
+	virtual void MakeInfoText(const TCHAR* infoText) override;
 	
 public:
 	const static FEditorModeID EditorModeID;
@@ -32,5 +27,5 @@ public:
 	virtual void Render(const FSceneView* View, FViewport* Viewport, FPrimitiveDrawInterface* PDI) override;
 	virtual bool InputKey(FEditorViewportClient* ViewportClient, FViewport* Viewport, FKey Key, EInputEvent Event) override;
 
-	void SetEditingPath(UPIPathData* pathData);
+	virtual void SetTargetPath(UPIPathData* targetPath);
 };

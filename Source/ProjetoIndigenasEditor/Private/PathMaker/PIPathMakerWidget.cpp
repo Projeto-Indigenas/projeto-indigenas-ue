@@ -20,7 +20,7 @@ void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData) const
 		object = nullptr;
 	}
 
-	GetEdMode()->SetEditingPath(Cast<UPIPathData>(object));
+	GetEdMode()->SetTargetPath(Cast<UPIPathData>(object));
 }
 
 void SPIPathMakerWidget::Construct(const FArguments& inArgs)
