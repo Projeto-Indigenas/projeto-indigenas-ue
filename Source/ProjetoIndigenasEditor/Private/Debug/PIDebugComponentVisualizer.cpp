@@ -20,6 +20,11 @@ UActorComponent* FPIDebugComponentVisualizer::GetEditedComponent() const
 
 void FPIDebugComponentVisualizer::EndEditing()
 {
+	if (_editingComponent.IsValid())
+	{
+		_editingComponent->EndEditing();
+	}
+	
 	_usedViewportClient = nullptr;
 	_editingComponent = nullptr;
 }
@@ -39,8 +44,7 @@ void FPIDebugComponentVisualizer::DrawVisualization(
 	
 	_editingComponent = Cast<UPIDebugVisualizationComponent>(Component);
 	if (!_editingComponent.IsValid()) return;
- 	if (_usedViewportClient == nullptr) return;
-	_editingComponent->DrawVisualization(_usedViewportClient, PDI);
+	_editingComponent->DrawVisualization(Component, GCurrentLevelEditingViewportClient, PDI);
 }
 
 void FPIDebugComponentVisualizer::DrawVisualizationHUD(

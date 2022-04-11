@@ -3,34 +3,22 @@
 #include "CoreMinimal.h"
 #include "Debug/PICustomEditor.h"
 #include "Interactables/PIClimbableTree.h"
-#include "PathEditor/PIPathEditorBase.h"
 
-class PROJETOINDIGENASEDITOR_API FPIClimbableTreeCustomEditor : public FPICustomEditor, public FPIPathEditorBase
+class PROJETOINDIGENASEDITOR_API FPIClimbableTreeCustomEditor : public FPICustomEditor
 {
 	TWeakObjectPtr<APIClimbableTree> _climbableTree;
+	TWeakObjectPtr<UStaticMeshComponent> _staticMeshComponent;
+	TArray<FVector> _socketsLocations;
 
-	static bool TryGetTargetLocation(const UWorld* world, const FViewportCursorLocation& mouseLocation, FVector& outLocation);
-	
 public:
 	FPIClimbableTreeCustomEditor() = default;
 
-	virtual void SetActor(AActor* actor) override;
 	virtual bool IsEditorForClass(UClass* cls) override;
 
-	virtual TArray<FVector>& GetNodes() const override;
+	virtual void EndEditing() override;
 
 	virtual void DrawVisualization(
+		const UActorComponent* Component,
 		FEditorViewportClient* ViewportClient,
 		FPrimitiveDrawInterface* PDI) override;
-	virtual void DrawVisualizationHUD(FCanvas* Canvas) override;
-	virtual bool HandleInputKey(
-		FEditorViewportClient* ViewportClient,
-		const FKey& Key,
-		const EInputEvent& Event) override;
-
-	virtual void MarkDirty() override;
-	virtual void Save() override;
-
-	virtual FVector GetWorldVector(FVector vector) override;
-	virtual FVector GetLocalVector(FVector vector) override;
 };

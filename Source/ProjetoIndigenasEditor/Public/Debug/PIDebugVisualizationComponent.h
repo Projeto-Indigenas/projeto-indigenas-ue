@@ -21,8 +21,10 @@ public:
 	bool ShowOnlyWhenSelected = true;
 	
 	UPIDebugVisualizationComponent();
-	
+
+	void EndEditing() const;
 	void DrawVisualization(
+		const UActorComponent* Component,
 		FEditorViewportClient* ViewportClient,
 		FPrimitiveDrawInterface* PDI) const;
 	void DrawVisualizationHUD(FCanvas* Canvas) const;

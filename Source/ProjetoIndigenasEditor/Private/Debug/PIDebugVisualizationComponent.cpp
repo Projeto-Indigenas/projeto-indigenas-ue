@@ -3,12 +3,6 @@
 #include "ProjetoIndigenasEditor.h"
 #include "UnrealEd.h"
 
-UPIDebugVisualizationComponent::UPIDebugVisualizationComponent()
-{
-	PrimaryComponentTick.bCanEverTick = true;
-	bIsEditorOnly = true;
-}
-
 void UPIDebugVisualizationComponent::OnRegister()
 {
 	Super::OnRegister();
@@ -22,13 +16,25 @@ void UPIDebugVisualizationComponent::OnRegister()
 	_customEditor = moduleInstance->GetCustomEditor(actorClass);
 }
 
+UPIDebugVisualizationComponent::UPIDebugVisualizationComponent()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+	bIsEditorOnly = true;
+}
+
+void UPIDebugVisualizationComponent::EndEditing() const
+{
+	if (_customEditor == nullptr) return;
+	_customEditor->EndEditing();
+}
+
 void UPIDebugVisualizationComponent::DrawVisualization(
+	const UActorComponent* Component,
 	FEditorViewportClient* ViewportClient,
 	FPrimitiveDrawInterface* PDI) const
 {
 	if (_customEditor == nullptr) return;
-	_customEditor->SetActor(GetOwner());
-	_customEditor->DrawVisualization(ViewportClient, PDI);
+	_customEditor->DrawVisualization(Component, ViewportClient, PDI);
 }
 
 void UPIDebugVisualizationComponent::DrawVisualizationHUD(FCanvas* Canvas) const
@@ -43,6 +49,5 @@ bool UPIDebugVisualizationComponent::HandleInputKey(
 	const EInputEvent& Event) const
 {
 	if (_customEditor == nullptr) return false;
-	_customEditor->SetActor(GetOwner());
 	return _customEditor->HandleInputKey(ViewportClient, Key, Event);
 }
