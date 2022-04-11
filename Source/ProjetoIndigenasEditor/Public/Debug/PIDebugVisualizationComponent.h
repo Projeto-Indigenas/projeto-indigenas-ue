@@ -11,7 +11,7 @@ class PROJETOINDIGENASEDITOR_API UPIDebugVisualizationComponent : public UActorC
 {
 	GENERATED_BODY()
 
-	TSharedPtr<FPICustomEditor> _customEditor;
+	FPICustomEditor* _customEditor;
 
 protected:
 	virtual void OnRegister() override;
@@ -24,4 +24,8 @@ public:
 	
 	void DrawVisualization(FPrimitiveDrawInterface* PDI) const;
 	void DrawVisualizationHUD(FCanvas* Canvas) const;
+	bool HandleInputKey(
+		FEditorViewportClient* ViewportClient,
+		const FKey& Key,
+		const EInputEvent& Event) const;
 };

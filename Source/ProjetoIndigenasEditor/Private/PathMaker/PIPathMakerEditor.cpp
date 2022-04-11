@@ -1,9 +1,13 @@
 #include "PathMaker/PIPathMakerEditor.h"
+
+#include <EditorModeManager.h>
+#include <FileHelpers.h>
+
 #include "NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "SEditorViewport.h"
-#include "EditorOnly/Debug/PIPathDrawer.h"
+#include "Debug/PIPathDrawer.h"
 
 const FEditorModeID FPIPathMakerEditor::EditorModeID = FEditorModeID(TEXT("PathMakerEditorMode"));
 
@@ -21,28 +25,6 @@ FVector FPIPathMakerEditor::GetWorldLocation(const UWorld* world, const FViewpor
 	}
 
 	return hit.Location;
-}
-
-void FPIPathMakerEditor::FocusNearestVector(
-	FEditorViewportClient* viewportClient, 
-	const FVector& mouseLocation) const
-{
-	const int& nearestVector = FindNearestVector(mouseLocation);
-
-	const TArray<FVector>& nodes = GetDataProvider()->GetNodes();
-	
-	if (nearestVector < 0 || nearestVector >= nodes.Num()) return;
-
-	const FVector& targetLocation = nodes[nearestVector];
-
-	const TWeakPtr<SEditorViewport> editorViewport = viewportClient->GetEditorViewportWidget();
-	FViewportCameraTransform& transform = viewportClient->ViewTransformPerspective;
-
-	constexpr float distance = -100.f;
-	const FVector cameraOffsetVector = transform.GetRotation().Vector() * distance;
-
-	transform.SetLookAt(targetLocation);
-	transform.TransitionToLocation(targetLocation + cameraOffsetVector, editorViewport, false);
 }
 
 void FPIPathMakerEditor::MarkDirty()
@@ -65,13 +47,11 @@ void FPIPathMakerEditor::MakeInfoText(const TCHAR* infoText)
 		"\tZ: %.2f"
 	), currentNode->X, currentNode->Y, currentNode->Z) : FString();
 
-	IPIPathEditorDataProvider* dataProvider = GetDataProvider();
-	
 	const FString& infoString = FString::Printf(TEXT(
 		"Current node count: %d\n"
 		"Current state: %s\n"
 		"Current editing node: %s"),
-		dataProvider ? dataProvider->GetNodes().Num() : 0,
+		_targetPath ? _targetPath->Nodes.Num() : 0,
 		infoText,
 		*vectorText);
 
@@ -128,15 +108,14 @@ void FPIPathMakerEditor::Render(const FSceneView* View, FViewport* Viewport, FPr
 {
 	FEdMode::Render(View, Viewport, PDI);
 
-	IPIPathEditorDataProvider* dataProvider = GetDataProvider();
-	if (dataProvider == nullptr) return;
-	DrawPath(PDI, dataProvider->GetNodes());
+	if (_targetPath == nullptr) return;
+	DrawPath(PDI, _targetPath->Nodes);
 }
 
 bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
                                   FViewport* Viewport, FKey Key, EInputEvent Event)
 {
-	if (GetDataProvider() == nullptr) return FEdMode::InputKey(ViewportClient, Viewport, Key, Event);
+	if (_targetPath == nullptr) return FEdMode::InputKey(ViewportClient, Viewport, Key, Event);
 
 	if (Event == IE_Pressed && !Key.IsMouseButton())
 	{
@@ -183,9 +162,14 @@ bool FPIPathMakerEditor::InputKey(FEditorViewportClient* ViewportClient,
 	return FEdMode::InputKey(ViewportClient, Viewport, Key, Event);
 }
 
+TArray<FVector>& FPIPathMakerEditor::GetNodes() const
+{
+	return _targetPath->Nodes;
+}
+
 void FPIPathMakerEditor::SetTargetPath(UPIPathData* targetPath)
 {
-	SetDataProvider(targetPath);
+	_targetPath = targetPath;
 
 	if (targetPath == nullptr)
 	{

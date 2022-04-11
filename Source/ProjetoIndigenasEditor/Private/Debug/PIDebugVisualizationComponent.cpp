@@ -1,8 +1,7 @@
 ﻿#include "Debug/PIDebugVisualizationComponent.h"
 
+#include "ProjetoIndigenasEditor.h"
 #include "UnrealEd.h"
-#include "Actors/PIActor.h"
-#include "EditorOnly/PICustomEditor.h"
 
 UPIDebugVisualizationComponent::UPIDebugVisualizationComponent()
 {
@@ -14,19 +13,30 @@ void UPIDebugVisualizationComponent::OnRegister()
 {
 	Super::OnRegister();
 
-	APIActor* actor = Cast<APIActor>(GetOwner());
-	if (actor == nullptr) return;
-	_customEditor = actor->GetCustomEditor();
+	IModuleInterface* module = FModuleManager::Get().GetModule("ProjetoIndigenasEditor");
+	if (module == nullptr) return;
+	FProjetoIndigenasEditor* piEditor = static_cast<FProjetoIndigenasEditor*>(module);
+	
+	_customEditor = piEditor->GetCustomEditor<FPICustomEditor>(GetOwner()->GetClass());
 }
 
 void UPIDebugVisualizationComponent::DrawVisualization(FPrimitiveDrawInterface* PDI) const
 {
-	if (!_customEditor.IsValid()) return;
+	if (_customEditor == nullptr) return;
 	_customEditor->DrawVisualization(PDI);
 }
 
 void UPIDebugVisualizationComponent::DrawVisualizationHUD(FCanvas* Canvas) const
 {
-	if (!_customEditor.IsValid()) return;
+	if (_customEditor == nullptr) return;
 	_customEditor->DrawVisualizationHUD(Canvas);
+}
+
+bool UPIDebugVisualizationComponent::HandleInputKey(
+	FEditorViewportClient* ViewportClient,
+	const FKey& Key,
+	const EInputEvent& Event) const
+{
+	if (_customEditor == nullptr) return false;
+	return _customEditor->HandleInputKey(ViewportClient, Key, Event);
 }

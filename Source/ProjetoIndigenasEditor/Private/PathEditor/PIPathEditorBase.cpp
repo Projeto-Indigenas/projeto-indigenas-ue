@@ -1,10 +1,12 @@
-﻿#include "EditorOnly/PathEditor/PIPathEditorBase.h"
+﻿#include "PathEditor/PIPathEditorBase.h"
+
+#include <SEditorViewport.h>
 
 int FPIPathEditorBase::FindNearestVector(const FVector& location) const
 {
 	FVector nearestLocation = FVector::ZeroVector;
 	
-	const TArray<FVector>& nodes = _dataProvider->GetNodes();
+	const TArray<FVector>& nodes = GetNodes();
 	
 	int nearestIndex = -1;
 	for (int index = 0; index < nodes.Num(); ++index)
@@ -20,11 +22,33 @@ int FPIPathEditorBase::FindNearestVector(const FVector& location) const
 	return nearestIndex;
 }
 
+void FPIPathEditorBase::FocusNearestVector(
+	FEditorViewportClient* viewportClient, 
+	const FVector& mouseLocation) const
+{
+	const int& nearestVector = FindNearestVector(mouseLocation);
+
+	const TArray<FVector>& nodes = GetNodes();
+	
+	if (nearestVector < 0 || nearestVector >= nodes.Num()) return;
+
+	const FVector& targetLocation = nodes[nearestVector];
+
+	const TWeakPtr<SEditorViewport> editorViewport = viewportClient->GetEditorViewportWidget();
+	FViewportCameraTransform& transform = viewportClient->ViewTransformPerspective;
+
+	constexpr float distance = -100.f;
+	const FVector cameraOffsetVector = transform.GetRotation().Vector() * distance;
+
+	transform.SetLookAt(targetLocation);
+	transform.TransitionToLocation(targetLocation + cameraOffsetVector, editorViewport, false);
+}
+
 void FPIPathEditorBase::CreateNewVector(const FVector& location)
 {
 	if (_currentNode != nullptr) return;
 
-	TArray<FVector>& nodes = _dataProvider->GetNodes();
+	TArray<FVector>& nodes = GetNodes();
 	
 	if (nodes.Num() == 0)
 	{
@@ -56,9 +80,7 @@ void FPIPathEditorBase::CreateNewVector(const FVector& location)
 
 void FPIPathEditorBase::GrabNearestVector(const FVector& location)
 {
-	if (_dataProvider == nullptr) return;
-
-	TArray<FVector>& nodes = _dataProvider->GetNodes();
+	TArray<FVector>& nodes = GetNodes();
 	
 	if (nodes.Num() == 0) return;
 
@@ -74,7 +96,7 @@ void FPIPathEditorBase::GrabNearestVector(const FVector& location)
 
 void FPIPathEditorBase::DeleteNearestVector(const FVector& location)
 {
-	TArray<FVector>& nodes = _dataProvider->GetNodes();
+	TArray<FVector>& nodes = GetNodes();
 	
 	if (_currentNodeIndex != -1)
 	{
@@ -110,9 +132,4 @@ void FPIPathEditorBase::Save()
 	MarkDirty();
 
 	MakeInfoText(TEXT("Saved path"));
-}
-
-void FPIPathEditorBase::SetDataProvider(IPIPathEditorDataProvider* dataProvider)
-{
-	_dataProvider = dataProvider;
 }

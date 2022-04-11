@@ -1,21 +1,28 @@
 ﻿#include "Debug/PIDebugComponentVisualizer.h"
 
-#include "UnrealEd.h"
 #include "Debug/PIDebugVisualizationComponent.h"
-
-bool FPIDebugComponentVisualizer::TryGetComponent(
-	const UActorComponent* component,
-	const UPIDebugVisualizationComponent*& outComponent) const
-{
-	outComponent = Cast<UPIDebugVisualizationComponent>(component);
-	return outComponent != nullptr;
-}
+#include "UnrealEd.h"
 
 bool FPIDebugComponentVisualizer::ShowWhenSelected()
 {
-	const UPIDebugVisualizationComponent* component;
-	if (!TryGetComponent(GetEditedComponent(), component)) return true;
+	const UActorComponent* actorComponent = GetEditedComponent();
+	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(actorComponent);
+	if (component == nullptr) return true;
 	return component->ShowOnlyWhenSelected;
+}
+
+void FPIDebugComponentVisualizer::OnRegister()
+{
+	FComponentVisualizer::OnRegister();
+}
+
+UActorComponent* FPIDebugComponentVisualizer::GetEditedComponent() const
+{
+	USelection* selection = GUnrealEd->GetSelectedActors();
+	if (selection == nullptr) return nullptr;
+	TArray<UPIDebugVisualizationComponent*> components;
+	if (selection->GetSelectedObjects(components) == 0) return nullptr;
+	return components[0];
 }
 
 void FPIDebugComponentVisualizer::DrawVisualization(
@@ -23,8 +30,8 @@ void FPIDebugComponentVisualizer::DrawVisualization(
 	const FSceneView* View,
 	FPrimitiveDrawInterface* PDI)
 {
- 	const UPIDebugVisualizationComponent* component;
-	if (!TryGetComponent(Component, component)) return;
+ 	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(Component);
+	if (component == nullptr) return;
 	component->DrawVisualization(PDI);
 }
 
@@ -34,7 +41,19 @@ void FPIDebugComponentVisualizer::DrawVisualizationHUD(
 	const FSceneView* View,
 	FCanvas* Canvas)
 {
-	const UPIDebugVisualizationComponent* component;
-	if (!TryGetComponent(Component, component)) return;
+	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(Component);
+	if (component == nullptr) return;
 	component->DrawVisualizationHUD(Canvas);
+}
+
+bool FPIDebugComponentVisualizer::HandleInputKey(
+	FEditorViewportClient* ViewportClient,
+	FViewport* Viewport,
+	FKey Key,
+	EInputEvent Event)
+{
+	const UActorComponent* actorComponent = GetEditedComponent();
+	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(actorComponent);
+	if (component == nullptr) return false;
+	return component->HandleInputKey(ViewportClient, Key, Event);
 }

@@ -1,11 +1,10 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Actors/PIActor.h"
 #include "PIClimbableTree.generated.h"
 
 UCLASS()
-class PROJETOINDIGENAS_API APIClimbableTree : public APIActor
+class PROJETOINDIGENAS_API APIClimbableTree : public AActor
 {
 	GENERATED_BODY()
 	
@@ -24,7 +23,7 @@ protected:
 
 #if WITH_EDITOR
 public:
-	virtual TSharedPtr<FPICustomEditor> GetCustomEditor() override;
-	friend class FPIClimbableTreeCustomEditor;
+	TArray<FVector>& GetTrack() { return _climbableTrack; }
+	float GetStartPositionRadius() const { return _startPositionRadius; }
 #endif
 };

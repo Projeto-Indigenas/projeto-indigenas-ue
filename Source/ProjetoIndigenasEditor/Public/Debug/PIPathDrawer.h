@@ -1,10 +1,8 @@
 ﻿#pragma once
 
-#if WITH_EDITOR
-
 #include "CoreMinimal.h"
 
-extern PROJETOINDIGENAS_API
+extern PROJETOINDIGENASEDITOR_API
 void DrawPath(
 	FPrimitiveDrawInterface* PDI,
 	const TArray<FVector>& path,
@@ -16,5 +14,3 @@ void DrawPath(
 	const float& endNodeSize = 20.f,
 	const FLinearColor& lineColor =  FLinearColor::Red,
 	const float& lineThickness = 1.f);
-
-#endif
