@@ -28,6 +28,7 @@ protected:
 	virtual TArray<FVector>& GetNodes() const = 0;
 
 	virtual FVector GetWorldVector(FVector vector) { return vector; }
+	virtual FVector GetLocalVector(FVector vector) { return vector; }
 
 public:
 	FPIPathEditorBase() = default;

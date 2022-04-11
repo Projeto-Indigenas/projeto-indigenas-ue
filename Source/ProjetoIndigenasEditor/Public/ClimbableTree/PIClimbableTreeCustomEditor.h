@@ -32,4 +32,5 @@ public:
 	virtual void Save() override;
 
 	virtual FVector GetWorldVector(FVector vector) override;
+	virtual FVector GetLocalVector(FVector vector) override;
 };

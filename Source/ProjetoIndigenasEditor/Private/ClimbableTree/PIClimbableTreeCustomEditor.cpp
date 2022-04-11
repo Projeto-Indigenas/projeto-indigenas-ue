@@ -46,8 +46,9 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(
 	if (!_climbableTree.IsValid()) return;
 	
 	const TArray<FVector>& track = _climbableTree->GetTrack();
-	
-	DrawPath(PDI, track, _climbableTree->GetActorLocation());
+
+	const FVector& actorLocation = _climbableTree->GetActorLocation();
+	DrawPath(PDI, track, actorLocation);
 
 	if (track.Num() > 0)
 	{
@@ -63,8 +64,9 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(
 	FVector mouseLocation;
 	if (TryGetTargetLocation(_climbableTree->GetWorld(), location, mouseLocation))
 	{
-		mouseLocation -= _climbableTree->GetActorLocation();
-		SetCurrentNodeValue(mouseLocation);
+		mouseLocation.X = actorLocation.X;
+		mouseLocation.Y = actorLocation.Y;
+		SetCurrentNodeValue(GetLocalVector(mouseLocation));
 	}
 	
 	MakeInfoText(TEXT("Placing node"));
@@ -107,11 +109,14 @@ bool FPIClimbableTreeCustomEditor::HandleInputKey(
 		FVector mouseLocation;
 		if (!TryGetTargetLocation(_climbableTree->GetWorld(), location, mouseLocation)) return false;
 
-		mouseLocation -= _climbableTree->GetActorLocation();
-				
+		const FVector& actorLocation = _climbableTree->GetActorLocation();
+		mouseLocation.X = actorLocation.X;
+		mouseLocation.Y = actorLocation.Y;
+		const FVector& localLocation = GetLocalVector(mouseLocation);
+		
 		if (Key == EKeys::N) // new
 		{
-			CreateNewVector(mouseLocation);
+			CreateNewVector(localLocation);
 			return true;
 		}
 
@@ -123,13 +128,13 @@ bool FPIClimbableTreeCustomEditor::HandleInputKey(
 
 		if (Key == EKeys::G) // grab nearest
 		{
-			GrabNearestVector(mouseLocation);
+			GrabNearestVector(localLocation);
 			return true;
 		}
 
 		if (Key == EKeys::D) // delete nearest
 		{
-			DeleteNearestVector(mouseLocation);
+			DeleteNearestVector(localLocation);
 			return true;
 		}
 
@@ -161,4 +166,9 @@ void FPIClimbableTreeCustomEditor::Save()
 FVector FPIClimbableTreeCustomEditor::GetWorldVector(FVector vector)
 {
 	return vector + _climbableTree->GetActorLocation();
+}
+
+FVector FPIClimbableTreeCustomEditor::GetLocalVector(FVector vector)
+{
+	return vector - _climbableTree->GetActorLocation();
 }
