@@ -11,7 +11,9 @@ class PROJETOINDIGENASEDITOR_API FPIPathEditorBase
 	
 protected:
 	virtual int FindNearestVector(const FVector& location) const;
-	void FocusNearestVector(FEditorViewportClient * viewportClient, const FVector & mouseLocation) const;
+	void FocusNearestVector(
+		FEditorViewportClient * viewportClient,
+		const FVector& location);
 	virtual void CreateNewVector(const FVector& location);
 	virtual void GrabNearestVector(const FVector& location);
 	virtual void DeleteNearestVector(const FVector& location);
@@ -24,6 +26,8 @@ protected:
 	virtual void MakeInfoText(const TCHAR* infoText) { }
 	virtual void MarkDirty() { }
 	virtual TArray<FVector>& GetNodes() const = 0;
+
+	virtual FVector GetWorldVector(FVector vector) { return vector; }
 
 public:
 	FPIPathEditorBase() = default;

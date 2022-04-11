@@ -47,22 +47,25 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(
 	
 	const TArray<FVector>& track = _climbableTree->GetTrack();
 	
-	DrawPath(PDI, track);
+	DrawPath(PDI, track, _climbableTree->GetActorLocation());
 
 	if (track.Num() > 0)
 	{
-		const FVector& baseLocation = _climbableTree->GetActorLocation() + track[0];
+		const FVector& baseLocation = GetWorldVector(track[0]);
 		DrawCircle(PDI, baseLocation, FVector::ForwardVector, FVector::RightVector,
 			FLinearColor::Red, _climbableTree->GetStartPositionRadius(), 10, 0, 1.f);
 	}
 
 	if (GetCurrentNode() == nullptr) return;
-	
-	const FViewportCursorLocation& mouseLocation = ViewportClient->GetCursorWorldLocationFromMousePos();
-	FVector worldLocation;
-	if (!TryGetTargetLocation(_climbableTree->GetWorld(), mouseLocation, worldLocation)) return;
-	
-	SetCurrentNodeValue(worldLocation);
+
+	const FViewportCursorLocation& location = ViewportClient->GetCursorWorldLocationFromMousePos();
+		
+	FVector mouseLocation;
+	if (TryGetTargetLocation(_climbableTree->GetWorld(), location, mouseLocation))
+	{
+		mouseLocation -= _climbableTree->GetActorLocation();
+		SetCurrentNodeValue(mouseLocation);
+	}
 	
 	MakeInfoText(TEXT("Placing node"));
 }
@@ -89,47 +92,50 @@ bool FPIClimbableTreeCustomEditor::HandleInputKey(
 	const EInputEvent& Event)
 {
 	if (!_climbableTree.IsValid()) return false;
-
+	
 	if (Event == IE_Pressed && !Key.IsMouseButton())
 	{
+		if(Key == EKeys::S)
+		{
+			Save();
+			return true;
+		}
+		
 		const FViewportCursorLocation& location = ViewportClient->GetCursorWorldLocationFromMousePos();
+		
 		
 		FVector mouseLocation;
 		if (!TryGetTargetLocation(_climbableTree->GetWorld(), location, mouseLocation)) return false;
+
+		mouseLocation -= _climbableTree->GetActorLocation();
 				
 		if (Key == EKeys::N) // new
-			{
+		{
 			CreateNewVector(mouseLocation);
 			return true;
-			}
+		}
 
 		if (Key == EKeys::M) // mark
-			{
+		{
 			FinishPlacingNode();
 			return true;
-			}
+		}
 
 		if (Key == EKeys::G) // grab nearest
-			{
+		{
 			GrabNearestVector(mouseLocation);
 			return true;
-			}
+		}
 
 		if (Key == EKeys::D) // delete nearest
-			{
+		{
 			DeleteNearestVector(mouseLocation);
 			return true;
-			}
+		}
 
 		if (Key == EKeys::F)
 		{
 			FocusNearestVector(ViewportClient, mouseLocation);
-			return true;
-		}
-
-		if(Key == EKeys::S)
-		{
-			Save();
 			return true;
 		}
 	}
@@ -146,8 +152,13 @@ void FPIClimbableTreeCustomEditor::MarkDirty()
 void FPIClimbableTreeCustomEditor::Save()
 {
 	FPIPathEditorBase::Save();
-
+	
 	TArray<UPackage*> toSave;
 	toSave.Add(_climbableTree->GetPackage());
 	UEditorLoadingAndSavingUtils::SavePackages(toSave, true);
+}
+
+FVector FPIClimbableTreeCustomEditor::GetWorldVector(FVector vector)
+{
+	return vector + _climbableTree->GetActorLocation();
 }

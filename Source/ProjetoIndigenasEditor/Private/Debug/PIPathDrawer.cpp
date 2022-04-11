@@ -10,7 +10,8 @@ void DrawPath(
 	const float& middleNodeSize,
 	const float& endNodeSize,
 	const FLinearColor& lineColor,
-	const float& lineThickness)
+	const float& lineThickness,
+	const FVector& worldZero)
 {
 	constexpr ESceneDepthPriorityGroup depthPriority = SDPG_Foreground;
 	
@@ -18,11 +19,11 @@ void DrawPath(
 	
 	for (int index = 0; index < nodesCount; ++index)
 	{
-		const FVector& current = path[index];
+		const FVector& current = path[index] + worldZero;
 
 		if (index < nodesCount - 1)
 		{
-			const FVector& next = path[index + 1];
+			const FVector& next = path[index + 1] + worldZero;
 
 			FLinearColor color;
 			float size;

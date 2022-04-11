@@ -3,12 +3,19 @@
 #include "CoreMinimal.h"
 #include "ComponentVisualizer.h"
 
+class UPIDebugVisualizationComponent;
+
 class PROJETOINDIGENASEDITOR_API FPIDebugComponentVisualizer : public FComponentVisualizer
 {
+	FEditorViewportClient* _usedViewportClient = nullptr;
+	TWeakObjectPtr<const UPIDebugVisualizationComponent> _editingComponent;
+	
 public:
 	virtual bool ShowWhenSelected() override;
 	
 	virtual UActorComponent* GetEditedComponent() const override;
+
+	virtual void EndEditing() override;
 	
 	virtual void DrawVisualization(
 		const UActorComponent* Component,
@@ -26,9 +33,4 @@ public:
 		FViewport* Viewport,
 		FKey Key,
 		EInputEvent Event) override;
-		
-	virtual bool VisProxyHandleClick(
-		FEditorViewportClient* InViewportClient,
-		HComponentVisProxy* VisProxy,
-		const FViewportClick& Click) override;
 };

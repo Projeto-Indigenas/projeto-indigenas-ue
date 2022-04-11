@@ -4,7 +4,8 @@
 
 int FPIPathEditorBase::FindNearestVector(const FVector& location) const
 {
-	FVector nearestLocation = FVector::ZeroVector;
+	const float& max = TNumericLimits<float>::Max();
+	FVector nearestLocation = FVector(max, max, max);
 	
 	const TArray<FVector>& nodes = GetNodes();
 	
@@ -24,15 +25,15 @@ int FPIPathEditorBase::FindNearestVector(const FVector& location) const
 
 void FPIPathEditorBase::FocusNearestVector(
 	FEditorViewportClient* viewportClient, 
-	const FVector& mouseLocation) const
+	const FVector& location)
 {
-	const int& nearestVector = FindNearestVector(mouseLocation);
+	const int& nearestVector = FindNearestVector(location);
 
-	const TArray<FVector>& nodes = GetNodes();
+	TArray<FVector>& nodes = GetNodes();
 	
 	if (nearestVector < 0 || nearestVector >= nodes.Num()) return;
 
-	const FVector& targetLocation = nodes[nearestVector];
+	const FVector& targetLocation = GetWorldVector(nodes[nearestVector]);
 
 	const TWeakPtr<SEditorViewport> editorViewport = viewportClient->GetEditorViewportWidget();
 	FViewportCameraTransform& transform = viewportClient->ViewTransformPerspective;
@@ -101,6 +102,8 @@ void FPIPathEditorBase::DeleteNearestVector(const FVector& location)
 	if (_currentNodeIndex != -1)
 	{
 		nodes.RemoveAt(_currentNodeIndex);
+		_currentNode = nullptr;
+		_currentNodeIndex = -1;
 		MarkDirty();
 		
 		return;

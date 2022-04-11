@@ -14,22 +14,14 @@ bool FPIDebugComponentVisualizer::ShowWhenSelected()
 
 UActorComponent* FPIDebugComponentVisualizer::GetEditedComponent() const
 {
-	const USelection* selection = GUnrealEd->GetSelectedObjects();
-	if (selection->Num() > 0)
-	{
-		UObject* object = selection->GetSelectedObject(0);
-		UActorComponent* component = Cast<UActorComponent>(object);
-		if (component != nullptr)
-		{
-			return component;
-		}
-	}
+	if (!_editingComponent.IsValid()) return nullptr;
+	return const_cast<UPIDebugVisualizationComponent*>(_editingComponent.Get());
+}
 
-	selection = GUnrealEd->GetSelectedActors();
-	if (selection == nullptr || selection->Num() == 0) return nullptr;
-	UObject* object = selection->GetSelectedObject(0);
-	const AActor* actor = Cast<AActor>(object);
-	return actor->GetComponentByClass(UPIDebugVisualizationComponent::StaticClass());
+void FPIDebugComponentVisualizer::EndEditing()
+{
+	_usedViewportClient = nullptr;
+	_editingComponent = nullptr;
 }
 
 void FPIDebugComponentVisualizer::DrawVisualization(
@@ -37,13 +29,18 @@ void FPIDebugComponentVisualizer::DrawVisualization(
 	const FSceneView* View,
 	FPrimitiveDrawInterface* PDI)
 {
- 	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(Component);
-	if (component == nullptr) return;
-	TSharedPtr<FComponentVisualizer> shared = SharedThis<FPIDebugComponentVisualizer>(this);
-    FViewportClient* viewportClient = GUnrealEd->GetActiveViewport()->GetClient();
-	FEditorViewportClient* editorViewportClient = static_cast<FEditorViewportClient*>(viewportClient);
-	GUnrealEd->ComponentVisManager.SetActiveComponentVis(editorViewportClient, shared);
-	component->DrawVisualization(editorViewportClient, PDI);
+	if (_usedViewportClient == nullptr)
+	{
+		TSharedPtr<FComponentVisualizer> shared = SharedThis<FPIDebugComponentVisualizer>(this);
+		FViewportClient* viewportClient = GUnrealEd->GetActiveViewport()->GetClient();
+		FEditorViewportClient* editorViewportClient = static_cast<FEditorViewportClient*>(viewportClient);
+		GUnrealEd->ComponentVisManager.SetActiveComponentVis(editorViewportClient, shared);
+	}
+	
+	_editingComponent = Cast<UPIDebugVisualizationComponent>(Component);
+	if (!_editingComponent.IsValid()) return;
+ 	if (_usedViewportClient == nullptr) return;
+	_editingComponent->DrawVisualization(_usedViewportClient, PDI);
 }
 
 void FPIDebugComponentVisualizer::DrawVisualizationHUD(
@@ -63,14 +60,11 @@ bool FPIDebugComponentVisualizer::HandleInputKey(
 	FKey Key,
 	EInputEvent Event)
 {
+	_usedViewportClient = ViewportClient;
+	TSharedPtr<FComponentVisualizer> shared = SharedThis<FPIDebugComponentVisualizer>(this);
+	GUnrealEd->ComponentVisManager.SetActiveComponentVis(_usedViewportClient, shared);
 	const UActorComponent* actorComponent = GetEditedComponent();
 	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(actorComponent);
 	if (component == nullptr) return false;
 	return component->HandleInputKey(ViewportClient, Key, Event);
-}
-
-bool FPIDebugComponentVisualizer::VisProxyHandleClick(FEditorViewportClient* InViewportClient,
-	HComponentVisProxy* VisProxy, const FViewportClick& Click)
-{
-	return true;
 }

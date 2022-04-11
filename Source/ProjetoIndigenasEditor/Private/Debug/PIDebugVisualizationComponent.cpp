@@ -16,7 +16,7 @@ void UPIDebugVisualizationComponent::OnRegister()
 	IModuleInterface* module = FModuleManager::Get().GetModule("ProjetoIndigenasEditor");
 	if (module == nullptr) return;
 	const FProjetoIndigenasEditor* moduleInstance = static_cast<FProjetoIndigenasEditor*>(module);
-
+	
 	const AActor* actor = GetOwner();
 	UClass* actorClass = actor->GetClass();
 	_customEditor = moduleInstance->GetCustomEditor(actorClass);
@@ -43,5 +43,6 @@ bool UPIDebugVisualizationComponent::HandleInputKey(
 	const EInputEvent& Event) const
 {
 	if (_customEditor == nullptr) return false;
+	_customEditor->SetActor(GetOwner());
 	return _customEditor->HandleInputKey(ViewportClient, Key, Event);
 }
