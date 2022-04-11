@@ -6,14 +6,13 @@
 #include "ClimbableTree/PIClimbableTreeCustomEditor.h"
 #include "Debug/PIDebugComponentVisualizer.h"
 #include "Debug/PIDebugVisualizationComponent.h"
-#include "Interactables/PIClimbableTree.h"
 #include "PathMaker/PIPathMakerEditor.h"
 
 IMPLEMENT_GAME_MODULE(FProjetoIndigenasEditor, ProjetoIndigenasEditor)
 
 void FProjetoIndigenasEditor::RegisterCustomEditors()
 {
-	_customEditorsMap.Add(APIClimbableTree::StaticClass(), MakeShareable(new FPIClimbableTreeCustomEditor));
+	_customEditors.Add(MakeShareable(new FPIClimbableTreeCustomEditor));
 }
 
 void FProjetoIndigenasEditor::StartupModule()
@@ -33,5 +32,19 @@ void FProjetoIndigenasEditor::StartupModule()
 
 void FProjetoIndigenasEditor::ShutdownModule()
 {
+	const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
+	GUnrealEd->UnregisterComponentVisualizer(componentName);
+	
 	IModuleInterface::ShutdownModule();
+}
+
+FPICustomEditor* FProjetoIndigenasEditor::GetCustomEditor(UClass* cls) const
+{
+	for (int index = 0; index < _customEditors.Num(); ++index)
+	{
+		const TSharedPtr<FPICustomEditor>& customEditor = _customEditors[index];
+		if (customEditor->IsEditorForClass(cls)) return customEditor.Get();
+	}
+	
+	return nullptr;
 }

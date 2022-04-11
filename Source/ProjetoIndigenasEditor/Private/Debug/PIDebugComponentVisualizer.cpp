@@ -11,11 +11,6 @@ bool FPIDebugComponentVisualizer::ShowWhenSelected()
 	return component->ShowOnlyWhenSelected;
 }
 
-void FPIDebugComponentVisualizer::OnRegister()
-{
-	FComponentVisualizer::OnRegister();
-}
-
 UActorComponent* FPIDebugComponentVisualizer::GetEditedComponent() const
 {
 	USelection* selection = GUnrealEd->GetSelectedActors();

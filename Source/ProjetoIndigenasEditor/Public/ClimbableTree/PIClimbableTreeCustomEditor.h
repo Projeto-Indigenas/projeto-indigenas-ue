@@ -15,6 +15,7 @@ public:
 	FPIClimbableTreeCustomEditor() = default;
 
 	virtual void SetActor(AActor* actor) override;
+	virtual bool IsEditorForClass(UClass* cls) override;
 
 	virtual TArray<FVector>& GetNodes() const override;
 

@@ -11,6 +11,8 @@ public:
 	virtual ~FPICustomEditor() = default;
 
 	virtual void SetActor(AActor* actor) = 0;
+
+	virtual bool IsEditorForClass(UClass* cls) = 0;
 	
 	virtual void DrawVisualization(FPrimitiveDrawInterface* PDI) = 0;
 	virtual void DrawVisualizationHUD(FCanvas* Canvas) { }

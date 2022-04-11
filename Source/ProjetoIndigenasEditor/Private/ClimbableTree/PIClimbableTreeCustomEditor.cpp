@@ -27,6 +27,11 @@ void FPIClimbableTreeCustomEditor::SetActor(AActor* actor)
 	_climbableTree = Cast<APIClimbableTree>(actor);
 }
 
+bool FPIClimbableTreeCustomEditor::IsEditorForClass(UClass* cls)
+{
+	return cls->IsChildOf(APIClimbableTree::StaticClass());
+}
+
 TArray<FVector>& FPIClimbableTreeCustomEditor::GetNodes() const
 {
 	return _climbableTree->GetTrack();
@@ -34,6 +39,8 @@ TArray<FVector>& FPIClimbableTreeCustomEditor::GetNodes() const
 
 void FPIClimbableTreeCustomEditor::DrawVisualization(FPrimitiveDrawInterface* PDI)
 {
+	if (!_climbableTree.IsValid()) return;
+	
 	const TArray<FVector>& track = _climbableTree->GetTrack();
 	
 	DrawPath(PDI, track);

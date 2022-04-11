@@ -15,9 +15,13 @@ void UPIDebugVisualizationComponent::OnRegister()
 
 	IModuleInterface* module = FModuleManager::Get().GetModule("ProjetoIndigenasEditor");
 	if (module == nullptr) return;
-	FProjetoIndigenasEditor* piEditor = static_cast<FProjetoIndigenasEditor*>(module);
-	
-	_customEditor = piEditor->GetCustomEditor<FPICustomEditor>(GetOwner()->GetClass());
+	const FProjetoIndigenasEditor* moduleInstance = static_cast<FProjetoIndigenasEditor*>(module);
+
+	AActor* actor = GetOwner();
+	UClass* actorClass = actor->GetClass();
+	_customEditor = moduleInstance->GetCustomEditor(actorClass);
+	if (_customEditor == nullptr) return;
+	_customEditor->SetActor(actor);
 }
 
 void UPIDebugVisualizationComponent::DrawVisualization(FPrimitiveDrawInterface* PDI) const

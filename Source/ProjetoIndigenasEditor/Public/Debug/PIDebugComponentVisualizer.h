@@ -7,7 +7,6 @@ class PROJETOINDIGENASEDITOR_API FPIDebugComponentVisualizer : public FComponent
 {
 public:
 	virtual bool ShowWhenSelected() override;
-	virtual void OnRegister() override;
 	
 	virtual UActorComponent* GetEditedComponent() const override;
 	
