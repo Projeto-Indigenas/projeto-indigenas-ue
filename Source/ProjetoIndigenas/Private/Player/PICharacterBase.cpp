@@ -109,18 +109,3 @@ void APICharacterBase::StopClimbing()
 	UE_LOG(LogTemp, Error, TEXT("APICharacterBase::%s not implemented"), __func__)
 }
 
-void APICharacterBase::SetCanStartClimbingTree(bool canStartClimbing)
-{
-	_canStartClimbingTree = canStartClimbing;
-}
-
-void APICharacterBase::SetCapsuleRadius(const float* radius)
-{
-	_acceleratedCapsuleRadius = radius ? *radius : _defaultCapsuleRadius;
-}
-
-void APICharacterBase::SetMovementAcceleration(const float* acceleration)
-{
-	_acceleratedMovementSpeed.Acceleration = acceleration ? *acceleration : _defaultMovementAcceleration;
-}
-

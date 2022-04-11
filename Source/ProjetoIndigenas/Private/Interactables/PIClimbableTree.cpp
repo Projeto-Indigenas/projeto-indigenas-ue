@@ -17,7 +17,6 @@ void APIClimbableTree::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	baseCharacter->SetCanStartClimbingTree(false);
 }
 
-
 #if WITH_EDITOR
 TSharedPtr<FPICustomEditor> APIClimbableTree::GetCustomEditor()
 {

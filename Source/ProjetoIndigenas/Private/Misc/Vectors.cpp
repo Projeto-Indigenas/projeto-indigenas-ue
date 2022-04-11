@@ -26,16 +26,6 @@ void FAcceleratedValue::Tick(float DeltaSeconds)
 	_current += step;
 }
 
-FAcceleratedValue::operator float() const
-{
-	return _current;
-}
-
-void FAcceleratedValue::operator=(float value)
-{
-	_target = value;
-}
-
 #pragma endregion FAcceleratedValue
 
 #pragma region FAcceleratedVector2D
@@ -62,27 +52,6 @@ void FAcceleratedVector2D::SetAcceleration(float acceleration)
 {
 	X.Acceleration = acceleration;
 	Y.Acceleration = acceleration;
-}
-
-FAcceleratedVector2D::operator FVector2D() const
-{
-	return FVector2D(X, Y);
-}
-
-FAcceleratedVector2D::operator FVector() const
-{
-	return FVector(X, Y, 0.f);
-}
-
-FAcceleratedVector2D::operator FRotator() const
-{
-	return FVector(X, Y, 0.f).Rotation();
-}
-
-void FAcceleratedVector2D::operator =(const FVector2D& value)
-{
-	X = value.X;
-	Y = value.Y;
 }
 
 #pragma endregion FAcceleratedVector2D
@@ -114,23 +83,6 @@ void FAcceleratedVector::SetAcceleration(float acceleration)
 	FAcceleratedVector2D::SetAcceleration(acceleration);
 
 	Z.Acceleration = acceleration;
-}
-
-FAcceleratedVector::operator FVector() const
-{
-	return FVector(X, Y, Z);
-}
-
-FAcceleratedVector::operator FRotator() const
-{
-	return FVector(X, Y, Z).Rotation();
-}
-
-void FAcceleratedVector::operator=(const FVector& value)
-{
-	X = value.X;
-	Y = value.Y;
-	Z = value.Z;
 }
 
 #pragma endregion FAcceleratedVector

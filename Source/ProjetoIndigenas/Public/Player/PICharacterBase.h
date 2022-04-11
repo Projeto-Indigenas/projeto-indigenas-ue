@@ -52,10 +52,12 @@ public:
 	void ToggleRun();
 	virtual void StartClimbing();
 	virtual void StopClimbing();
-
-	FORCEINLINE void SetCanStartClimbingTree(bool canStartClimbing);
-	FORCEINLINE void SetCapsuleRadius(const float* radius);
-	FORCEINLINE void SetMovementAcceleration(const float* acceleration);
+	
+	FORCEINLINE void SetCanStartClimbingTree(bool canStartClimbing) { _canStartClimbingTree = canStartClimbing; }
+	FORCEINLINE void SetCapsuleRadius(const float* radius)
+	{ _acceleratedCapsuleRadius = radius ? *radius : _defaultCapsuleRadius; }
+	FORCEINLINE void SetMovementAcceleration(const float* acceleration)
+	{ _acceleratedMovementSpeed.Acceleration = acceleration ? *acceleration : _defaultMovementAcceleration; }
 
 #pragma region Templates Declarations
 	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();
