@@ -1,5 +1,6 @@
 ﻿#include "Debug/PIDebugComponentVisualizer.h"
 
+#include "SLevelViewport.h"
 #include "Debug/PIDebugVisualizationComponent.h"
 #include "UnrealEd.h"
 
@@ -13,11 +14,22 @@ bool FPIDebugComponentVisualizer::ShowWhenSelected()
 
 UActorComponent* FPIDebugComponentVisualizer::GetEditedComponent() const
 {
-	USelection* selection = GUnrealEd->GetSelectedActors();
-	if (selection == nullptr) return nullptr;
-	TArray<UPIDebugVisualizationComponent*> components;
-	if (selection->GetSelectedObjects(components) == 0) return nullptr;
-	return components[0];
+	const USelection* selection = GUnrealEd->GetSelectedObjects();
+	if (selection->Num() > 0)
+	{
+		UObject* object = selection->GetSelectedObject(0);
+		UActorComponent* component = Cast<UActorComponent>(object);
+		if (component != nullptr)
+		{
+			return component;
+		}
+	}
+
+	selection = GUnrealEd->GetSelectedActors();
+	if (selection == nullptr || selection->Num() == 0) return nullptr;
+	UObject* object = selection->GetSelectedObject(0);
+	const AActor* actor = Cast<AActor>(object);
+	return actor->GetComponentByClass(UPIDebugVisualizationComponent::StaticClass());
 }
 
 void FPIDebugComponentVisualizer::DrawVisualization(
@@ -27,7 +39,11 @@ void FPIDebugComponentVisualizer::DrawVisualization(
 {
  	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(Component);
 	if (component == nullptr) return;
-	component->DrawVisualization(PDI);
+	TSharedPtr<FComponentVisualizer> shared = SharedThis<FPIDebugComponentVisualizer>(this);
+    FViewportClient* viewportClient = GUnrealEd->GetActiveViewport()->GetClient();
+	FEditorViewportClient* editorViewportClient = static_cast<FEditorViewportClient*>(viewportClient);
+	GUnrealEd->ComponentVisManager.SetActiveComponentVis(editorViewportClient, shared);
+	component->DrawVisualization(editorViewportClient, PDI);
 }
 
 void FPIDebugComponentVisualizer::DrawVisualizationHUD(
@@ -51,4 +67,10 @@ bool FPIDebugComponentVisualizer::HandleInputKey(
 	const UPIDebugVisualizationComponent* component = Cast<UPIDebugVisualizationComponent>(actorComponent);
 	if (component == nullptr) return false;
 	return component->HandleInputKey(ViewportClient, Key, Event);
+}
+
+bool FPIDebugComponentVisualizer::VisProxyHandleClick(FEditorViewportClient* InViewportClient,
+	HComponentVisProxy* VisProxy, const FViewportClick& Click)
+{
+	return true;
 }

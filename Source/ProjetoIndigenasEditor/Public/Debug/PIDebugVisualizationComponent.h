@@ -22,7 +22,9 @@ public:
 	
 	UPIDebugVisualizationComponent();
 	
-	void DrawVisualization(FPrimitiveDrawInterface* PDI) const;
+	void DrawVisualization(
+		FEditorViewportClient* ViewportClient,
+		FPrimitiveDrawInterface* PDI) const;
 	void DrawVisualizationHUD(FCanvas* Canvas) const;
 	bool HandleInputKey(
 		FEditorViewportClient* ViewportClient,

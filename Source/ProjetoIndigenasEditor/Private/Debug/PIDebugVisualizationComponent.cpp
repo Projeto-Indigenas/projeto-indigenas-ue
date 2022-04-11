@@ -17,17 +17,18 @@ void UPIDebugVisualizationComponent::OnRegister()
 	if (module == nullptr) return;
 	const FProjetoIndigenasEditor* moduleInstance = static_cast<FProjetoIndigenasEditor*>(module);
 
-	AActor* actor = GetOwner();
+	const AActor* actor = GetOwner();
 	UClass* actorClass = actor->GetClass();
 	_customEditor = moduleInstance->GetCustomEditor(actorClass);
-	if (_customEditor == nullptr) return;
-	_customEditor->SetActor(actor);
 }
 
-void UPIDebugVisualizationComponent::DrawVisualization(FPrimitiveDrawInterface* PDI) const
+void UPIDebugVisualizationComponent::DrawVisualization(
+	FEditorViewportClient* ViewportClient,
+	FPrimitiveDrawInterface* PDI) const
 {
 	if (_customEditor == nullptr) return;
-	_customEditor->DrawVisualization(PDI);
+	_customEditor->SetActor(GetOwner());
+	_customEditor->DrawVisualization(ViewportClient, PDI);
 }
 
 void UPIDebugVisualizationComponent::DrawVisualizationHUD(FCanvas* Canvas) const

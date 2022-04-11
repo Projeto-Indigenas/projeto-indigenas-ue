@@ -26,4 +26,9 @@ public:
 		FViewport* Viewport,
 		FKey Key,
 		EInputEvent Event) override;
+		
+	virtual bool VisProxyHandleClick(
+		FEditorViewportClient* InViewportClient,
+		HComponentVisProxy* VisProxy,
+		const FViewportClick& Click) override;
 };

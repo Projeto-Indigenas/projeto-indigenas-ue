@@ -19,10 +19,13 @@ public:
 
 	virtual TArray<FVector>& GetNodes() const override;
 
-	virtual void DrawVisualization(FPrimitiveDrawInterface* PDI) override;
+	virtual void DrawVisualization(FEditorViewportClient* ViewportClient, FPrimitiveDrawInterface* PDI) override;
 	virtual void DrawVisualizationHUD(FCanvas* Canvas) override;
 	virtual bool HandleInputKey(
 		FEditorViewportClient* ViewportClient,
 		const FKey& Key,
 		const EInputEvent& Event) override;
+
+	virtual void MarkDirty() override;
+	virtual void Save() override;
 };

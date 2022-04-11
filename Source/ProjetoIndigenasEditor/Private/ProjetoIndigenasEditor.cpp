@@ -25,17 +25,9 @@ void FProjetoIndigenasEditor::StartupModule()
 		FSlateIcon(), true);
 		
 	const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
-	GUnrealEd->RegisterComponentVisualizer(componentName, MakeShareable(new FPIDebugComponentVisualizer));
+	GUnrealEd->RegisterComponentVisualizer(componentName, MakeShared<FPIDebugComponentVisualizer>());
 
 	RegisterCustomEditors();
-}
-
-void FProjetoIndigenasEditor::ShutdownModule()
-{
-	const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
-	GUnrealEd->UnregisterComponentVisualizer(componentName);
-	
-	IModuleInterface::ShutdownModule();
 }
 
 FPICustomEditor* FProjetoIndigenasEditor::GetCustomEditor(UClass* cls) const

@@ -10,7 +10,6 @@ class PROJETOINDIGENASEDITOR_API FProjetoIndigenasEditor : public IModuleInterfa
 	
 public:
 	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
 
 	FPICustomEditor* GetCustomEditor(UClass* cls) const;
 };

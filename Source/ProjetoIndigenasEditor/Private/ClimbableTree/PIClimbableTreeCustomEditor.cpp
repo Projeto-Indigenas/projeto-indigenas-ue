@@ -3,6 +3,8 @@
 #include <CanvasTypes.h>
 #include <EditorViewportClient.h>
 
+#include "FileHelpers.h"
+#include "LevelEditorViewport.h"
 #include "Debug/PIPathDrawer.h"
 
 bool FPIClimbableTreeCustomEditor::TryGetTargetLocation(
@@ -16,7 +18,7 @@ bool FPIClimbableTreeCustomEditor::TryGetTargetLocation(
 	DrawDebugLine(world, mouseOrigin, rayEnd, FColor::Green);
 
 	FHitResult hit;
-	if (!world->LineTraceSingleByChannel(hit, mouseOrigin, rayEnd, ECC_WorldStatic)) return false;
+	if (!world->LineTraceSingleByChannel(hit, mouseOrigin, rayEnd, ECC_Camera)) return false;
 
 	outLocation = hit.Location;
 	return hit.GetActor()->IsA<APIClimbableTree>();
@@ -37,7 +39,9 @@ TArray<FVector>& FPIClimbableTreeCustomEditor::GetNodes() const
 	return _climbableTree->GetTrack();
 }
 
-void FPIClimbableTreeCustomEditor::DrawVisualization(FPrimitiveDrawInterface* PDI)
+void FPIClimbableTreeCustomEditor::DrawVisualization(
+	FEditorViewportClient* ViewportClient,
+	FPrimitiveDrawInterface* PDI)
 {
 	if (!_climbableTree.IsValid()) return;
 	
@@ -51,6 +55,16 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(FPrimitiveDrawInterface* PD
 		DrawCircle(PDI, baseLocation, FVector::ForwardVector, FVector::RightVector,
 			FLinearColor::Red, _climbableTree->GetStartPositionRadius(), 10, 0, 1.f);
 	}
+
+	if (GetCurrentNode() == nullptr) return;
+	
+	const FViewportCursorLocation& mouseLocation = ViewportClient->GetCursorWorldLocationFromMousePos();
+	FVector worldLocation;
+	if (!TryGetTargetLocation(_climbableTree->GetWorld(), mouseLocation, worldLocation)) return;
+	
+	SetCurrentNodeValue(worldLocation);
+	
+	MakeInfoText(TEXT("Placing node"));
 }
 
 void FPIClimbableTreeCustomEditor::DrawVisualizationHUD(FCanvas* Canvas)
@@ -121,4 +135,19 @@ bool FPIClimbableTreeCustomEditor::HandleInputKey(
 	}
 	
 	return false;
+}
+
+void FPIClimbableTreeCustomEditor::MarkDirty()
+{
+	if (!_climbableTree.IsValid()) return;
+	_climbableTree->MarkPackageDirty();
+}
+
+void FPIClimbableTreeCustomEditor::Save()
+{
+	FPIPathEditorBase::Save();
+
+	TArray<UPackage*> toSave;
+	toSave.Add(_climbableTree->GetPackage());
+	UEditorLoadingAndSavingUtils::SavePackages(toSave, true);
 }

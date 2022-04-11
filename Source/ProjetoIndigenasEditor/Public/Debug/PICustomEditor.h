@@ -14,7 +14,9 @@ public:
 
 	virtual bool IsEditorForClass(UClass* cls) = 0;
 	
-	virtual void DrawVisualization(FPrimitiveDrawInterface* PDI) = 0;
+	virtual void DrawVisualization(
+		FEditorViewportClient* ViewportClient,
+		FPrimitiveDrawInterface* PDI) = 0;
 	virtual void DrawVisualizationHUD(FCanvas* Canvas) { }
 	virtual bool HandleInputKey(
 		FEditorViewportClient* ViewportClient,
