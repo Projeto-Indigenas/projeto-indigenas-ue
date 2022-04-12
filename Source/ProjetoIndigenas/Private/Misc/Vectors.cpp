@@ -7,6 +7,7 @@ FAcceleratedValue FAcceleratedValue::ZeroValue = FAcceleratedValue();
 FAcceleratedValue::FAcceleratedValue(float current, float acceleration) : FAcceleratedValue()
 {
 	_current = current;
+	_target = current;
 	Acceleration = acceleration;
 }
 

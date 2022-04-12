@@ -7,6 +7,7 @@
 
 void FPIMovementState::UpdateMovementSpeed()
 {
+	_inputVector.Z = 0.f;
 	if (_inputVector == FVector::ZeroVector) _run = false;
 	const float runMultiplier = _run ? 2.f : 1.f;
 	_acceleratedMovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
