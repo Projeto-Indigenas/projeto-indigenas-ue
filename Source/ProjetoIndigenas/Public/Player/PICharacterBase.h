@@ -7,6 +7,7 @@
 #include "States/PIStateBase.h"
 #include "PICharacterBase.generated.h"
 
+class FPIInputDelegates;
 class FPIStateBase;
 class UPIAnimInstanceBase;
 
@@ -14,6 +15,8 @@ UCLASS()
 class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 {
 	GENERATED_BODY()
+	
+	TSharedPtr<FPIInputDelegates> _inputDelegates;
 
 protected:
 	TSharedPtr<FPIStateBase> _currentState;
@@ -29,6 +32,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	virtual void InitializeFromController() { }
+	
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void SetInputX(float x) { }
@@ -41,6 +46,8 @@ public:
 
 	virtual void SetClimbableTree(APIClimbableTree* tree) { }
 
+	void SetInputDelegates(TSharedPtr<FPIInputDelegates> inputDelegates);
+
 #pragma region Templates Declarations
 	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();
 	template<typename TComponent> TComponent* GetComponent();
@@ -51,7 +58,7 @@ public:
 template <typename TAnimInstance>
 TAnimInstance* APICharacterBase::GetAnimInstance()
 {
-	return Cast<TAnimInstance>(_currentState->GetAnimInstance());
+	return Cast<TAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 template <typename TComponent>

@@ -9,6 +9,11 @@ void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	_animInstance = GetAnimInstance<UPICharacterAnimInstance>();
+}
+
+void APICharacter::InitializeFromController()
+{
 	_characterStates.Add(EPICharacterAnimationState::Movement, MakeShared<FPIMovementState>(
 		this, FPIMovementStateData(
 			_capsuleRadiusForState[EPICharacterAnimationState::Movement],
@@ -25,8 +30,11 @@ void APICharacter::BeginPlay()
 			)));
 
 	SetCurrentState(_characterStates[EPICharacterAnimationState::Movement]);
+}
+
+void APICharacter::SetDirectionYaw(float yaw)
+{
 	
-	_animInstance = GetAnimInstance<UPICharacterAnimInstance>();
 }
 
 void APICharacter::StartClimbing()

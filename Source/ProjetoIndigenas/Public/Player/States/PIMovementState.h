@@ -35,14 +35,16 @@ class PROJETOINDIGENAS_API FPIMovementState : public FPIStateBaseWithData<FPIMov
 	
 	void UpdateMovementSpeed();
 
-public:
-	explicit FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData);
-
-	virtual void Tick(float DeltaSeconds) override;
-
 	void SetXInput(float x);
 	void SetYInput(float y);
 	void ToggleRun();
-	void SetDirectionYaw(const float& directionYaw);
+	void SetDirectionYaw(float directionYaw);
 	void Dodge() const;
+
+public:
+	explicit FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData);
+
+	virtual void Enter(FPIInputDelegates& inputDelegates) override;
+	virtual void Exit(FPIInputDelegates& inputDelegates) override;
+	virtual void Tick(float DeltaSeconds) override;
 };

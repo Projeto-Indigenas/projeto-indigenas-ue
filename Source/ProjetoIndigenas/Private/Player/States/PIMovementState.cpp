@@ -12,6 +12,39 @@ void FPIMovementState::UpdateMovementSpeed()
 	_acceleratedMovementSpeed = _inputVector.GetClampedToMaxSize(1.f).Size() * runMultiplier;
 }
 
+void FPIMovementState::SetXInput(float x)
+{
+	_inputVector.Y = x;
+
+	UpdateMovementSpeed();
+}
+
+void FPIMovementState::SetYInput(float y)
+{
+	_inputVector.X = y;
+
+	UpdateMovementSpeed();
+}
+
+void FPIMovementState::ToggleRun()
+{
+	_run = !_run;
+
+	UpdateMovementSpeed();
+}
+
+void FPIMovementState::SetDirectionYaw(float directionYaw)
+{
+	_directionYaw = directionYaw;
+}
+
+void FPIMovementState::Dodge() const
+{
+	if (!_animInstance.IsValid()) return;
+
+	_animInstance->ShouldDodge = true;
+}
+
 FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData):
 	FPIStateBaseWithData(character, stateData),
 	_run(false),
@@ -21,6 +54,24 @@ FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovemen
 	_acceleratedMovementSpeed.Acceleration = stateData.MovementSpeedAcceleration;
 
 	_acceleratedCapsuleRadius = FAcceleratedValue(stateData.CapsuleRadius, stateData.CapsuleRadiusAcceleration);
+}
+
+void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
+{
+	inputDelegates.InputHorizontalDelegate.BindRaw(this, &FPIMovementState::SetXInput);
+	inputDelegates.InputVerticalDelegate.BindRaw(this, &FPIMovementState::SetYInput);
+	inputDelegates.DirectionYawDelegate.BindRaw(this, &FPIMovementState::SetDirectionYaw);
+	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
+	inputDelegates.DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
+}
+
+void FPIMovementState::Exit(FPIInputDelegates& inputDelegates)
+{
+	inputDelegates.InputHorizontalDelegate.Unbind();
+	inputDelegates.InputVerticalDelegate.Unbind();
+	inputDelegates.DirectionYawDelegate.Unbind();
+	inputDelegates.ToggleRunDelegate.Unbind();
+	inputDelegates.DodgeDelegate.Unbind();
 }
 
 void FPIMovementState::Tick(float DeltaSeconds)
@@ -49,39 +100,6 @@ void FPIMovementState::Tick(float DeltaSeconds)
 		
 		_character->SetActorRelativeRotation(_acceleratedCharacterDirection);
 	}
-}
-
-void FPIMovementState::SetXInput(float x)
-{
-	_inputVector.Y = x;
-
-	UpdateMovementSpeed();
-}
-
-void FPIMovementState::SetYInput(float y)
-{
-	_inputVector.X = y;
-
-	UpdateMovementSpeed();
-}
-
-void FPIMovementState::ToggleRun()
-{
-	_run = !_run;
-
-	UpdateMovementSpeed();
-}
-
-void FPIMovementState::SetDirectionYaw(const float& directionYaw)
-{
-	_directionYaw = directionYaw;
-}
-
-void FPIMovementState::Dodge() const
-{
-	if (!_animInstance.IsValid()) return;
-
-	_animInstance->ShouldDodge = true;
 }
 
 

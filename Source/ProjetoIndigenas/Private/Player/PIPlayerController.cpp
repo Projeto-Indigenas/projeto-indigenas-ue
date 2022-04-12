@@ -6,39 +6,39 @@
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
-	if (!_character.IsValid()) return;
-	_character->SetInputX(x);
+	_inputDelegates->InputHorizontalDelegate.ExecuteIfBound(x);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
-	if (!_character.IsValid()) return;
-	_character->SetInputY(y);
+	_inputDelegates->InputVerticalDelegate.ExecuteIfBound(y);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
 {
-	if (!_character.IsValid()) return;
-	_character->ToggleRun();
+	_inputDelegates->ToggleRunDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::DodgeInputBinding()
 {
-	if (!_character.IsValid()) return;
-	_character->Dodge();
+	_inputDelegates->DodgeDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::PositiveActionInputBinding()
 {
-	//TODO(anderson): in the future provide an abstract action event that do not need to be specified
-	if (!_character.IsValid()) return;
-	_character->StartClimbing();
+	_inputDelegates->PositiveActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::NegativeActionInputBinding()
 {
-	if (!_character.IsValid()) return;
-	_character->StopClimbing();
+	_inputDelegates->NegativeActionDelegate.ExecuteIfBound();
+}
+
+void APIPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	_inputDelegates = MakeShared<FPIInputDelegates>();
 }
 
 void APIPlayerController::SetupInputComponent()
@@ -57,7 +57,6 @@ void APIPlayerController::SetupInputComponent()
 		&APIPlayerController::PositiveActionInputBinding);
 	InputComponent->BindAction(TEXT("NegativeAction"), IE_Pressed, this,
 		&APIPlayerController::NegativeActionInputBinding);
-	
 }
 
 void APIPlayerController::OnPossess(APawn* InPawn)
@@ -65,6 +64,8 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	_character = Cast<APICharacter>(InPawn);
+	_character->SetInputDelegates(_inputDelegates);
+	_character->InitializeFromController();
 }
 
 void APIPlayerController::OnUnPossess()
@@ -81,5 +82,6 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	if (!_cameraController.IsValid()) return;
 	if (!_character.IsValid()) return;
 
-	_character->SetDirectionYaw(_cameraController->GetCameraRotator().Yaw);
+	const double& yaw = _cameraController->GetCameraRotator().Yaw;
+	_inputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }

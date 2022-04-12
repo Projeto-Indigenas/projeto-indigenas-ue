@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Player/PIAnimInstanceBase.h"
 #include "Player/PICharacterBase.h"
+#include "Player/Input/PIInputDelegates.h"
 
 class APICharacterBase;
 class UCapsuleComponent;
@@ -19,8 +20,8 @@ public:
 
 	virtual ~FPIStateBase() = default;
 
-	virtual void Enter() { }
-	virtual void Exit() { }
+	virtual void Enter(FPIInputDelegates& inputDelegates) { }
+	virtual void Exit(FPIInputDelegates& inputDelegates) { }
 	virtual void Tick(float DeltaSeconds) { }
 
 	FORCEINLINE UPIAnimInstanceBase* GetAnimInstance() const { return _animInstance.Get(); }
