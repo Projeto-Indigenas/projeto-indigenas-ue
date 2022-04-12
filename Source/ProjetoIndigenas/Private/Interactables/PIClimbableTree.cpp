@@ -6,12 +6,12 @@ void APIClimbableTree::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActo
 {
 	APICharacterBase* baseCharacter = Cast<APICharacterBase>(OtherActor);
 	if (baseCharacter == nullptr) return;
-	baseCharacter->SetCanStartClimbingTree(true);
+	baseCharacter->SetClimbableTree(this);
 }
 
-void APIClimbableTree::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void APIClimbableTree::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const
 {
 	APICharacterBase* baseCharacter = Cast<APICharacterBase>(OtherActor);
 	if (baseCharacter == nullptr) return;
-	baseCharacter->SetCanStartClimbingTree(false);
+	baseCharacter->SetClimbableTree(nullptr);
 }

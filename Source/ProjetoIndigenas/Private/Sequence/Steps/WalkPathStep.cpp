@@ -9,8 +9,8 @@ void UWalkPathStep::MoveToNextNode()
 
 	if (_destinationController->IsPathCompleted())
 	{
-		_targetCharacter->SetXInput(0.f);
-		_targetCharacter->SetYInput(0.f);
+		_targetCharacter->SetInputX(0.f);
+		_targetCharacter->SetInputY(0.f);
 		
 		Finish();
 
@@ -106,8 +106,8 @@ void UWalkPathStep::Tick(float deltaTime)
 	}
 
 	const FVector& direction = pathComponent->GetCurrentMoveInput();
-	_targetCharacter->SetXInput(direction.Y);
-	_targetCharacter->SetYInput(direction.X);
+	_targetCharacter->SetInputX(direction.Y);
+	_targetCharacter->SetInputY(direction.X);
 }
 
 #pragma endregion IStepExecutor

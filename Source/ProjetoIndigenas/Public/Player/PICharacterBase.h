@@ -2,9 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Misc/Vectors.h"
+#include "GameFramework/Actor.h"
+#include "Interactables/PIClimbableTree.h"
+#include "States/PIStateBase.h"
 #include "PICharacterBase.generated.h"
 
+class FPIStateBase;
 class UPIAnimInstanceBase;
 
 UCLASS()
@@ -12,52 +15,31 @@ class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-	TWeakObjectPtr<UPIAnimInstanceBase> _animInstance;
-	TWeakObjectPtr<UCapsuleComponent> _capsuleComponent;
-	
-	FAcceleratedVector _acceleratedCharacterDirection;
-	FAcceleratedValue _acceleratedCapsuleRadius;
-	FAcceleratedValue _acceleratedMovementSpeed;
-
-	FVector _inputVector;
-	bool _run;
-	float _directionYaw;
-	
-	void UpdateMovementSpeed();
-
 protected:
-	bool _canStartClimbingTree;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float _defaultCapsuleRadius = 34.f;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float _defaultMovementAcceleration = 1.f;
+	TSharedPtr<FPIStateBase> _currentState;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _rotationAcceleration = 1.f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _capsuleRadiusAcceleration = 1.f;
-	
+
+	void SetCurrentState(const TSharedPtr<FPIStateBase>& state);
+
 	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaSeconds) override;
 
-	void SetXInput(float x);
-	void SetYInput(float y);
-	void SetDirectionYaw(const float& directionYaw);
-	void Dodge();
-	void ToggleRun();
-	virtual void StartClimbing();
-	virtual void StopClimbing();
-	
-	FORCEINLINE void SetCanStartClimbingTree(bool canStartClimbing) { _canStartClimbingTree = canStartClimbing; }
-	FORCEINLINE void SetCapsuleRadius(const float* radius)
-	{ _acceleratedCapsuleRadius = radius ? *radius : _defaultCapsuleRadius; }
-	FORCEINLINE void SetMovementAcceleration(const float* acceleration)
-	{ _acceleratedMovementSpeed.Acceleration = acceleration ? *acceleration : _defaultMovementAcceleration; }
+	virtual void SetInputX(float x) { }
+	virtual void SetInputY(float y) { }
+	virtual void ToggleRun() { }
+	virtual void Dodge() { }
+	virtual void SetDirectionYaw(float yaw) { }
+	virtual void StartClimbing() { }
+	virtual void StopClimbing() { }
+
+	virtual void SetClimbableTree(APIClimbableTree* tree) { }
 
 #pragma region Templates Declarations
 	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();
@@ -66,12 +48,10 @@ public:
 };
 
 #pragma region Templates Implementations
-
 template <typename TAnimInstance>
 TAnimInstance* APICharacterBase::GetAnimInstance()
 {
-	if (!_animInstance.IsValid()) return nullptr;
-	return Cast<TAnimInstance>(_animInstance.Get());
+	return Cast<TAnimInstance>(_currentState->GetAnimInstance());
 }
 
 template <typename TComponent>
@@ -80,5 +60,4 @@ TComponent* APICharacterBase::GetComponent()
 	UActorComponent* component = GetComponentByClass(TComponent::StaticClass());
 	return Cast<TComponent>(component);
 }
-
 #pragma endregion Templates Implementations

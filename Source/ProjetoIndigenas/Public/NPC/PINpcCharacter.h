@@ -8,7 +8,4 @@ UCLASS()
 class PROJETOINDIGENAS_API APINpcCharacter : public APICharacterBase
 {
 	GENERATED_BODY()
-
-public:
-	virtual void StartClimbing() override;
 };

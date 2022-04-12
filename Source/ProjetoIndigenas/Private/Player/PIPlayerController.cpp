@@ -7,13 +7,13 @@
 void APIPlayerController::MoveXInputBinding(float x)
 {
 	if (!_character.IsValid()) return;
-	_character->SetXInput(x);
+	_character->SetInputX(x);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
 	if (!_character.IsValid()) return;
-	_character->SetYInput(y);
+	_character->SetInputY(y);
 }
 
 void APIPlayerController::ToggleRunInputBinding()

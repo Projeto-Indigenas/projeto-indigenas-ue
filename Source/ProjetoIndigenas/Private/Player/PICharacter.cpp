@@ -2,27 +2,36 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/PICharacterAnimInstance.h"
+#include "Player/States/PIClimbingState.h"
+#include "Player/States/PIMovementState.h"
 
 void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	_characterStates.Add(EPICharacterAnimationState::Movement, MakeShared<FPIMovementState>(
+		this, FPIMovementStateData(
+			_capsuleRadiusForState[EPICharacterAnimationState::Movement],
+			_capsuleRadiusAcceleration,
+			_rotationAcceleration,
+			_movementAccelerationForState[EPICharacterAnimationState::Movement]
+			)));
+	
+	_characterStates.Add(EPICharacterAnimationState::Climbing, MakeShared<FPIClimbingState>(
+		this, FPIClimbingStateData(
+			_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
+			_capsuleRadiusAcceleration,
+			_movementAccelerationForState[EPICharacterAnimationState::Climbing]
+			)));
+
+	SetCurrentState(_characterStates[EPICharacterAnimationState::Movement]);
+	
 	_animInstance = GetAnimInstance<UPICharacterAnimInstance>();
-}
-
-void APICharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (_animInstance.IsValid() && _animInstance->IsClimbing)
-	{
-		GetCharacterMovement()->Velocity = FVector::ZeroVector;
-	}
 }
 
 void APICharacter::StartClimbing()
 {
-	if (!_canStartClimbingTree) return;
+	if (_climbableTree == nullptr) return;
 	if (!_animInstance.IsValid()) return;
 
 	GetCharacterMovement()->MovementMode = MOVE_Flying;
@@ -30,18 +39,25 @@ void APICharacter::StartClimbing()
 	const EPICharacterAnimationState& state = EPICharacterAnimationState::Climbing;
 	_animInstance->State = state;
 
-	SetCapsuleRadius(_capsuleRadiusForState.Find(state));
-	SetMovementAcceleration(_movementAccelerationForState.Find(state));
+	SetCurrentState(_characterStates[EPICharacterAnimationState::Climbing]);
 }
 
 void APICharacter::StopClimbing()
 {
+	if (_climbableTree == nullptr) return;
 	if (!_animInstance.IsValid()) return;
 
 	GetCharacterMovement()->MovementMode = MOVE_Walking;
 	const EPICharacterAnimationState& state = EPICharacterAnimationState::Movement;
 	_animInstance->State = state;
 	
-	SetCapsuleRadius(_capsuleRadiusForState.Find(state));
-	SetMovementAcceleration(_movementAccelerationForState.Find(state));
+	SetCurrentState(_characterStates[EPICharacterAnimationState::Movement]);
+}
+
+void APICharacter::SetClimbableTree(APIClimbableTree* tree)
+{
+	// should not unset tree if we are climbing
+	if (_animInstance->State == EPICharacterAnimationState::Climbing) return;
+	
+	_climbableTree = tree;
 }

@@ -16,7 +16,7 @@ protected:
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 	UFUNCTION(BlueprintCallable)
-	void OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
+	void OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const;
 
 #if WITH_EDITOR
 public:
