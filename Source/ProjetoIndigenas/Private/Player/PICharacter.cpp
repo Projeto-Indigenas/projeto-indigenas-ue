@@ -26,7 +26,8 @@ void APICharacter::InitializeFromController()
 		FPIClimbingStateData(
 			_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
 			_capsuleRadiusAcceleration,
-			_movementAccelerationForState[EPICharacterAnimationState::Climbing]
+			_movementAccelerationForState[EPICharacterAnimationState::Climbing],
+			_rotationAcceleration
 		));
 
 	SetCurrentState(_movementState);
@@ -34,25 +35,12 @@ void APICharacter::InitializeFromController()
 
 void APICharacter::StartClimbing(APIClimbableTree* tree)
 {
-	if (!_animInstance.IsValid()) return;
-
-	GetCharacterMovement()->MovementMode = MOVE_Flying;
-	
-	const EPICharacterAnimationState& state = EPICharacterAnimationState::Climbing;
-	_animInstance->State = state;
-
 	_climbingState->Tree = tree;
 	SetCurrentState(_climbingState);
 }
 
 void APICharacter::StopClimbing(APIClimbableTree* tree)
 {
-	if (!_animInstance.IsValid()) return;
-
-	GetCharacterMovement()->MovementMode = MOVE_Walking;
-	const EPICharacterAnimationState& state = EPICharacterAnimationState::Movement;
-	_animInstance->State = state;
-
 	_climbingState->Tree = nullptr;
 	SetCurrentState(_movementState);
 }

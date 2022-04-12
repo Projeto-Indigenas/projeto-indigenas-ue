@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "PIStateBase.h"
 #include "Misc/Vectors.h"
+#include "Player/PICharacterAnimInstance.h"
 
 struct PROJETOINDIGENAS_API FPIMovementStateData
 {
@@ -23,7 +24,9 @@ struct PROJETOINDIGENAS_API FPIMovementStateData
 	{ }
 };
 
-class PROJETOINDIGENAS_API FPIMovementState : public FPIStateBaseWithData<FPIMovementStateData>
+typedef FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIMovementStateData> FPIMovementStateBase;
+
+class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 {
 	FAcceleratedVector _acceleratedCharacterDirection;
 	FAcceleratedValue _acceleratedCapsuleRadius;

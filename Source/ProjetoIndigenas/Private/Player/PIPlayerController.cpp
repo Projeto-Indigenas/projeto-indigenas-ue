@@ -6,12 +6,12 @@
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
-	_inputDelegates->InputHorizontalDelegate.ExecuteIfBound(x);
+	_inputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
-	_inputDelegates->InputVerticalDelegate.ExecuteIfBound(y);
+	_inputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
 }
 
 void APIPlayerController::ToggleRunInputBinding()

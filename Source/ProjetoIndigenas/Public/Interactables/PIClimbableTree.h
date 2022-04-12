@@ -23,8 +23,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const;
 
-#if WITH_EDITOR
 public:
-	float GetStartPositionRadius() const { return _startPositionRadius; }
-#endif
+	FORCEINLINE float GetStartPositionRadius() const { return _startPositionRadius; }
 };

@@ -8,8 +8,8 @@ DECLARE_DELEGATE(FPIInputActionDelegate)
 class PROJETOINDIGENAS_API FPIInputDelegates
 {
 public:
-	FPIInputAxisDelegate InputHorizontalDelegate;
-	FPIInputAxisDelegate InputVerticalDelegate;
+	FPIInputAxisDelegate HorizontalInputDelegate;
+	FPIInputAxisDelegate VerticalInputDelegate;
 	FPIInputAxisDelegate DirectionYawDelegate;
 	FPIInputActionDelegate DodgeDelegate;
 	FPIInputActionDelegate ToggleRunDelegate;
