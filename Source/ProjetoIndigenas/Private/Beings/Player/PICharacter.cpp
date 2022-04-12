@@ -1,9 +1,8 @@
-﻿#include "Player/PICharacter.h"
+﻿#include "Beings/Player/PICharacter.h"
 
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Player/PICharacterAnimInstance.h"
-#include "Player/States/PIClimbingState.h"
-#include "Player/States/PIMovementState.h"
+#include "Beings/Player/PICharacterAnimInstance.h"
+#include "Beings/Player/States/PIClimbingState.h"
+#include "Beings/Player/States/PIMovementState.h"
 
 void APICharacter::BeginPlay()
 {

@@ -1,9 +1,9 @@
-﻿#include "Player/States/PIMovementState.h"
+﻿#include "Beings/Player/States/PIMovementState.h"
 
 #include <Components/CapsuleComponent.h>
 #include <Kismet/KismetMathLibrary.h>
 
-#include "Player/PIAnimInstanceBase.h"
+#include "Beings/Shared/PIAnimInstanceBase.h"
 
 void FPIMovementState::UpdateMovementSpeed()
 {

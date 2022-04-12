@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Player/PICharacterBase.h"
+#include "Beings/Shared/PICharacterBase.h"
 #include "PINpcCharacter.generated.h"
 
 UCLASS()

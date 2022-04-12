@@ -2,7 +2,7 @@
 
 #include "EditorModeManager.h"
 #include "PropertyCustomizationHelpers.h"
-#include "NPC/Paths/PIPathData.h"
+#include "Beings/NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerEditor.h"
 #include "Widgets/Layout/SScrollBox.h"
 

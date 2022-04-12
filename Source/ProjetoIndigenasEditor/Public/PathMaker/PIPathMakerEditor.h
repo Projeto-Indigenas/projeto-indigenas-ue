@@ -2,7 +2,7 @@
 
 #include <EdMode.h>
 
-#include "NPC/Paths/PIPathData.h"
+#include "Beings/NPC/Paths/PIPathData.h"
 #include "PathEditor/PIPathEditorBase.h"
 
 class PROJETOINDIGENASEDITOR_API FPIPathMakerEditor : public FEdMode, FPIPathEditorBase

@@ -1,44 +1,43 @@
-#include "Player/PIPlayerController.h"
+#include "Beings/Player/PIPlayerController.h"
 
 #include "Kismet/KismetMathLibrary.h"
-#include "Player/PICameraController.h"
-#include "Player/PICharacter.h"
+#include "Beings/Player/PICameraController.h"
+#include "Beings/Player/PICharacter.h"
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
-	_inputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
-	_inputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
 {
-	_inputDelegates->ToggleRunDelegate.ExecuteIfBound();
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->ToggleRunDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::DodgeInputBinding()
 {
-	_inputDelegates->DodgeDelegate.ExecuteIfBound();
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->DodgeDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::PositiveActionInputBinding()
 {
-	_inputDelegates->PositiveActionDelegate.ExecuteIfBound();
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->PositiveActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::NegativeActionInputBinding()
 {
-	_inputDelegates->NegativeActionDelegate.ExecuteIfBound();
-}
-
-void APIPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	_inputDelegates = MakeShared<FPIInputDelegates>();
+	if (!_character.IsValid()) return;
+	_character->InputDelegates->NegativeActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::SetupInputComponent()
@@ -67,7 +66,6 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	
 	if (!_character.IsValid()) return;
 	
-	_character->InputDelegates = _inputDelegates;
 	_character->InitializeFromController();
 }
 
@@ -85,9 +83,12 @@ void APIPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (!_cameraController.IsValid()) return;
 	if (!_character.IsValid()) return;
+	if (!_cameraController.IsValid()) return;
 
-	const double& yaw = _cameraController->GetCameraRotator().Yaw;
-	_inputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+	const APICharacterBase* character = _character.Get();
+	const APICameraController* cameraController = _cameraController.Get();
+
+	const double& yaw = cameraController->GetCameraRotator().Yaw;
+	character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }

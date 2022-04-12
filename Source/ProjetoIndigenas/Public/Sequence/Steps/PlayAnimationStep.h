@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NPC/PINpcAnimationState.h"
-#include "NPC/PINpcAnimInstance.h"
+#include "Beings/NPC/PINpcAnimationState.h"
+#include "Beings/NPC/PINpcAnimInstance.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/Providers/ActorProviderBase.h"
 #include "PlayAnimationStep.generated.h"

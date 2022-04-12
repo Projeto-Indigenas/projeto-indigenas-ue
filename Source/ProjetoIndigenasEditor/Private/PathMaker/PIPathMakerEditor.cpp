@@ -3,7 +3,7 @@
 #include <EditorModeManager.h>
 #include <FileHelpers.h>
 
-#include "NPC/Paths/PIPathData.h"
+#include "Beings/NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "SEditorViewport.h"

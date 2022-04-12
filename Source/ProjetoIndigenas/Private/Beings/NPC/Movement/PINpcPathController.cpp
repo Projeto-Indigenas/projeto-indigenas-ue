@@ -1,4 +1,4 @@
-﻿#include "NPC/Movement/PINpcPathController.h"
+﻿#include "Beings/NPC/Movement/PINpcPathController.h"
 
 FPINpcPathController::FPINpcPathController(const TArray<FVector>& pathNodes, const bool loop)
 {

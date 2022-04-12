@@ -1,12 +1,14 @@
-﻿#include "Player/States/PIClimbingState.h"
+﻿#include "Beings/Player/States/PIClimbingState.h"
 
 #include <Components/CapsuleComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
 
-#include "Player/PIAnimInstanceBase.h"
+#include "Beings/Shared/PIAnimInstanceBase.h"
 
 void FPIClimbingState::SetInputY(float y)
 {
+	if (_animInstance.IsValid() && _animInstance->State != EPICharacterAnimationState::Climbing) return;
+	
 	_inputVector.X = y;
 
 	UpdateMovementSpeed();
@@ -24,11 +26,11 @@ FPIClimbingState::FPIClimbingState(APICharacterBase* character, const FPIClimbin
 	FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData>(character, stateData)
 {
 	_characterMovement = character->GetCharacterMovement();
-	
+
 	_acceleratedDirection.SetAcceleration(stateData.RotationAcceleration);
 	_acceleratedLocation.SetAcceleration(stateData.MovementSpeedAcceleration);
 	_acceleratedMovementSpeed.Acceleration = stateData.MovementSpeedAcceleration;
-	
+
 	_acceleratedCapsuleRadius.Acceleration = stateData.CapsuleRadiusAcceleration;
 }
 
@@ -36,6 +38,8 @@ void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
 {
 	inputDelegates.VerticalInputDelegate.BindRaw(this, &FPIClimbingState::SetInputY);
 
+	_inputVector = FVector::ZeroVector;
+	
 	if (!Tree.IsValid()) return;
 	if (!_character.IsValid()) return;
 	if (!_characterMovement.IsValid()) return;
@@ -104,18 +108,15 @@ void FPIClimbingState::Tick(float DeltaSeconds)
 	characterMovement->Velocity = FVector::ZeroVector;
 
 	character->SetActorRotation(_acceleratedDirection);
-	if (!_acceleratedLocation.IsOnTarget(1.f))
+
+	if (_acceleratedLocation.IsOnTarget(1.f))
 	{
+		animInstance->State = EPICharacterAnimationState::Climbing;
 		FVector location = _acceleratedLocation;
 		location.Z = character->GetActorLocation().Z;
 		character->SetActorLocation(location);
-
+		
 		return;
-	}
-
-	if (animInstance->State != EPICharacterAnimationState::Climbing)
-	{
-		animInstance->State = EPICharacterAnimationState::Climbing;
 	}
 
 	animInstance->MovementSpeed = _acceleratedMovementSpeed;

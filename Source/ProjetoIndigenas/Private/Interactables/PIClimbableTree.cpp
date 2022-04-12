@@ -1,6 +1,6 @@
 ﻿#include "Interactables/PIClimbableTree.h"
 
-#include "Player/PICharacterBase.h"
+#include "Beings/Shared/PICharacterBase.h"
 
 void APIClimbableTree::BeginPlay()
 {

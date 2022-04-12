@@ -1,8 +1,8 @@
-﻿#include "Player/States/PIStateBase.h"
+﻿#include "Beings/Shared/PIStateBase.h"
 
 #include "Components/CapsuleComponent.h"
-#include "Player/States/PIClimbingState.h"
-#include "Player/States/PIMovementState.h"
+#include "Beings/Player/States/PIClimbingState.h"
+#include "Beings/Player/States/PIMovementState.h"
 
 FPIStateBase::FPIStateBase(APICharacterBase* character)
 {

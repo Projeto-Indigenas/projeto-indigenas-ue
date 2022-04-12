@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "PIStateBase.h"
 #include "Misc/Vectors.h"
-#include "Player/PICharacterAnimInstance.h"
+#include "Beings/Shared/PIStateBase.h"
+#include "Beings/Player/PICharacterAnimInstance.h"
 
 struct PROJETOINDIGENAS_API FPIMovementStateData
 {

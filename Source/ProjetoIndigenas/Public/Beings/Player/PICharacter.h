@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "PICharacterAnimInstance.h"
-#include "PICharacterBase.h"
+#include "Beings/Shared/PICharacterBase.h"
 #include "States/PIClimbingState.h"
 #include "States/PIMovementState.h"
 #include "PICharacter.generated.h"

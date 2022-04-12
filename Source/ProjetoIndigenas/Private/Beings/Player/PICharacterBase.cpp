@@ -1,6 +1,6 @@
-﻿#include "Player/PICharacterBase.h"
+﻿#include "Beings/Shared/PICharacterBase.h"
 
-#include "Player/States/PIStateBase.h"
+#include "Beings/Shared/PIStateBase.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
@@ -22,6 +22,8 @@ void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 void APICharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InputDelegates = MakeUnique<FPIInputDelegates>();
 }
 
 void APICharacterBase::Tick(float DeltaSeconds)

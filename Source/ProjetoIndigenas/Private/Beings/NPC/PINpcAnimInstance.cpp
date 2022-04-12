@@ -1,4 +1,4 @@
-﻿#include "NPC/PINpcAnimInstance.h"
+﻿#include "Beings/NPC/PINpcAnimInstance.h"
 
 void UPINpcAnimInstance::AnimationCompleted()
 {

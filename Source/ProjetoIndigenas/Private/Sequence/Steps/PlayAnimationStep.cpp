@@ -1,7 +1,7 @@
 #include "Sequence/Steps/PlayAnimationStep.h"
 
 #include "GameFramework/Character.h"
-#include "NPC/PINpcAnimInstance.h"
+#include "Beings/NPC/PINpcAnimInstance.h"
 
 bool UPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) const
 {

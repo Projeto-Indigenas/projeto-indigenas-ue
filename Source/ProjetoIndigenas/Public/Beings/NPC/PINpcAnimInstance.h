@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "PINpcAnimationState.h"
-#include "Player/PIAnimInstanceBase.h"
+#include "Beings/Shared/PIAnimInstanceBase.h"
 #include "PINpcAnimInstance.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FAnimationEventDelegate);

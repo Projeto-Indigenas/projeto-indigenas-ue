@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Player/Input/PIInputDelegates.h"
+#include "Beings/Player/Input/PIInputDelegates.h"
 
 class PROJETOINDIGENAS_API FPIActionBase
 {

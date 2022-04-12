@@ -1,7 +1,6 @@
 ﻿#include "Sequence/Steps/WalkPathStep.h"
 
-#include "GameFramework/Character.h"
-#include "NPC/PINpcController.h"
+#include "Beings/NPC/PINpcController.h"
 
 void UWalkPathStep::MoveToNextNode()
 {

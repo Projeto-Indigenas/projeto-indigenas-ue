@@ -5,7 +5,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
 #include "Interactables/PIClimbableTree.h"
-#include "States/PIStateBase.h"
+#include "Beings/Shared/PIStateBase.h"
 #include "PICharacterBase.generated.h"
 
 class FPIInputDelegates;
@@ -32,7 +32,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	TSharedPtr<FPIInputDelegates> InputDelegates;
+	TUniquePtr<FPIInputDelegates> InputDelegates;
 	
 	virtual void InitializeFromController() { }
 	

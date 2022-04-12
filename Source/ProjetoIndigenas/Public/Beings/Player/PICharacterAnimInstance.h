@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "PICharacterAnimationState.h"
-#include "PIAnimInstanceBase.h"
+#include "Beings/Shared/PIAnimInstanceBase.h"
 #include "PICharacterAnimInstance.generated.h"
 
 UCLASS()
