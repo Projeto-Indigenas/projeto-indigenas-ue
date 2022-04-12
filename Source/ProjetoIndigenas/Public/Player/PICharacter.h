@@ -29,8 +29,6 @@ protected:
 public:
 	virtual void InitializeFromController() override;
 
-	virtual void SetDirectionYaw(float yaw) override;
-	
 	virtual void StartClimbing() override;
 	virtual void StopClimbing() override;
 

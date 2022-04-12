@@ -32,11 +32,6 @@ void APICharacter::InitializeFromController()
 	SetCurrentState(_characterStates[EPICharacterAnimationState::Movement]);
 }
 
-void APICharacter::SetDirectionYaw(float yaw)
-{
-	
-}
-
 void APICharacter::StartClimbing()
 {
 	if (_climbableTree == nullptr) return;
