@@ -3,8 +3,8 @@
 #include "CoreMinimal.h"
 #include "PICharacterAnimInstance.h"
 #include "PICharacterBase.h"
-#include "Input/PIInputDelegates.h"
-#include "States/PIStateBase.h"
+#include "States/PIClimbingState.h"
+#include "States/PIMovementState.h"
 #include "PICharacter.generated.h"
 
 UCLASS()
@@ -12,10 +12,9 @@ class PROJETOINDIGENAS_API APICharacter : public APICharacterBase
 {
 	GENERATED_BODY()
 
-	TMap<EPICharacterAnimationState, TSharedPtr<FPIStateBase>> _characterStates;
+	TSharedPtr<FPIMovementState> _movementState;
+	TSharedPtr<FPIClimbingState> _climbingState;
 	TWeakObjectPtr<UPICharacterAnimInstance> _animInstance;
-
-	TWeakObjectPtr<APIClimbableTree> _climbableTree;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -29,8 +28,6 @@ protected:
 public:
 	virtual void InitializeFromController() override;
 
-	virtual void StartClimbing() override;
-	virtual void StopClimbing() override;
-
-	virtual void SetClimbableTree(APIClimbableTree* tree) override;
+	virtual void StartClimbing(APIClimbableTree* tree) override;
+	virtual void StopClimbing(APIClimbableTree* tree) override;
 };

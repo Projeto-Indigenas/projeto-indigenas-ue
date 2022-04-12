@@ -30,7 +30,9 @@ class PROJETOINDIGENAS_API FPIClimbingState : public FPIStateBaseWithData<FPICli
 	void UpdateMovementSpeed();
 	
 public:
-	explicit FPIClimbingState(APICharacterBase* character, const FPIClimbingStateData& stateData);
+	TWeakObjectPtr<APIClimbableTree> Tree;
 	
+	explicit FPIClimbingState(APICharacterBase* character, const FPIClimbingStateData& stateData);
+
 	virtual void Tick(float DeltaSeconds) override;
 };

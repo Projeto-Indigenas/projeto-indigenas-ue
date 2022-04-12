@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "Actions/PIActionBase.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
 #include "Interactables/PIClimbableTree.h"
@@ -16,10 +17,9 @@ class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 	
-	TSharedPtr<FPIInputDelegates> _inputDelegates;
-
 protected:
 	TSharedPtr<FPIStateBase> _currentState;
+	FPIActionBase* _availableAction;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _rotationAcceleration = 1.f;
@@ -32,6 +32,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	TSharedPtr<FPIInputDelegates> InputDelegates;
+	
 	virtual void InitializeFromController() { }
 	
 	virtual void Tick(float DeltaSeconds) override;
@@ -41,12 +43,10 @@ public:
 	virtual void ToggleRun() { }
 	virtual void Dodge() { }
 	virtual void SetDirectionYaw(float yaw) { }
-	virtual void StartClimbing() { }
-	virtual void StopClimbing() { }
+	virtual void StartClimbing(APIClimbableTree* tree) { }
+	virtual void StopClimbing(APIClimbableTree* tree) { }
 
-	virtual void SetClimbableTree(APIClimbableTree* tree) { }
-
-	void SetInputDelegates(TSharedPtr<FPIInputDelegates> inputDelegates);
+	void SetAvailableAction(FPIActionBase* action);
 
 #pragma region Templates Declarations
 	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();

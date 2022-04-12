@@ -64,7 +64,10 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	_character = Cast<APICharacter>(InPawn);
-	_character->SetInputDelegates(_inputDelegates);
+	
+	if (!_character.IsValid()) return;
+	
+	_character->InputDelegates = _inputDelegates;
 	_character->InitializeFromController();
 }
 
@@ -72,6 +75,9 @@ void APIPlayerController::OnUnPossess()
 {
 	Super::OnUnPossess();
 
+	if (!_character.IsValid()) return;
+	
+	_character->InputDelegates = nullptr;
 	_character = nullptr;
 }
 

@@ -4,7 +4,7 @@
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
-	FPIInputDelegates& inputDelegates = *_inputDelegates;
+	FPIInputDelegates& inputDelegates = *InputDelegates;
 	
 	if (_currentState.IsValid())
 	{
@@ -33,7 +33,17 @@ void APICharacterBase::Tick(float DeltaSeconds)
 	_currentState->Tick(DeltaSeconds);
 }
 
-void APICharacterBase::SetInputDelegates(TSharedPtr<FPIInputDelegates> inputDelegates)
+void APICharacterBase::SetAvailableAction(FPIActionBase* action)
 {
-	_inputDelegates = inputDelegates;
+	if (_availableAction != nullptr)
+	{
+		_availableAction->UnbindInput(*InputDelegates);
+	}
+
+	_availableAction = action;
+	
+	if (_availableAction != nullptr)
+	{
+		_availableAction->BindInput(*InputDelegates);
+	}
 }
