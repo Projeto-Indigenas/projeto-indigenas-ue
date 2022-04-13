@@ -69,8 +69,10 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
 }
 
-void FPIMovementState::Exit(FPIInputDelegates& inputDelegates)
+void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
 {
+	FPIMovementStateBase::Exit(inputDelegates, onExitDelegate);
+	
 	inputDelegates.HorizontalInputDelegate.Unbind();
 	inputDelegates.VerticalInputDelegate.Unbind();
 	inputDelegates.DirectionYawDelegate.Unbind();
@@ -79,6 +81,8 @@ void FPIMovementState::Exit(FPIInputDelegates& inputDelegates)
 
 	_inputVector = FVector::ZeroVector;
 	_run = false;
+
+	InvokeOnExitDelegate();
 }
 
 void FPIMovementState::Tick(float DeltaSeconds)

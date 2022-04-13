@@ -15,6 +15,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _startPositionRadius = 5.f;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _synchronizingPositionRadius = 5.f;
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -25,4 +28,5 @@ protected:
 
 public:
 	FORCEINLINE float GetStartPositionRadius() const { return _startPositionRadius; }
+	FORCEINLINE float GetSynchronizingPositionRadius() const { return _synchronizingPositionRadius; }
 };

@@ -5,18 +5,27 @@
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
 	FPIInputDelegates& inputDelegates = *InputDelegates;
-	
-	if (_currentState.IsValid())
-	{
-		_currentState->Exit(inputDelegates);
-	}
-	
-	_currentState = state;
 
+	auto setCurrentLambda = [this, state]
+	{
+		if (this == nullptr) return;
+			
+		_currentState = state;
+
+		if (_currentState.IsValid())
+		{
+			_currentState->Enter(*InputDelegates);
+		}			
+	};
+	
 	if (_currentState.IsValid())
 	{
-		_currentState->Enter(inputDelegates);
+		_currentState->Exit(inputDelegates, FPIStateOnExitDelegate::CreateWeakLambda(this, setCurrentLambda));
+
+		return;
 	}
+
+	setCurrentLambda();
 }
 
 void APICharacterBase::BeginPlay()

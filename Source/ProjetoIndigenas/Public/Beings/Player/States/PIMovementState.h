@@ -48,6 +48,6 @@ public:
 	explicit FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData);
 
 	virtual void Enter(FPIInputDelegates& inputDelegates) override;
-	virtual void Exit(FPIInputDelegates& inputDelegates) override;
+	virtual void Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate) override;
 	virtual void Tick(float DeltaSeconds) override;
 };

@@ -4,10 +4,20 @@
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Player/States/PIMovementState.h"
 
+void FPIStateBase::InvokeOnExitDelegate() const
+{
+	_onExitDelegate.ExecuteIfBound();
+}
+
 FPIStateBase::FPIStateBase(APICharacterBase* character)
 {
 	_character = character;
 	_capsuleComponent = _character->GetComponent<UCapsuleComponent>();
+}
+
+void FPIStateBase::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
+{
+	_onExitDelegate = onExitDelegate;
 }
 
 template <typename TAnimInstance>

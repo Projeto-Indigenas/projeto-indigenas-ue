@@ -14,7 +14,6 @@ class PROJETOINDIGENAS_API APICharacter : public APICharacterBase
 
 	TSharedPtr<FPIMovementState> _movementState;
 	TSharedPtr<FPIClimbingState> _climbingState;
-	TWeakObjectPtr<UPICharacterAnimInstance> _animInstance;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -22,12 +21,13 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<EPICharacterAnimationState, float> _movementAccelerationForState;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float _climbingSynchronizationAcceleration = 1.f;
 	
 	virtual void BeginPlay() override;
 	
 public:
-	virtual void InitializeFromController() override;
-
 	virtual void StartClimbing(APIClimbableTree* tree) override;
 	virtual void StopClimbing(APIClimbableTree* tree) override;
 };

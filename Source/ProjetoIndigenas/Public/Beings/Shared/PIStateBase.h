@@ -8,19 +8,26 @@
 class APICharacterBase;
 class UCapsuleComponent;
 
+DECLARE_DELEGATE(FPIStateOnExitDelegate)
+
 class PROJETOINDIGENAS_API FPIStateBase
 {
+	FPIStateOnExitDelegate _onExitDelegate;
+	
 protected:
 	TWeakObjectPtr<APICharacterBase> _character;
 	TWeakObjectPtr<UCapsuleComponent> _capsuleComponent;
-	
+
+	void InvokeOnExitDelegate() const;
+
 public:
 	explicit FPIStateBase(APICharacterBase* character);
 
 	virtual ~FPIStateBase() = default;
 
 	virtual void Enter(FPIInputDelegates& inputDelegates) { }
-	virtual void Exit(FPIInputDelegates& inputDelegates) { }
+	virtual void Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate = nullptr);
+
 	virtual void Tick(float DeltaSeconds) { }
 };
 
@@ -50,7 +57,7 @@ template <typename TAnimInstance, typename TStateData>
 class PROJETOINDIGENAS_API FPIAnimatedStateBaseWithData : public FPIAnimatedStateBase<TAnimInstance>
 {
 protected:
-	const TStateData& _stateData;
+	const TStateData _stateData;
 	
 public:
 	FPIAnimatedStateBaseWithData(APICharacterBase* character, const TStateData& stateData);

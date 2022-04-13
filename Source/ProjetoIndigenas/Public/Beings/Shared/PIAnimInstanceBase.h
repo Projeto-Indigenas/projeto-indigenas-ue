@@ -14,7 +14,4 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool ShouldDodge;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool IsClimbing;
 };

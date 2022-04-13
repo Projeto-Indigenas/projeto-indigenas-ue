@@ -8,11 +8,6 @@ void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_animInstance = GetAnimInstance<UPICharacterAnimInstance>();
-}
-
-void APICharacter::InitializeFromController()
-{
 	_movementState = MakeShared<FPIMovementState>(this,
 		FPIMovementStateData(
 			_capsuleRadiusForState[EPICharacterAnimationState::Movement],
@@ -26,7 +21,8 @@ void APICharacter::InitializeFromController()
 			_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
 			_capsuleRadiusAcceleration,
 			_movementAccelerationForState[EPICharacterAnimationState::Climbing],
-			_rotationAcceleration
+			_rotationAcceleration,
+			_climbingSynchronizationAcceleration
 		));
 
 	SetCurrentState(_movementState);
