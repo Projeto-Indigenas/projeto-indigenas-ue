@@ -21,9 +21,6 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<EPICharacterAnimationState, float> _movementAccelerationForState;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float _climbingSynchronizationAcceleration = 1.f;
 	
 	virtual void BeginPlay() override;
 	

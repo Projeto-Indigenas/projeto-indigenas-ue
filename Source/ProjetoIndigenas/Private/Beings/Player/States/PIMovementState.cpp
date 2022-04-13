@@ -65,7 +65,7 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
 	inputDelegates.DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
 
-	_acceleratedCapsuleRadius.SetNow(_capsuleComponent->GetUnscaledCapsuleRadius());
+	_acceleratedCapsuleRadius.SetCurrent(_capsuleComponent->GetUnscaledCapsuleRadius());
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
 }
 

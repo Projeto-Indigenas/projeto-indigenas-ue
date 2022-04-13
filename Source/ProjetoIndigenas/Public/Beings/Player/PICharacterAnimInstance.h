@@ -15,8 +15,6 @@ class PROJETOINDIGENAS_API UPICharacterAnimInstance : public UPIAnimInstanceBase
 public:
 	FPICharacterAnimationEventDelegate ClimbingStartedDelegate;
 	FPICharacterAnimationEventDelegate ClimbingEndedDelegate;
-	FPICharacterAnimationEventDelegate BeginSynchronizingClimbingDelegate;
-	FPICharacterAnimationEventDelegate EndSynchronizingClimbingDelegate;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	EPICharacterAnimationState State;
@@ -26,10 +24,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OnClimbingEnded() { ClimbingEndedDelegate.ExecuteIfBound(); }
-	
-	UFUNCTION(BlueprintCallable)
-	void OnBeginSynchronizingClimbing() { BeginSynchronizingClimbingDelegate.ExecuteIfBound(); }
-	
-	UFUNCTION(BlueprintCallable)
-	void OnEndSynchronizingClimbing() { EndSynchronizingClimbingDelegate.ExecuteIfBound(); }
 };

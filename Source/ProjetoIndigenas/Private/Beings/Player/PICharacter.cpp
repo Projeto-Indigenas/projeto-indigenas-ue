@@ -3,6 +3,7 @@
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Player/States/PIMovementState.h"
+#include "Interactables/PIClimbableTree.h"
 
 void APICharacter::BeginPlay()
 {
@@ -21,8 +22,7 @@ void APICharacter::BeginPlay()
 			_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
 			_capsuleRadiusAcceleration,
 			_movementAccelerationForState[EPICharacterAnimationState::Climbing],
-			_rotationAcceleration,
-			_climbingSynchronizationAcceleration
+			_rotationAcceleration
 		));
 
 	SetCurrentState(_movementState);

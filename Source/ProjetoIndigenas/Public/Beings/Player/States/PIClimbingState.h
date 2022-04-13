@@ -5,34 +5,33 @@
 #include "Beings/Shared/PIStateBase.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 
-enum class PROJETOINDIGENAS_API EPIClimbingState
-{
-	None,
-	FloorToTree,
-	HangingOnTree,
-	TreeToFloor
-};
-
 struct PROJETOINDIGENAS_API FPIClimbingStateData
 {
 	const float CapsuleRadius;
 	const float CapsuleRadiusAcceleration;
 	const float MovementSpeedAcceleration;
 	const float RotationAcceleration;
-	const float SynchronizationAcceleration;
 
 	FPIClimbingStateData(
 		const float& capsuleRadius,
 		const float& capsuleRadiusAcceleration,
 		const float& movementSpeedAcceleration,
-		const float& rotationAcceleration,
-		const float& synchronizationAcceleration)
+		const float& rotationAcceleration)
 		: CapsuleRadius(capsuleRadius),
 		  CapsuleRadiusAcceleration(capsuleRadiusAcceleration),
 		  MovementSpeedAcceleration(movementSpeedAcceleration),
-		  RotationAcceleration(rotationAcceleration),
-		  SynchronizationAcceleration(synchronizationAcceleration)
+		  RotationAcceleration(rotationAcceleration)
 	{ }
+};
+
+UENUM(BlueprintType)
+enum class EPIClimbingState : uint8
+{
+	None,
+	StartClimbing,
+	HangingOnTreeIdle,
+	HangingOnTreeMoving,
+	EndClimbing
 };
 
 typedef FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData> FPIClimbingStateBase;
@@ -53,18 +52,14 @@ class PROJETOINDIGENAS_API FPIClimbingState : public FPIClimbingStateBase
 
 	FVector _inputVector;
 	FVector _startDirection;
-	bool _synchronizeClimbing;
 
 	void SetInputY(float y);
 	void UpdateMovementSpeed();
-	void UpdateClimbingSynchronizedLocation(bool climbing);
-
-	FORCEINLINE void SynchronizeCharacterLocation(APICharacterBase* character) const;
+	void UpdateTargetLocation();
+	void SynchronizeCharacterLocation() const;
 
 	void ClimbingStarted();
-	void ClimbingEnded();
-	void BeginSynchronizingClimbing(); 
-	void EndSynchronizingClimbing();
+	void ClimbingEnded() const;
 	
 public:
 	TWeakObjectPtr<APIClimbableTree> Tree;

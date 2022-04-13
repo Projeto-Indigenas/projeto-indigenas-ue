@@ -20,7 +20,7 @@ public:
 	FORCEINLINE operator float() const { return _current; }
 	FORCEINLINE void operator =(float value) { _target = value; }
 
-	FORCEINLINE void SetNow(float value)
+	FORCEINLINE void SetCurrent(float value)
 	{
 		_current = value;
 		_target = value;
@@ -54,16 +54,16 @@ struct PROJETOINDIGENAS_API FAcceleratedVector2D
 	FORCEINLINE void operator =(const FVector2D& value) { X = value.X; Y = value.Y; }
 	FORCEINLINE virtual void operator =(const FVector& value) { X = value.X; Y = value.Y; }
 
-	FORCEINLINE void SetNow(FVector2D value)
+	FORCEINLINE void SetCurrent(FVector2D value)
 	{
-		X.SetNow(value.X);
-		Y.SetNow(value.Y);
+		X.SetCurrent(value.X);
+		Y.SetCurrent(value.Y);
 	}
 
-	FORCEINLINE virtual void SetNow(FVector value)
+	FORCEINLINE virtual void SetCurrent(FVector value)
 	{
-		X.SetNow(value.X);
-		Y.SetNow(value.Y);
+		X.SetCurrent(value.X);
+		Y.SetCurrent(value.Y);
 	}
 };
 
@@ -90,9 +90,9 @@ struct PROJETOINDIGENAS_API FAcceleratedVector : FAcceleratedVector2D
 		Z = value.Z;
 	}
 	
-	FORCEINLINE virtual void SetNow(FVector value) override
+	FORCEINLINE virtual void SetCurrent(FVector value) override
 	{
-		FAcceleratedVector2D::SetNow(value);
-		Z.SetNow(value.Z);
+		FAcceleratedVector2D::SetCurrent(value);
+		Z.SetCurrent(value.Z);
 	}
 };
