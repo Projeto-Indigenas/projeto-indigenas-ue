@@ -55,11 +55,17 @@ void FPIClimbingState::ClimbingStarted()
 
 void FPIClimbingState::ClimbingEnded()
 {
-	UpdateClimbingSynchronizedLocation(false);
+	_currentState = EPIClimbingState::None;
 
 	InvokeOnExitDelegate();
-
-	_currentState = EPIClimbingState::None;
+	
+	if (!_animInstance.IsValid()) return;
+	UPICharacterAnimInstance* animInstance = _animInstance.Get();
+	
+	animInstance->ClimbingStartedDelegate.Unbind();
+	animInstance->ClimbingEndedDelegate.Unbind();
+	animInstance->BeginSynchronizingClimbingDelegate.Unbind();
+	animInstance->EndSynchronizingClimbingDelegate.Unbind();
 }
 
 void FPIClimbingState::BeginSynchronizingClimbing()
@@ -144,14 +150,7 @@ void FPIClimbingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	_inputVector = FVector::ZeroVector;
 
 	if (!_characterMovement.IsValid()) return;
-	if (!_animInstance.IsValid()) return;
-	UPICharacterAnimInstance* animInstance = _animInstance.Get();
 	UCharacterMovementComponent* characterMovement = _characterMovement.Get();
-	
-	animInstance->ClimbingStartedDelegate.Unbind();
-	animInstance->ClimbingEndedDelegate.Unbind();
-	animInstance->BeginSynchronizingClimbingDelegate.Unbind();
-	animInstance->EndSynchronizingClimbingDelegate.Unbind();
 
 	characterMovement->MovementMode = MOVE_Walking;
 	*_characterAnimState = EPICharacterAnimationState::Movement;
