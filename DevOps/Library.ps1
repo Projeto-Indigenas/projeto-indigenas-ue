@@ -7,7 +7,7 @@ $env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binarie
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
 Write-Output "Using project at: $env:PROJECT_PATH"
 
-function ValidateEngine 
+function ValidateBuildTool
 {
     if (![File]::Exists($unrealBuildToolPath))
     {

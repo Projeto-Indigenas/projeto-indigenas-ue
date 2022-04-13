@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NPC/NpcAnimationState.h"
-#include "NPC/PINpcAnimInstance.h"
+#include "Beings/NPC/PINpcAnimationState.h"
+#include "Beings/NPC/PINpcAnimInstance.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/Providers/ActorProviderBase.h"
 #include "PlayAnimationStep.generated.h"
@@ -21,7 +21,7 @@ protected:
 	UActorProviderBase* _actorProvider;
 	
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	ENpcAnimationState _animationStateToPlay;
+	EPINpcAnimationState _animationStateToPlay;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	bool _waitForAnimationCompletedEvent;

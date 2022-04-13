@@ -22,10 +22,10 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	FSequence _sequence;
 
+	virtual void BeginPlay() override;
+
 public:
 	FSequenceCompletedDelegate SequenceCompletedDelegate;
-
-	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 	void StartSequence();

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "NPC/PINpcCharacter.h"
-#include "NPC/PINpcController.h"
-#include "NPC/Paths/DestinationController.h"
-#include "NPC/Paths/PIPathData.h"
+#include "Beings/NPC/PINpcCharacter.h"
+#include "Beings/NPC/PINpcController.h"
+#include "Beings/NPC/Paths/DestinationController.h"
+#include "Beings/NPC/Paths/PIPathData.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/SequenceStepExecutor.h"
 #include "Sequence/Providers/ActorProviderBase.h"

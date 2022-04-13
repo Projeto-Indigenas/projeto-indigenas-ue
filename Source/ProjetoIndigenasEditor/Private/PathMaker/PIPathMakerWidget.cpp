@@ -2,7 +2,7 @@
 
 #include "EditorModeManager.h"
 #include "PropertyCustomizationHelpers.h"
-#include "NPC/Paths/PIPathData.h"
+#include "Beings/NPC/Paths/PIPathData.h"
 #include "PathMaker/PIPathMakerEditor.h"
 #include "Widgets/Layout/SScrollBox.h"
 
@@ -20,7 +20,7 @@ void SPIPathMakerWidget::OnPathObjectChanged(const FAssetData& assetData) const
 		object = nullptr;
 	}
 
-	GetEdMode()->SetEditingPath(Cast<UPIPathData>(object));
+	GetEdMode()->SetTargetPath(Cast<UPIPathData>(object));
 }
 
 void SPIPathMakerWidget::Construct(const FArguments& inArgs)

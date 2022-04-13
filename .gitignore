@@ -73,3 +73,5 @@ Plugins/ExodusImport/*
 .vscode/*
 **/RiderLink/*
 *.exp
+Binaries/Mac
+Binaries/**/*DebugGame*

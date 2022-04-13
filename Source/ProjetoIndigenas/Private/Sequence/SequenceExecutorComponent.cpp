@@ -2,6 +2,15 @@
 
 #include "Sequence/SequenceStepExecutor.h"
 
+void USequenceExecutorComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (_stepExecutor == nullptr) return;
+
+	_stepExecutor->BeginExecution();
+}
+
 USequenceExecutorComponent::USequenceExecutorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -10,15 +19,6 @@ USequenceExecutorComponent::USequenceExecutorComponent()
 void USequenceExecutorComponent::SetupExecutor(ISequenceStepExecutor* stepExecutor)
 {
 	_stepExecutor = stepExecutor;
-}
-
-void USequenceExecutorComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (_stepExecutor == nullptr) return;
-
-	_stepExecutor->BeginExecution();
 }
 
 void USequenceExecutorComponent::TickComponent(float DeltaTime, ELevelTick TickType,

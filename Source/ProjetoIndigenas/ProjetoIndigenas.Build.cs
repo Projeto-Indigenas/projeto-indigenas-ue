@@ -14,5 +14,13 @@ public class ProjetoIndigenas : ModuleRules
 			"InputCore",
 			"AIModule",
 		});
+
+		if (Target.bBuildEditor)
+		{
+			// PublicDependencyModuleNames.AddRange(new[]
+			// {
+			// 	"UnrealEd"
+			// });
+		}
 	}
 }
