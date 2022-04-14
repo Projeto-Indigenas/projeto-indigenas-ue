@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Animation/AnimInstance.h"
 #include "PIAnimInstanceBase.generated.h"
 
 UCLASS()

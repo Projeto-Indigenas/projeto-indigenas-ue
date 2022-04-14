@@ -4,13 +4,13 @@
 #include "Actions/PIActionBase.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
-#include "Interactables/PIClimbableTree.h"
 #include "Beings/Shared/PIStateBase.h"
 #include "PICharacterBase.generated.h"
 
 class FPIInputDelegates;
 class FPIStateBase;
 class UPIAnimInstanceBase;
+class APIClimbableTree;
 
 UCLASS()
 class PROJETOINDIGENAS_API APICharacterBase : public ACharacter

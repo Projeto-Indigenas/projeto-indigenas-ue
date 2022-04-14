@@ -4,12 +4,13 @@
 #include <GameFramework/CharacterMovementComponent.h>
 
 #include "Beings/Shared/PIAnimInstanceBase.h"
+#include "Interactables/PIClimbableTree.h"
 
 void FPIClimbingState::SetInputY(float y)
 {
 	if (*_characterAnimState != EPICharacterAnimationState::Climbing) return;
-	
-	_inputVector.X = y;
+
+	_inputValue = y;	
 
 	UpdateMovementSpeed();
 }
@@ -18,72 +19,110 @@ void FPIClimbingState::UpdateMovementSpeed()
 {
 	if (*_characterAnimState != EPICharacterAnimationState::Climbing) return;
 	
-	_acceleratedMovementSpeed = _inputVector.X;
+	_acceleratedMovementSpeed = _inputValue;
 }
 
-void FPIClimbingState::UpdateClimbingSynchronizedLocation(bool climbing)
+void FPIClimbingState::UpdateTargetLocation()
 {
+	if (!_character.IsValid()) return;
+	_acceleratedLocation.SetCurrent(_character->GetActorLocation());
+	
 	if (!Tree.IsValid()) return;
+	const float& positionRadius = Tree->GetPositionRadiusMap()[_currentState];
+	_acceleratedLocation = Tree->GetActorLocation() - _startDirection * positionRadius;
+
+#if !UE_BUILD_SHIPPING
+	const FVector& current = _acceleratedLocation;
+	PI_SCREEN_LOG(_logsEnabled, 10, TEXT("Accelerated Location current: %s"), *current.ToString())
+	PI_SCREEN_LOG(_logsEnabled, 10, TEXT("Accelerated Location target: %s"), *_acceleratedLocation.GetTarget2D().ToString());
+#endif
+}
+
+void FPIClimbingState::SynchronizeCharacterLocation(const float& deltaSeconds)
+{
+	_acceleratedLocation.Tick(deltaSeconds);
+	
 	if (!_character.IsValid()) return;
 	
-	const APIClimbableTree* tree = Tree.Get();
-	const APICharacterBase* character = _character.Get();
-	
-	const float& positionRadius = climbing ? tree->GetSynchronizingPositionRadius() : tree->GetStartPositionRadius();
-	_acceleratedLocation.SetNow(character->GetActorLocation());
-	_acceleratedLocation = tree->GetActorLocation() - _startDirection * positionRadius;
-	
-	const float& acceleration = climbing
-		? _stateData.SynchronizationAcceleration
-		: _stateData.MovementSpeedAcceleration;
-	_acceleratedLocation.SetAcceleration(acceleration);
-}
-
-FORCEINLINE void FPIClimbingState::SynchronizeCharacterLocation(APICharacterBase* character) const
-{
 	FVector location = _acceleratedLocation;
-	location.Z = character->GetActorLocation().Z;
-	character->SetActorLocation(location);
+	location.Z = _character->GetActorLocation().Z;
+	_character->SetActorLocation(location);
 }
 
 void FPIClimbingState::ClimbingStarted()
 {
-	UpdateClimbingSynchronizedLocation(true);
-
-	_currentState = EPIClimbingState::HangingOnTree;
+	_currentState = EPIClimbingState::HangingOnTreeIdle;
+	_acceleratedLocation.SetCurrent(_character->GetActorLocation());
+	UpdateTargetLocation();
 }
 
 void FPIClimbingState::ClimbingEnded()
 {
-	_currentState = EPIClimbingState::None;
+	SetTreeCameraCollision(ECR_Block);
+	
+	if (_animInstance.IsValid())
+	{
+		_animInstance->ClimbingStartedDelegate.Unbind();
+		_animInstance->ClimbingEndedDelegate.Unbind();
+	}
 
+	if (_characterMovement.IsValid())
+	{
+		_characterMovement->MovementMode = MOVE_Walking;
+	}
+
+	Tree = nullptr;
+	
 	InvokeOnExitDelegate();
-	
-	if (!_animInstance.IsValid()) return;
-	UPICharacterAnimInstance* animInstance = _animInstance.Get();
-	
-	animInstance->ClimbingStartedDelegate.Unbind();
-	animInstance->ClimbingEndedDelegate.Unbind();
-	animInstance->BeginSynchronizingClimbingDelegate.Unbind();
-	animInstance->EndSynchronizingClimbingDelegate.Unbind();
 }
 
-void FPIClimbingState::BeginSynchronizingClimbing()
+void FPIClimbingState::ClampLocationToPath()
 {
-	_synchronizeClimbing = true;
+	if (!Tree.IsValid()) return;
+	if (!_character.IsValid()) return;
+	if (!_capsuleComponent.IsValid()) return;
 
-	UpdateClimbingSynchronizedLocation(true);
+	const TArray<FVector>& path = Tree->GetPath();
+
+	// TODO(anderson): this will only work if the path has only two nodes.
+	// For this to work as intended, we need to implement path projections.
+	// Here is a good source of knowledge about projections:
+	// https://en.m.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+
+	const float& capsuleHalfHeight = _capsuleComponent->GetScaledCapsuleHalfHeight();
+	const float& positionRadius = Tree->GetPositionRadiusMap()[_currentState];
+	const FVector& radiusVector = _startDirection * positionRadius;
+	const FVector& actorLocation = _character->GetActorLocation();
+	const FVector& capsuleHalfHeightVector = FVector::UpVector * capsuleHalfHeight;
+	const FVector& pathMinLocation = path[0] - radiusVector + capsuleHalfHeightVector;
+	const FVector& pathMaxLocation = path.Last() - radiusVector - capsuleHalfHeightVector;
+	const float& clampedZ = FMath::Clamp(actorLocation.Z, pathMinLocation.Z, pathMaxLocation.Z);
+	const FVector& finalActorLocation = FVector(actorLocation.X, actorLocation.Y, clampedZ);
+	_character->SetActorLocation(finalActorLocation);
+
+	_isAtTop = actorLocation.Z >= pathMaxLocation.Z - 5.f;
+	_isAtBottom = actorLocation.Z <= pathMinLocation.Z + 5.f;
+	
+	if (_isAtTop && _inputValue > 0 || _isAtBottom && _inputValue < 0)
+	{
+		_acceleratedMovementSpeed = 0.f;
+	}
 }
 
-void FPIClimbingState::EndSynchronizingClimbing()
+void FPIClimbingState::SetTreeCameraCollision(ECollisionResponse response) const
 {
-	_synchronizeClimbing = false;
+	if (!Tree.IsValid()) return;
+	UMeshComponent* meshComponent = Cast<UMeshComponent>(Tree->GetComponentByClass(UMeshComponent::StaticClass()));
+	if (meshComponent == nullptr) return;
+	meshComponent->SetCollisionResponseToChannel(ECC_Camera, response);
 }
 
 FPIClimbingState::FPIClimbingState(APICharacterBase* character, const FPIClimbingStateData& stateData):
 	FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData>(character, stateData),
 	_currentState(EPIClimbingState::None),
-	_synchronizeClimbing(false)
+	_inputValue(0),
+	_isAtTop(false),
+	_isAtBottom(false)
 {
 	_characterMovement = character->GetCharacterMovement();
 
@@ -100,8 +139,8 @@ void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
 {
 	inputDelegates.VerticalInputDelegate.BindRaw(this, &FPIClimbingState::SetInputY);
 
-	_inputVector = FVector::ZeroVector;
-	_currentState = EPIClimbingState::FloorToTree;
+	_inputValue = 0.f;
+	_currentState = EPIClimbingState::StartClimbing;
 	
 	if (!Tree.IsValid()) return;
 	if (!_character.IsValid()) return;
@@ -109,101 +148,119 @@ void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
 	if (!_characterMovement.IsValid()) return;
 	if (!_capsuleComponent.IsValid()) return;
 
-	const APIClimbableTree* tree = Tree.Get();
-	const APICharacterBase* character = _character.Get();
-	const UCapsuleComponent* capsuleComponent = _capsuleComponent.Get();
-	UCharacterMovementComponent* characterMovement = _characterMovement.Get();
-	UPICharacterAnimInstance* animInstance = _animInstance.Get();
-
-	animInstance->ClimbingStartedDelegate.BindRaw(this, &FPIClimbingState::ClimbingStarted);
-	animInstance->ClimbingEndedDelegate.BindRaw(this, &FPIClimbingState::ClimbingEnded);
-	animInstance->BeginSynchronizingClimbingDelegate.BindRaw(this, &FPIClimbingState::BeginSynchronizingClimbing);
-	animInstance->EndSynchronizingClimbingDelegate.BindRaw(this, &FPIClimbingState::EndSynchronizingClimbing);
+	_animInstance->ClimbingStartedDelegate.BindRaw(this, &FPIClimbingState::ClimbingStarted);
+	_animInstance->ClimbingEndedDelegate.BindRaw(this, &FPIClimbingState::ClimbingEnded);
 	
-	characterMovement->MovementMode = MOVE_Flying;
+	_characterMovement->MovementMode = MOVE_Flying;
 	
-	FVector actorLocation = character->GetActorLocation();
-	_acceleratedLocation.SetNow(actorLocation);
-	FVector currentDirection = character->GetActorRotation().Vector();
-	currentDirection.Normalize();
-	_acceleratedDirection.SetNow(currentDirection);
-
-	_acceleratedCapsuleRadius.SetNow(capsuleComponent->GetScaledCapsuleRadius());
+	_acceleratedCapsuleRadius.Current = _capsuleComponent->GetScaledCapsuleRadius();
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
 
-	FVector treeLocation = tree->GetActorLocation();
+	FVector actorLocation = _character->GetActorLocation();
+	FVector treeLocation = Tree->GetActorLocation();
 	actorLocation.Z = 0;
 	treeLocation.Z = 0;
 	_startDirection = treeLocation - actorLocation;
 	_startDirection.Normalize();
-	_acceleratedDirection = _startDirection;
 
-	UpdateClimbingSynchronizedLocation(false);
+	FVector currentDirection = _character->GetActorRotation().Vector();
+	currentDirection.Normalize();
+	_acceleratedDirection.SetCurrent(currentDirection);
+	_acceleratedDirection = _startDirection;
+	
+	UpdateTargetLocation();
+
+	SetTreeCameraCollision(ECR_Ignore);
 }
 
 void FPIClimbingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
 {
 	FPIClimbingStateBase::Exit(inputDelegates, onExitDelegate);
+
+	if (!_isAtBottom) return;
 	
 	inputDelegates.VerticalInputDelegate.Unbind();
 	
-	_inputVector = FVector::ZeroVector;
-
-	if (!_characterMovement.IsValid()) return;
-	UCharacterMovementComponent* characterMovement = _characterMovement.Get();
-
-	characterMovement->MovementMode = MOVE_Walking;
-	*_characterAnimState = EPICharacterAnimationState::Movement;
-
-	_currentState = EPIClimbingState::TreeToFloor;
+	_inputValue = 0.f;
+	_currentState = EPIClimbingState::EndClimbing;
+	UpdateTargetLocation();
 }
 
 void FPIClimbingState::Tick(float DeltaSeconds)
 {
-	_acceleratedLocation.Tick(DeltaSeconds);
+#if !UE_BUILD_SHIPPING
+	_logKey = 0;
+#endif
+	
 	_acceleratedDirection.Tick(DeltaSeconds);
 	_acceleratedCapsuleRadius.Tick(DeltaSeconds);
-	_acceleratedMovementSpeed.Tick(DeltaSeconds);
 
 	if (!_character.IsValid()) return;
 	if (!_characterMovement.IsValid()) return;
 	if (!_animInstance.IsValid()) return;
 	if (!_capsuleComponent.IsValid()) return;
 	
-	APICharacterBase* character = _character.Get();
-	UCharacterMovementComponent* characterMovement = _characterMovement.Get();
-	UPICharacterAnimInstance* animInstance = _animInstance.Get();
-	UCapsuleComponent* capsuleComponent = _capsuleComponent.Get();
-	
-	capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
-	characterMovement->Velocity = FVector::ZeroVector;
-	
-	animInstance->MovementSpeed = _acceleratedMovementSpeed;
+	_characterMovement->Velocity = FVector::ZeroVector;
+	_capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
+	_character->SetActorRotation(_acceleratedDirection);
 
-	character->SetActorRotation(_acceleratedDirection);
 	switch (_currentState)
 	{
-	case EPIClimbingState::FloorToTree:
+	case EPIClimbingState::StartClimbing:
 		{
-			const bool isOnTarget = _acceleratedLocation.IsOnTarget(1.f);
-			if (isOnTarget && animInstance->State != EPICharacterAnimationState::Climbing)
+			if (*_characterAnimState == EPICharacterAnimationState::Climbing) break;
+			
+			if (_acceleratedLocation.IsOnTarget(1.f))
 			{
-				animInstance->State = EPICharacterAnimationState::Climbing;
+				*_characterAnimState = EPICharacterAnimationState::Climbing;
+
+				break;
 			}
 
-			SynchronizeCharacterLocation(character);
+			SynchronizeCharacterLocation(DeltaSeconds);
 			
 			break;
 		}
-	case EPIClimbingState::HangingOnTree:
+	case EPIClimbingState::HangingOnTreeIdle:
+	case EPIClimbingState::HangingOnTreeMoving:
 		{
-			if (_synchronizeClimbing)
+			UpdateTargetLocation();
+			SynchronizeCharacterLocation(DeltaSeconds);
+			ClampLocationToPath();
+			
+			if (_acceleratedMovementSpeed.Target == 0)
 			{
-				SynchronizeCharacterLocation(character);
+				if (_currentState != EPIClimbingState::HangingOnTreeIdle)
+				{
+					_currentState = EPIClimbingState::HangingOnTreeIdle;
+				}
+			}
+			else
+			{
+				if (_currentState != EPIClimbingState::HangingOnTreeMoving)
+				{
+					_currentState = EPIClimbingState::HangingOnTreeMoving;
+				}
 			}
 			
 			break;
 		}
-	default: break;
+	case EPIClimbingState::EndClimbing:
+		{
+			if (*_characterAnimState == EPICharacterAnimationState::Default) return;
+			
+			if (_acceleratedLocation.IsOnTarget(1.f))
+			{
+				*_characterAnimState = EPICharacterAnimationState::Default;
+
+				return;;
+			}
+			
+			SynchronizeCharacterLocation(DeltaSeconds);
+		}
+	default: return;
 	}
+
+	_acceleratedMovementSpeed.Tick(DeltaSeconds);
+	_animInstance->MovementSpeed = _acceleratedMovementSpeed;
 }

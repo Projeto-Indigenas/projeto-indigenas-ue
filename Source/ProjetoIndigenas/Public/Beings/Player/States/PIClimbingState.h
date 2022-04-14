@@ -5,34 +5,33 @@
 #include "Beings/Shared/PIStateBase.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 
-enum class PROJETOINDIGENAS_API EPIClimbingState
-{
-	None,
-	FloorToTree,
-	HangingOnTree,
-	TreeToFloor
-};
-
 struct PROJETOINDIGENAS_API FPIClimbingStateData
 {
 	const float CapsuleRadius;
 	const float CapsuleRadiusAcceleration;
 	const float MovementSpeedAcceleration;
 	const float RotationAcceleration;
-	const float SynchronizationAcceleration;
 
 	FPIClimbingStateData(
 		const float& capsuleRadius,
 		const float& capsuleRadiusAcceleration,
 		const float& movementSpeedAcceleration,
-		const float& rotationAcceleration,
-		const float& synchronizationAcceleration)
+		const float& rotationAcceleration)
 		: CapsuleRadius(capsuleRadius),
 		  CapsuleRadiusAcceleration(capsuleRadiusAcceleration),
 		  MovementSpeedAcceleration(movementSpeedAcceleration),
-		  RotationAcceleration(rotationAcceleration),
-		  SynchronizationAcceleration(synchronizationAcceleration)
+		  RotationAcceleration(rotationAcceleration)
 	{ }
+};
+
+UENUM(BlueprintType)
+enum class EPIClimbingState : uint8
+{
+	None,
+	StartClimbing,
+	HangingOnTreeIdle,
+	HangingOnTreeMoving,
+	EndClimbing
 };
 
 typedef FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData> FPIClimbingStateBase;
@@ -51,20 +50,21 @@ class PROJETOINDIGENAS_API FPIClimbingState : public FPIClimbingStateBase
 
 	EPIClimbingState _currentState;
 
-	FVector _inputVector;
+	float _inputValue;
 	FVector _startDirection;
-	bool _synchronizeClimbing;
+	bool _isAtTop;
+	bool _isAtBottom;
 
 	void SetInputY(float y);
 	void UpdateMovementSpeed();
-	void UpdateClimbingSynchronizedLocation(bool climbing);
-
-	FORCEINLINE void SynchronizeCharacterLocation(APICharacterBase* character) const;
+	void UpdateTargetLocation();
+	void SynchronizeCharacterLocation(const float& deltaSeconds);
 
 	void ClimbingStarted();
 	void ClimbingEnded();
-	void BeginSynchronizingClimbing(); 
-	void EndSynchronizingClimbing();
+
+	void ClampLocationToPath();
+	void SetTreeCameraCollision(ECollisionResponse response) const;
 	
 public:
 	TWeakObjectPtr<APIClimbableTree> Tree;
@@ -75,4 +75,23 @@ public:
 	virtual void Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate) override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+#if !UE_BUILD_SHIPPING
+private:
+	inline static int _logKey = 0;
+
+	FORCEINLINE static int GetLogKey() { return ++_logKey; }
+	
+	FAutoConsoleVariable _logsEnabled = FAutoConsoleVariable(
+		TEXT("pi.climbing.screenLogs"),
+		false,
+		TEXT("Displays useful logs for debugging"));
+
+	#define PI_SCREEN_LOG(variable, duration, format, ...) \
+		if (variable->GetBool()) \
+		{ \
+			const FString& message = FString::Printf(format, ##__VA_ARGS__); \
+			GEngine->AddOnScreenDebugMessage(GetLogKey(), duration, FColor::Red, message); \
+		}
+#endif
 };

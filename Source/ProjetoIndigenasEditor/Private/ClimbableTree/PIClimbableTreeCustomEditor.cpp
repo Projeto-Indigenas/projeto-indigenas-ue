@@ -26,10 +26,14 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(
 	if (!_climbableTree.IsValid() || _climbableTree != Component->GetOwner())
 	{
 		_climbableTree = Cast<APIClimbableTree>(Component->GetOwner());
+
 		if (!_climbableTree.IsValid()) return;
+
 		UActorComponent* component = _climbableTree->GetComponentByClass(UStaticMeshComponent::StaticClass());
 		_staticMeshComponent = Cast<UStaticMeshComponent>(component);
+
 		if (!_staticMeshComponent.IsValid()) return;
+
 		_socketsLocations.Empty();
 		for (const FName& socketName : _staticMeshComponent->GetAllSocketNames())
 		{
@@ -45,7 +49,11 @@ void FPIClimbableTreeCustomEditor::DrawVisualization(
 	if (_socketsLocations.Num() > 0)
 	{
 		const FVector& baseLocation = _socketsLocations[0];
-		DrawCircle(PDI, baseLocation, FVector::ForwardVector, FVector::RightVector,
-			FLinearColor::Red, _climbableTree->GetStartPositionRadius(), 10, 0, 1.f);
+
+		for (const TTuple<EPIClimbingState, float>& pair : _climbableTree->GetPositionRadiusMap())
+		{
+			DrawCircle(PDI, baseLocation, FVector::ForwardVector, FVector::RightVector,
+				FLinearColor::MakeFromColorTemperature(pair.Value), pair.Value, 10, 0, 1.f);
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Actions/PIClimbTreeAction.h"
+#include "Beings/Player/States/PIClimbingState.h"
 #include "PIClimbableTree.generated.h"
 
 UCLASS()
@@ -10,14 +11,12 @@ class PROJETOINDIGENAS_API APIClimbableTree : public AActor
 	GENERATED_BODY()
 
 	TUniquePtr<FPIClimbTreeAction> _action;
+	TArray<FVector> _path;
 	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float _startPositionRadius = 5.f;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float _synchronizingPositionRadius = 5.f;
-
+	TMap<EPIClimbingState, float> _positionRadiusMap;
+	
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -27,6 +26,6 @@ protected:
 	void OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const;
 
 public:
-	FORCEINLINE float GetStartPositionRadius() const { return _startPositionRadius; }
-	FORCEINLINE float GetSynchronizingPositionRadius() const { return _synchronizingPositionRadius; }
+	FORCEINLINE const TMap<EPIClimbingState, float>& GetPositionRadiusMap() const { return _positionRadiusMap; }
+	FORCEINLINE const TArray<FVector>& GetPath() { return _path; }
 };
