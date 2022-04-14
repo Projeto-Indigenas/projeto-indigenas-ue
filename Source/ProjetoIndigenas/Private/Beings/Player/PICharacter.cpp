@@ -36,6 +36,5 @@ void APICharacter::StartClimbing(APIClimbableTree* tree)
 
 void APICharacter::StopClimbing(APIClimbableTree* tree)
 {
-	_climbingState->Tree = nullptr;
 	SetCurrentState(_movementState);
 }

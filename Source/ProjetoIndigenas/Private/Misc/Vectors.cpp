@@ -6,20 +6,20 @@ FAcceleratedValue FAcceleratedValue::ZeroValue = FAcceleratedValue();
 
 void FAcceleratedValue::Tick(float DeltaSeconds)
 {
-	const float delta = _target - _current;
+	const float delta = Target - Current;
 
 	float step = FMath::Abs(delta) * Acceleration * DeltaSeconds;
 	
-	if (_target < _current) step = -step;
+	if (Target < Current) step = -step;
 
 	if (FMath::Abs(step) > FMath::Abs(delta))
 	{
-		_current = _target;
+		Current = Target;
 		
 		return;
 	}
 	
-	_current += step;
+	Current += step;
 }
 
 #pragma endregion FAcceleratedValue
