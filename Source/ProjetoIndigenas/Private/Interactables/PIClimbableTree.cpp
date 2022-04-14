@@ -7,6 +7,15 @@ void APIClimbableTree::BeginPlay()
 	Super::BeginPlay();
 
 	_action = MakeUnique<FPIClimbTreeAction>(this);
+
+	const UMeshComponent* meshComponent = Cast<UMeshComponent>(GetComponentByClass(UMeshComponent::StaticClass()));
+
+	if (meshComponent == nullptr) return;
+	
+	for (const FName& socketName : meshComponent->GetAllSocketNames())
+	{
+		_path.Add(meshComponent->GetSocketLocation(socketName));
+	}
 }
 
 void APIClimbableTree::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)

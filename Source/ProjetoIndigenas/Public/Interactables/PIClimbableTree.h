@@ -11,6 +11,7 @@ class PROJETOINDIGENAS_API APIClimbableTree : public AActor
 	GENERATED_BODY()
 
 	TUniquePtr<FPIClimbTreeAction> _action;
+	TArray<FVector> _path;
 	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -26,4 +27,5 @@ protected:
 
 public:
 	FORCEINLINE const TMap<EPIClimbingState, float>& GetPositionRadiusMap() const { return _positionRadiusMap; }
+	FORCEINLINE const TArray<FVector>& GetPath() { return _path; }
 };

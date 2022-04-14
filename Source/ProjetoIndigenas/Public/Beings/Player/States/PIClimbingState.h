@@ -50,8 +50,10 @@ class PROJETOINDIGENAS_API FPIClimbingState : public FPIClimbingStateBase
 
 	EPIClimbingState _currentState;
 
-	FVector _inputVector;
+	float _inputValue;
 	FVector _startDirection;
+	bool _isAtTop;
+	bool _isAtBottom;
 
 	void SetInputY(float y);
 	void UpdateMovementSpeed();
@@ -60,6 +62,9 @@ class PROJETOINDIGENAS_API FPIClimbingState : public FPIClimbingStateBase
 
 	void ClimbingStarted();
 	void ClimbingEnded() const;
+
+	void ClampLocationToPath();
+	void SetTreeCameraCollision(ECollisionResponse response) const;
 	
 public:
 	TWeakObjectPtr<APIClimbableTree> Tree;
