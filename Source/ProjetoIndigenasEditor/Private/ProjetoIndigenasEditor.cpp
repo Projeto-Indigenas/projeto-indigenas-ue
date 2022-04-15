@@ -23,11 +23,25 @@ void FProjetoIndigenasEditor::StartupModule()
 		FPIPathMakerEditor::EditorModeID,
 		FText::FromString(TEXT("Path Maker")),
 		FSlateIcon(), true);
-		
-	const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
-	GUnrealEd->RegisterComponentVisualizer(componentName, MakeShared<FPIDebugComponentVisualizer>());
+	
+	if (GUnrealEd != nullptr)
+	{
+		const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
+		GUnrealEd->RegisterComponentVisualizer(componentName, MakeShared<FPIDebugComponentVisualizer>());
+	}
 
 	RegisterCustomEditors();
+}
+
+void FProjetoIndigenasEditor::ShutdownModule()
+{
+	IModuleInterface::ShutdownModule();
+
+	if (GUnrealEd != nullptr)
+	{
+		const FName& componentName = UPIDebugVisualizationComponent::StaticClass()->GetFName();
+		GUnrealEd->UnregisterComponentVisualizer(componentName);
+	}
 }
 
 FPICustomEditor* FProjetoIndigenasEditor::GetCustomEditor(UClass* cls) const
