@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-struct PROJETOINDIGENAS_API FDestinationController
+struct PROJETOINDIGENAS_API FPIDestinationController
 {
 private:
 	TArray<FVector> _nodes;
@@ -13,8 +13,8 @@ private:
 	void NextIndex();
 
 public:
-	FDestinationController(TArray<FVector> nodes, bool cycleDestination = true);
-	~FDestinationController() = default;
+	FPIDestinationController(TArray<FVector> nodes, bool cycleDestination = true);
+	~FPIDestinationController() = default;
 	
 	bool HasDestination() const;
 	bool NextDestination(FVector& outVector);

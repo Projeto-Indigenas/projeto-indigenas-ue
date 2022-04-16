@@ -11,6 +11,8 @@ class FPIInputDelegates;
 class FPIStateBase;
 class UPIAnimInstanceBase;
 class APIClimbableTree;
+class FPIMovementState;
+class FPIClimbingState;
 
 UCLASS()
 class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
@@ -18,6 +20,9 @@ class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 	GENERATED_BODY()
 	
 protected:
+	TSharedPtr<FPIMovementState> _movementState;
+	TSharedPtr<FPIClimbingState> _climbingState;
+	
 	TSharedPtr<FPIStateBase> _currentState;
 	FPIActionBase* _availableAction;
 	
@@ -30,6 +35,9 @@ protected:
 	void SetCurrentState(const TSharedPtr<FPIStateBase>& state);
 
 	virtual void BeginPlay() override;
+	
+	void CreateMovementState(const float& capsuleRadius, const float& movementAcceleration);
+	void CreateClimbingState(const float& capsuleRadius, const float& movementAcceleration);
 
 public:
 	TUniquePtr<FPIInputDelegates> InputDelegates;

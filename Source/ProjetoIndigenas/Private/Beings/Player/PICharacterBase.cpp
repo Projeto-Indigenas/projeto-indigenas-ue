@@ -1,5 +1,7 @@
 ﻿#include "Beings/Shared/PICharacterBase.h"
 
+#include "Beings/Player/States/PIClimbingState.h"
+#include "Beings/Player/States/PIMovementState.h"
 #include "Beings/Shared/PIStateBase.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
@@ -33,6 +35,28 @@ void APICharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	InputDelegates = MakeUnique<FPIInputDelegates>();
+}
+
+void APICharacterBase::CreateMovementState(const float& capsuleRadius, const float& movementAcceleration)
+{
+	_movementState = MakeShared<FPIMovementState>(this,
+		FPIMovementStateData(
+			capsuleRadius,
+			_capsuleRadiusAcceleration,
+			_rotationAcceleration,
+			movementAcceleration
+		));
+}
+
+void APICharacterBase::CreateClimbingState(const float& capsuleRadius, const float& movementAcceleration)
+{
+	_climbingState = MakeShared<FPIClimbingState>(this,
+		FPIClimbingStateData(
+			capsuleRadius,
+			_capsuleRadiusAcceleration,
+			movementAcceleration,
+			_rotationAcceleration
+		));
 }
 
 void APICharacterBase::Tick(float DeltaSeconds)
