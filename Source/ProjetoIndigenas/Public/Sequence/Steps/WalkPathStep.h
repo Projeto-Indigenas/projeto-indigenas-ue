@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Beings/NPC/PINpcCharacter.h"
 #include "Beings/NPC/PINpcController.h"
-#include "Beings/NPC/Paths/DestinationController.h"
+#include "Beings/NPC/Paths/PIDestinationController.h"
 #include "Beings/NPC/Paths/PIPathData.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/SequenceStepExecutor.h"
@@ -18,7 +18,7 @@ class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenc
 	TWeakObjectPtr<APINpcController> _targetController;
 	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
 
-	TUniquePtr<FDestinationController> _destinationController;
+	TUniquePtr<FPIDestinationController> _destinationController;
 
 	void MoveToNextNode();
 	void PathRequestCompleted(FAIRequestID requestId, const FPathFollowingResult& result);

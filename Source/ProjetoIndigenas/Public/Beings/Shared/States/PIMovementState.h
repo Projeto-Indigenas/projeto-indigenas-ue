@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Misc/Vectors.h"
-#include "Beings/Shared/PIStateBase.h"
+#include "Beings/Shared/States/PIStateBase.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 
 struct PROJETOINDIGENAS_API FPIMovementStateData
@@ -24,7 +24,7 @@ struct PROJETOINDIGENAS_API FPIMovementStateData
 	{ }
 };
 
-typedef FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIMovementStateData> FPIMovementStateBase;
+typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData> FPIMovementStateBase;
 
 class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 {
