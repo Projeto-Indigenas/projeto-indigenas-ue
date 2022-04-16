@@ -18,4 +18,8 @@ protected:
 	TMap<EPINpcAnimationState, float> _movementAccelerationForState;
 	
 	virtual void BeginPlay() override;
+
+public:
+	virtual void SetInputX(float x) override;
+	virtual void SetInputY(float y) override;
 };

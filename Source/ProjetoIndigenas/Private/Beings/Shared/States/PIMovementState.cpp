@@ -1,4 +1,4 @@
-﻿#include "Beings/Player/States/PIMovementState.h"
+﻿#include "Beings/Shared/States/PIMovementState.h"
 
 #include <Components/CapsuleComponent.h>
 #include <Kismet/KismetMathLibrary.h>
@@ -47,7 +47,7 @@ void FPIMovementState::Dodge() const
 }
 
 FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData):
-	FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIMovementStateData>(character, stateData),
+	FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>(character, stateData),
 	_run(false),
 	_directionYaw(0)
 {
@@ -65,7 +65,7 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
 	inputDelegates.DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
 
-	_acceleratedCapsuleRadius.Current = _capsuleComponent->GetUnscaledCapsuleRadius();
+	_acceleratedCapsuleRadius.Current = _capsuleComponent->GetScaledCapsuleRadius();
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
 }
 
@@ -96,7 +96,7 @@ void FPIMovementState::Tick(float DeltaSeconds)
 	if (!_capsuleComponent.IsValid()) return;
 
 	APICharacterBase* character = _character.Get();
-	UPICharacterAnimInstance* animInstance = _animInstance.Get();
+	UPIAnimInstanceBase* animInstance = _animInstance.Get();
 	UCapsuleComponent* capsuleComponent = _capsuleComponent.Get();
 	
 	capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);

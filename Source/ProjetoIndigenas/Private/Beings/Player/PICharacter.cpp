@@ -2,7 +2,7 @@
 
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
-#include "Beings/Player/States/PIMovementState.h"
+#include "Beings/Shared/States/PIMovementState.h"
 #include "Interactables/PIClimbableTree.h"
 
 void APICharacter::BeginPlay()

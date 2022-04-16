@@ -1,6 +1,6 @@
 ﻿#include "Beings/NPC/PINpcCharacter.h"
 
-#include "Beings/Player/States/PIMovementState.h"
+#include "Beings/Shared/States/PIMovementState.h"
 
 void APINpcCharacter::BeginPlay()
 {
@@ -15,4 +15,16 @@ void APINpcCharacter::BeginPlay()
 		_movementAccelerationForState[EPINpcAnimationState::Climbing]);
 
 	SetCurrentState(_movementState);
+}
+
+void APINpcCharacter::SetInputX(float x)
+{
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
+}
+
+void APINpcCharacter::SetInputY(float y)
+{
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
 }

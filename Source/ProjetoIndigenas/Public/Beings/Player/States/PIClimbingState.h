@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Misc/Vectors.h"
-#include "Beings/Shared/PIStateBase.h"
+#include "Beings/Shared/States/PIStateBase.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 
 struct PROJETOINDIGENAS_API FPIClimbingStateData

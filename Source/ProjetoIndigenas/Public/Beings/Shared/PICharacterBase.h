@@ -4,7 +4,7 @@
 #include "Actions/PIActionBase.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
-#include "Beings/Shared/PIStateBase.h"
+#include "Beings/Shared/States/PIStateBase.h"
 #include "PICharacterBase.generated.h"
 
 class FPIInputDelegates;

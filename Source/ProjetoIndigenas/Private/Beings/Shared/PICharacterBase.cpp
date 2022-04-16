@@ -1,8 +1,8 @@
 ﻿#include "Beings/Shared/PICharacterBase.h"
 
 #include "Beings/Player/States/PIClimbingState.h"
-#include "Beings/Player/States/PIMovementState.h"
-#include "Beings/Shared/PIStateBase.h"
+#include "Beings/Shared/States/PIMovementState.h"
+#include "Beings/Shared/States/PIStateBase.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
