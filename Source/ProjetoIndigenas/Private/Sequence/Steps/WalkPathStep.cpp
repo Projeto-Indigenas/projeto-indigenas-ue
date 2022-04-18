@@ -91,6 +91,7 @@ void UWalkPathStep::BeginExecution()
 void UWalkPathStep::Tick(float deltaTime)
 {
 	if (!_targetController.IsValid()) return;
+	if (!_destinationController->HasDestination()) return;
 
 	const UPathFollowingComponent* pathComponent = _targetController->GetPathFollowingComponent();
 
