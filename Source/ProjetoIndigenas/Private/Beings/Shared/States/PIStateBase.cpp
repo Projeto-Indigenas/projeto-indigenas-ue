@@ -1,8 +1,8 @@
-﻿#include "Beings/Shared/PIStateBase.h"
+﻿#include "Beings/Shared/States/PIStateBase.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Beings/Player/States/PIClimbingState.h"
-#include "Beings/Player/States/PIMovementState.h"
+#include "Beings/Shared/States/PIMovementState.h"
 
 void FPIStateBase::InvokeOnExitDelegate() const
 {
@@ -50,5 +50,5 @@ FPIAnimatedStateBaseWithData<TAnimInstance, TStateData>::FPIAnimatedStateBaseWit
 template class FPIStateBaseWithData<FPIMovementStateData>;
 template class FPIStateBaseWithData<FPIClimbingStateData>;
 template class FPIAnimatedStateBase<UPICharacterAnimInstance>;
-template class FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIMovementStateData>;
+template class FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>;
 template class FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData>;

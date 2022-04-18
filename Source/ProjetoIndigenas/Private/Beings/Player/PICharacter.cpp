@@ -2,28 +2,20 @@
 
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
-#include "Beings/Player/States/PIMovementState.h"
+#include "Beings/Shared/States/PIMovementState.h"
 #include "Interactables/PIClimbableTree.h"
 
 void APICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_movementState = MakeShared<FPIMovementState>(this,
-		FPIMovementStateData(
-			_capsuleRadiusForState[EPICharacterAnimationState::Movement],
-			_capsuleRadiusAcceleration,
-			_rotationAcceleration,
-			_movementAccelerationForState[EPICharacterAnimationState::Movement]
-		));
+	CreateMovementState(
+		_capsuleRadiusForState[EPICharacterAnimationState::Movement],
+		_movementAccelerationForState[EPICharacterAnimationState::Movement]);
 	
-	_climbingState = MakeShared<FPIClimbingState>(this,
-		FPIClimbingStateData(
-			_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
-			_capsuleRadiusAcceleration,
-			_movementAccelerationForState[EPICharacterAnimationState::Climbing],
-			_rotationAcceleration
-		));
+	CreateClimbingState(
+		_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
+		_movementAccelerationForState[EPICharacterAnimationState::Climbing]);
 
 	SetCurrentState(_movementState);
 }

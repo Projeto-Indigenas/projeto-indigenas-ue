@@ -75,7 +75,7 @@ void UWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 {
 	Super::BeginPlay(gameInstance);
 
-	_destinationController = MakeUnique<FDestinationController>(_pathData->Nodes, _cycleDestinations);
+	_destinationController = MakeUnique<FPIDestinationController>(_pathData->Nodes, _cycleDestinations);
 }
 
 #pragma region IStepExecutor

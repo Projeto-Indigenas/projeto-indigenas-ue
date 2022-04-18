@@ -1,6 +1,6 @@
-﻿#include "DestinationController.h"
+﻿#include "Beings/NPC/Paths/PIDestinationController.h"
 
-void FDestinationController::NextIndex()
+void FPIDestinationController::NextIndex()
 {
 	++_currentIndex;
 
@@ -9,18 +9,18 @@ void FDestinationController::NextIndex()
 	_currentIndex %= _nodes.Num();
 }
 
-FDestinationController::FDestinationController(TArray<FVector> nodes, bool cycleDestination)
+FPIDestinationController::FPIDestinationController(TArray<FVector> nodes, bool cycleDestination)
 {
 	_nodes = nodes;
 	_cycleDestination = cycleDestination;
 }
 
-bool FDestinationController::HasDestination() const
+bool FPIDestinationController::HasDestination() const
 {
 	return _nodes.Num() > 0;
 }
 
-bool FDestinationController::NextDestination(FVector& outVector)
+bool FPIDestinationController::NextDestination(FVector& outVector)
 {
 	if (IsPathCompleted()) return false;
 
@@ -29,14 +29,14 @@ bool FDestinationController::NextDestination(FVector& outVector)
 	return true;
 }
 
-FVector FDestinationController::GetCurrentDestination() const
+FVector FPIDestinationController::GetCurrentDestination() const
 {
 	if (IsPathCompleted()) return _nodes.Last();
 
 	return _nodes[_currentIndex];
 }
 
-bool FDestinationController::IsPathCompleted() const
+bool FPIDestinationController::IsPathCompleted() const
 {
 	return !_cycleDestination && _currentIndex >= _nodes.Num();
 }
