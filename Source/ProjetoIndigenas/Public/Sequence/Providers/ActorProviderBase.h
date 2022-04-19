@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/Sequence.h"
+#include "Sequence/SequenceController.h"
 #include "ActorProviderBase.generated.h"
 
-struct FSequenceQuery;
+class USequenceSubsystem;
 
 UCLASS(Abstract, EditInlineNew)
 class PROJETOINDIGENAS_API UActorProviderBase : public UObject
@@ -12,12 +12,12 @@ class PROJETOINDIGENAS_API UActorProviderBase : public UObject
 	GENERATED_BODY()
 
 protected:
-	virtual AActor* GetActor(const FSequenceQuery* sequenceQuery) const { return nullptr; }
+	virtual AActor* GetActor() const { return nullptr; }
 	
 public:
 	template<typename TActor>
-	TActor* GetActor(const FSequenceQuery* sequenceQuery) const
+	TActor* GetActor() const
 	{
-		return Cast<TActor>(GetActor(sequenceQuery));
+		return Cast<TActor>(GetActor());
 	}
 };

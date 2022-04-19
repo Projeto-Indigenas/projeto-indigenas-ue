@@ -26,7 +26,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	bool _waitForAnimationCompletedEvent;
 
-	virtual void ExecuteStep(const FSequenceQuery* sequenceQuery) override;
+	virtual void ExecuteStep() override;
 
 	UFUNCTION()
 	void AnimationCompleted();

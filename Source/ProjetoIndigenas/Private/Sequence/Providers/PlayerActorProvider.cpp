@@ -1,6 +1,6 @@
 #include "Sequence/Providers/PlayerActorProvider.h"
 
-AActor* UPlayerActorProvider::GetActor(const FSequenceQuery* sequenceQuery) const
+AActor* UPlayerActorProvider::GetActor() const
 {
 	const UWorld* world = GetWorld();
 	if (!world) return nullptr;

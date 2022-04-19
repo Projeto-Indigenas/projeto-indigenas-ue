@@ -15,5 +15,5 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	TWeakObjectPtr<AActor> _worldActor;
 	
-	virtual AActor* GetActor(const FSequenceQuery* sequenceQuery) const override;
+	virtual AActor* GetActor() const override;
 };

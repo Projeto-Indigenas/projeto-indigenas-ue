@@ -52,9 +52,9 @@ void UWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResul
 	}
 }
 
-void UWalkPathStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
+void UWalkPathStep::ExecuteStep()
 {
-	_targetCharacter = _actorProvider->GetActor<APINpcCharacter>(sequenceQuery);
+	_targetCharacter = _actorProvider->GetActor<APINpcCharacter>();
 
 	// TODO(anderson): there should be a error log here
 	if (!_targetCharacter.IsValid()) return;

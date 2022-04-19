@@ -1,6 +1,9 @@
 ﻿#include "Sequence/Providers/NamedActorProvider.h"
 
-AActor* UNamedActorProvider::GetActor(const FSequenceQuery* sequenceQuery) const
+#include "Sequence/SequenceSubsystem.h"
+
+AActor* UNamedActorProvider::GetActor() const
 {
-	return sequenceQuery->FindActor(ActorName);
+	if (!_subsystem.IsValid()) return nullptr;
+	return _subsystem->GetActor<AActor>(_owner.Get(), ActorName);
 }

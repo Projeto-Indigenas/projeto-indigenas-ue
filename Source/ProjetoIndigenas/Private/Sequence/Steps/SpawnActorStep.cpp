@@ -2,13 +2,13 @@
 
 #include "GameFramework/Character.h"
 
-void USpawnActorStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
+void USpawnActorStep::ExecuteStep()
 {
 	// TODO(anderson): some error notification here should be good
 	if (ActorClass == nullptr) return;
 	if (!ActorPlayerStart.IsValid()) return;
 	
-	UWorld* world = _gameInstance->GetWorld();
+	UWorld* world = GetWorld();
 
 	const FVector& location = ActorPlayerStart->GetActorLocation();
 	const FRotator& rotator = ActorPlayerStart->GetActorRotation();
@@ -22,7 +22,7 @@ void USpawnActorStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
 		controller->Possess(character);
 	}
 	
-	SpawnedActorDelegate.ExecuteIfBound(ActorName, actor);
+	_subsystem->RegisterActor(GetOuter(), ActorName, actor);
 	
 	Finish();
 }

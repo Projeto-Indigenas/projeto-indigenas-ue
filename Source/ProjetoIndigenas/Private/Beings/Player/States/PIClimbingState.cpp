@@ -5,6 +5,7 @@
 
 #include "Beings/Shared/PIAnimInstanceBase.h"
 #include "Interactables/PIClimbableTree.h"
+#include "Misc/Logging.h"
 
 void FPIClimbingState::SetInputY(float y)
 {

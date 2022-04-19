@@ -12,14 +12,8 @@ bool FSequence::NextIndex()
 void FSequence::StepFinished(USequenceStep* step)
 {
 	step->FinishedDelegate.Unbind();
-	step->SpawnedActorDelegate.Unbind();
 
 	ExecuteNextStep();
-}
-
-void FSequence::SpawnedActor(const FName& actorName, AActor* actor)
-{
-	_spawnedActors.Add(actorName, actor);
 }
 
 void FSequence::BeginPlay(UGameInstance* gameInstance)
@@ -45,14 +39,6 @@ void FSequence::ExecuteNextStep()
 	if (step == nullptr) return;
 	
 	step->FinishedDelegate.BindRaw(this, &FSequence::StepFinished);
-	step->SpawnedActorDelegate.BindRaw(this, &FSequence::SpawnedActor);
 	
-	step->Execute(this);
-}
-
-AActor* FSequence::FindActor(const FName& name) const
-{
-	const TWeakObjectPtr<AActor>* weakActor = _spawnedActors.Find(name);
-	if (weakActor == nullptr) return nullptr;
-	return weakActor->Get();
+	step->Execute();
 }

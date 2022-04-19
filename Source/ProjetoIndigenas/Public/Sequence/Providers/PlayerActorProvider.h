@@ -14,5 +14,5 @@ protected:
 	int PlayerIndex = 0;
 	
 public:
-	virtual AActor* GetActor(const FSequenceQuery* sequenceQuery) const override;
+	virtual AActor* GetActor() const override;
 };

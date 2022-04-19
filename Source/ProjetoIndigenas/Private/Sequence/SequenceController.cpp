@@ -16,12 +16,23 @@ void ASequenceController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	_subsystem = GetWorld()->GetSubsystem<USequenceSubsystem>();
+	_subsystem->RegisterOwner(this);
+
 	_sequence.SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
 	_sequence.BeginPlay(GetGameInstance());
 
 	if (!_startAutomatically) return;
 
 	StartSequence();
+}
+
+void ASequenceController::Destroyed()
+{
+	Super::Destroyed();
+
+	if (!_subsystem.IsValid()) return;
+	_subsystem->UnregisterOwner(this);
 }
 
 void ASequenceController::StartSequence()

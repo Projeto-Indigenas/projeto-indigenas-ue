@@ -4,10 +4,12 @@
 #include "Sequence.h"
 #include "SequenceController.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class PROJETOINDIGENAS_API ASequenceController : public AActor
 {
 	GENERATED_BODY()
+
+	TWeakObjectPtr<USequenceSubsystem> _subsystem;
 	
 	void DelayToStartTimerAction();
 	void SequenceCompleted() const;
@@ -23,6 +25,7 @@ protected:
 	FSequence _sequence;
 
 	virtual void BeginPlay() override;
+	virtual void Destroyed() override;	
 
 public:
 	FSequenceCompletedDelegate SequenceCompletedDelegate;
