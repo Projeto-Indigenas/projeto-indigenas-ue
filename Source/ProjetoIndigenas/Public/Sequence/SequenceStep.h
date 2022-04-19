@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SequenceSubsystem.h"
 #include "SequenceStep.generated.h"
 
 DECLARE_DELEGATE_OneParam(FSequenceStepFinishedDelegate, class USequenceStep*)
@@ -14,7 +13,6 @@ class PROJETOINDIGENAS_API USequenceStep : public UObject
     
 protected:
     TWeakObjectPtr<UGameInstance> _gameInstance;
-    TWeakObjectPtr<USequenceSubsystem> _subsystem;
     
     UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
     bool _skipStep;

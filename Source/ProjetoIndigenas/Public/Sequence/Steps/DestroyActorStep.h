@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Sequence/SequenceStep.h"
-#include "Sequence/Providers/ActorProviderBase.h"
 #include "DestroyActorStep.generated.h"
 
 UCLASS(BlueprintType)
@@ -11,8 +10,8 @@ class PROJETOINDIGENAS_API UDestroyActorStep : public USequenceStep
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
-	UActorProviderBase* _actorProvider;
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	TWeakObjectPtr<AActor> _targetActor;
 
 	virtual void ExecuteStep() override;
 };

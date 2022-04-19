@@ -4,14 +4,12 @@
 #include "SequenceStep.h"
 #include "SequenceController.generated.h"
 
-DECLARE_DELEGATE(FSequenceCompletedDelegate)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSequenceCompletedDelegate);
 
 UCLASS(Blueprintable)
 class PROJETOINDIGENAS_API ASequenceController : public AActor
 {
 	GENERATED_BODY()
-
-	TWeakObjectPtr<USequenceSubsystem> _subsystem;
 
 	int _sequenceIndex = -1;
 
@@ -22,20 +20,19 @@ class PROJETOINDIGENAS_API ASequenceController : public AActor
 	void SequenceCompleted() const;
 
 protected:
-	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _delayToStart;
 
-	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool _startAutomatically;
 
-	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool _loopSteps = false;
 
 	UPROPERTY()
 	TArray<USequenceStep*> _steps;
 
 	virtual void BeginPlay() override;
-	virtual void Destroyed() override;
 	
 	void ExecuteNextStep();
 
@@ -43,8 +40,12 @@ protected:
 	void AddStep(USequenceStep* step);
 
 public:
+	UPROPERTY(BlueprintAssignable)
 	FSequenceCompletedDelegate SequenceCompletedDelegate;
 
 	UFUNCTION(BlueprintCallable)
 	void StartSequence();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void CreateSteps();
 };

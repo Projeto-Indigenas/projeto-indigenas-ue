@@ -15,8 +15,6 @@ bool UPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) c
 
 void UPlayAnimationStep::ExecuteStep()
 {
-	_targetCharacter = _actorProvider->GetActor<ACharacter>();
-
 	if (!_targetCharacter.IsValid()) return;
 
 	UPINpcAnimInstance* animInstance;

@@ -7,7 +7,6 @@
 #include "Beings/NPC/Paths/PIPathData.h"
 #include "Sequence/SequenceStep.h"
 #include "Sequence/SequenceStepExecutor.h"
-#include "Sequence/Providers/ActorProviderBase.h"
 #include "WalkPathStep.generated.h"
 
 UCLASS(BlueprintType)
@@ -16,16 +15,15 @@ class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenc
 	GENERATED_BODY()
 
 	TWeakObjectPtr<APINpcController> _targetController;
-	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
-
+	
 	TUniquePtr<FPIDestinationController> _destinationController;
 
 	void MoveToNextNode();
 	void PathRequestCompleted(FAIRequestID requestId, const FPathFollowingResult& result);
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
-	UActorProviderBase* _actorProvider;
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	UPIPathData* _pathData;

@@ -2,8 +2,6 @@
 
 void UToggleActorVisibilityStep::ExecuteStep()
 {
-	_targetActor = _actorProvider->GetActor<AActor>();
-
 	// TODO(anderson): there should be an error log here
 	if (!_targetActor.IsValid()) return;
 	
