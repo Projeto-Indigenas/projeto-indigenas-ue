@@ -1,7 +1,5 @@
 ﻿#include "Sequence/Steps/ToggleActorVisibilityStep.h"
 
-#include "Sequence/Sequence.h"
-
 void UToggleActorVisibilityStep::ExecuteStep()
 {
 	_targetActor = _actorProvider->GetActor<AActor>();

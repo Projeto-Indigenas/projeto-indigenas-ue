@@ -4,7 +4,7 @@
 #include "Misc/Logging.h"
 #include "SequenceSubsystem.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API USequenceSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
@@ -12,6 +12,9 @@ class PROJETOINDIGENAS_API USequenceSubsystem : public UWorldSubsystem
 	TMap<TObjectPtr<UObject>, TMap<FName, TWeakObjectPtr<AActor>>> _spawnedActors;
 
 public:
+	UFUNCTION(BlueprintPure, meta = (WorldContext=worldContext))
+	static USequenceSubsystem* GetSequenceSubsystem(UObject* worldContext);
+	
 	void RegisterOwner(UObject* owner);
 	void UnregisterOwner(const UObject* owner);
 	

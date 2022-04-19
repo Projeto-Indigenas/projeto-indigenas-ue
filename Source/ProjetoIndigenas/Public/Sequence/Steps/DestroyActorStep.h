@@ -11,7 +11,7 @@ class PROJETOINDIGENAS_API UDestroyActorStep : public USequenceStep
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Instanced)
+	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
 	UActorProviderBase* _actorProvider;
 
 	virtual void ExecuteStep() override;

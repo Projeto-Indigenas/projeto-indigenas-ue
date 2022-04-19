@@ -7,7 +7,7 @@
 #include "Sequence/Providers/ActorProviderBase.h"
 #include "PlayAnimationStep.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UPlayAnimationStep : public USequenceStep
 {
 	GENERATED_BODY()
@@ -17,13 +17,13 @@ class PROJETOINDIGENAS_API UPlayAnimationStep : public USequenceStep
 	bool GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) const;
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Instanced)
+	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
 	UActorProviderBase* _actorProvider;
 	
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	EPINpcAnimationState _animationStateToPlay;
 
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	bool _waitForAnimationCompletedEvent;
 
 	virtual void ExecuteStep() override;

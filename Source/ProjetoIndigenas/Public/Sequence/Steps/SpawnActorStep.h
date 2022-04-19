@@ -3,25 +3,27 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerStart.h"
 #include "Sequence/SequenceStep.h"
+#include "Sequence/Providers/ActorProviderBase.h"
 #include "SpawnActorStep.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API USpawnActorStep : public USequenceStep
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	FName _actorName;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	TSubclassOf<AActor> _actorClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	bool _shouldSpawnController;
+
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	UActorProviderBase* _playerStartProvider;
 	
 public:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	FName ActorName;
-	
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	TSubclassOf<AActor> ActorClass;
-
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	bool SpawnController;
-
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	TWeakObjectPtr<APlayerStart> ActorPlayerStart;
-
 	virtual void ExecuteStep() override;
 };

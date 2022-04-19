@@ -5,16 +5,19 @@
 void USpawnActorStep::ExecuteStep()
 {
 	// TODO(anderson): some error notification here should be good
-	if (ActorClass == nullptr) return;
-	if (!ActorPlayerStart.IsValid()) return;
+	if (_actorClass == nullptr) return;
+	if (_playerStartProvider == nullptr) return;
+	const APlayerStart* playerStart = _playerStartProvider->GetActor<APlayerStart>();
+	if (playerStart == nullptr) return;
 	
 	UWorld* world = GetWorld();
+	
 
-	const FVector& location = ActorPlayerStart->GetActorLocation();
-	const FRotator& rotator = ActorPlayerStart->GetActorRotation();
-	AActor* actor = world->SpawnActor<AActor>(ActorClass, location, rotator);
+	const FVector& location = playerStart->GetActorLocation();
+	const FRotator& rotator = playerStart->GetActorRotation();
+	AActor* actor = world->SpawnActor<AActor>(_actorClass, location, rotator);
 
-	if (SpawnController && actor->IsA<ACharacter>())
+	if (_shouldSpawnController && actor->IsA<ACharacter>())
 	{
 		ACharacter* character = Cast<ACharacter>(actor);
 		
@@ -22,7 +25,7 @@ void USpawnActorStep::ExecuteStep()
 		controller->Possess(character);
 	}
 	
-	_subsystem->RegisterActor(GetOuter(), ActorName, actor);
+	_subsystem->RegisterActor(GetOuter(), _actorName, actor);
 	
 	Finish();
 }

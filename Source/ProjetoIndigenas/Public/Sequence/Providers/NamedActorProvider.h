@@ -2,23 +2,20 @@
 
 #include "CoreMinimal.h"
 #include "ActorProviderBase.h"
-#include "Sequence/Sequence.h"
 #include "NamedActorProvider.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UNamedActorProvider : public UActorProviderBase
 {
 	GENERATED_BODY()
 
-protected:
-	UPROPERTY(BlueprintReadWrite)
-	TWeakObjectPtr<UObject> _owner;
-
-	UPROPERTY(BlueprintReadWrite)
 	TWeakObjectPtr<USequenceSubsystem> _subsystem;
 	
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+protected:
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	FName ActorName;
+
+	virtual void BeginPlay() override;
 	
 	virtual AActor* GetActor() const override;
 };

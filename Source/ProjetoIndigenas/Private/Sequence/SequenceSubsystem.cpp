@@ -1,5 +1,10 @@
 ﻿#include "Sequence/SequenceSubsystem.h"
 
+USequenceSubsystem* USequenceSubsystem::GetSequenceSubsystem(UObject* worldContext)
+{
+	return worldContext->GetWorld()->GetSubsystem<USequenceSubsystem>();
+}
+
 void USequenceSubsystem::RegisterOwner(UObject* owner)
 {
 	_spawnedActors.Add(TObjectPtr<UObject>(owner));

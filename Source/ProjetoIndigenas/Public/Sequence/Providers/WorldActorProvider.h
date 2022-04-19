@@ -12,7 +12,7 @@ class PROJETOINDIGENAS_API UWorldActorProvider : public UActorProviderBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	TWeakObjectPtr<AActor> _worldActor;
 	
 	virtual AActor* GetActor() const override;

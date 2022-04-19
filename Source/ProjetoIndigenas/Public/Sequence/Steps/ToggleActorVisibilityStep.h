@@ -5,7 +5,7 @@
 #include "Sequence/Providers/ActorProviderBase.h"
 #include "ToggleActorVisibilityStep.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UToggleActorVisibilityStep : public USequenceStep
 {
 	GENERATED_BODY()
@@ -13,10 +13,10 @@ class PROJETOINDIGENAS_API UToggleActorVisibilityStep : public USequenceStep
 	TWeakObjectPtr<AActor> _targetActor;
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Instanced)
+	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
 	UActorProviderBase* _actorProvider;
 	
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	bool _visible;
 	
 	virtual void ExecuteStep() override;

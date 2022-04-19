@@ -10,7 +10,7 @@ class PROJETOINDIGENAS_API UPlayerActorProvider : public UActorProviderBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	int PlayerIndex = 0;
 	
 public:

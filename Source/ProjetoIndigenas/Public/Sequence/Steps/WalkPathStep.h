@@ -10,7 +10,7 @@
 #include "Sequence/Providers/ActorProviderBase.h"
 #include "WalkPathStep.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenceStepExecutor
 {
 	GENERATED_BODY()
@@ -24,13 +24,13 @@ class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenc
 	void PathRequestCompleted(FAIRequestID requestId, const FPathFollowingResult& result);
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Instanced)
+	UPROPERTY(BlueprintReadOnly, Instanced, meta = (ExposeOnSpawn))
 	UActorProviderBase* _actorProvider;
 	
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	UPIPathData* _pathData;
 
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	bool _cycleDestinations = false;
 	
 	virtual void ExecuteStep() override;

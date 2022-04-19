@@ -1,8 +1,24 @@
 #include "Sequence/SequenceController.h"
 
+bool ASequenceController::NextIndex()
+{
+	++_sequenceIndex;
+	if (_sequenceIndex < _steps.Num()) return true;
+	if (!_loopSteps) return false;
+	_sequenceIndex = 0;
+	return true;
+}
+
+void ASequenceController::StepFinished(USequenceStep* step)
+{
+	step->FinishedDelegate.Unbind();
+
+	ExecuteNextStep();
+}
+
 void ASequenceController::DelayToStartTimerAction()
 {
-	_sequence.ExecuteNextStep();
+	ExecuteNextStep();
 }
 
 void ASequenceController::SequenceCompleted() const
@@ -19,8 +35,15 @@ void ASequenceController::BeginPlay()
 	_subsystem = GetWorld()->GetSubsystem<USequenceSubsystem>();
 	_subsystem->RegisterOwner(this);
 
-	_sequence.SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
-	_sequence.BeginPlay(GetGameInstance());
+	SequenceCompletedDelegate.BindUObject(this, &ASequenceController::SequenceCompleted);
+
+	UGameInstance* gameInstance = GetGameInstance();
+	for (USequenceStep* step : _steps)
+	{
+		if (step == nullptr) continue;
+		
+		step->BeginPlay(gameInstance);
+	}
 
 	if (!_startAutomatically) return;
 
@@ -35,6 +58,28 @@ void ASequenceController::Destroyed()
 	_subsystem->UnregisterOwner(this);
 }
 
+void ASequenceController::ExecuteNextStep()
+{
+	if (!NextIndex())
+	{
+		SequenceCompletedDelegate.ExecuteIfBound();
+
+		return;
+	}
+
+	USequenceStep* step = _steps[_sequenceIndex];
+	if (step == nullptr) return;
+	
+	step->FinishedDelegate.BindUObject(this, &ASequenceController::StepFinished);
+	
+	step->Execute();
+}
+
+void ASequenceController::AddStep(USequenceStep* step)
+{
+	_steps.Add(step);
+}
+
 void ASequenceController::StartSequence()
 {
 	if (_delayToStart > 0.f)
@@ -47,5 +92,5 @@ void ASequenceController::StartSequence()
 		return;
 	}
 
-	_sequence.ExecuteNextStep();
+	ExecuteNextStep();
 }

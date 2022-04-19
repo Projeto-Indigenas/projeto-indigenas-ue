@@ -7,7 +7,7 @@
 DECLARE_DELEGATE_OneParam(FSequenceStepFinishedDelegate, class USequenceStep*)
 DECLARE_DELEGATE_TwoParams(FSequenceStepSpawnedActorDelegate, const FName&, AActor*)
 
-UCLASS(Abstract, EditInlineNew)
+UCLASS(Abstract, BlueprintType, EditInlineNew)
 class PROJETOINDIGENAS_API USequenceStep : public UObject
 {
     GENERATED_BODY()
@@ -16,10 +16,10 @@ protected:
     TWeakObjectPtr<UGameInstance> _gameInstance;
     TWeakObjectPtr<USequenceSubsystem> _subsystem;
     
-    UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+    UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
     bool _skipStep;
 
-    UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+    UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
     float _delay;
     
     virtual void ExecuteStep();
