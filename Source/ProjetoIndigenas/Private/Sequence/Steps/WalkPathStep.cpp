@@ -52,10 +52,8 @@ void UWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResul
 	}
 }
 
-void UWalkPathStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
+void UWalkPathStep::ExecuteStep()
 {
-	_targetCharacter = _actorProvider->GetActor<APINpcCharacter>(sequenceQuery);
-
 	// TODO(anderson): there should be a error log here
 	if (!_targetCharacter.IsValid()) return;
 
@@ -82,6 +80,8 @@ void UWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 
 void UWalkPathStep::BeginExecution()
 {
+	if (!_targetController.IsValid()) return;
+	
 	UPathFollowingComponent* pathComponent = _targetController->GetPathFollowingComponent();
 	pathComponent->OnRequestFinished.AddUObject(this, &UWalkPathStep::PathRequestCompleted);
 	

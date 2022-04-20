@@ -13,10 +13,8 @@ bool UPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) c
 	return outAnimInstance != nullptr;
 }
 
-void UPlayAnimationStep::ExecuteStep(const FSequenceQuery* sequenceQuery)
+void UPlayAnimationStep::ExecuteStep()
 {
-	_targetCharacter = _actorProvider->GetActor<ACharacter>(sequenceQuery);
-
 	if (!_targetCharacter.IsValid()) return;
 
 	UPINpcAnimInstance* animInstance;

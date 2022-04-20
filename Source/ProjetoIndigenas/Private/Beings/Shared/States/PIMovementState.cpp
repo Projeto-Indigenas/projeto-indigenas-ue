@@ -105,10 +105,10 @@ void FPIMovementState::Tick(float DeltaSeconds)
 
 	if (_inputVector == FVector::ZeroVector) return;
 	
-	const FRotator cameraRotator(0.f, _directionYaw, 0.f);
-	const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
-	const FRotator targetRotator = cameraRotator + inputRotator;
-		
+	const FRotator& cameraRotator = FRotator(0.f, _directionYaw, 0.f);
+	const FRotator& inputRotator = _inputVector.Rotation();
+	const FRotator& targetRotator = cameraRotator + inputRotator;
+
 	_acceleratedCharacterDirection = targetRotator.Vector();
 		
 	character->SetActorRelativeRotation(_acceleratedCharacterDirection);
