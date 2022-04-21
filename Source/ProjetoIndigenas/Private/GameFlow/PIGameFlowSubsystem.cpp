@@ -24,7 +24,7 @@ const FName& UPIGameFlowSubsystem::GetCurrentState() const
 	return _currentState;
 }
 
-void UPIGameFlowSubsystem::TransitionTo(const FName& state)
+void UPIGameFlowSubsystem::TransitionTo(const FName state)
 {
 	if (!_gameFlowData.IsValid())
 	{

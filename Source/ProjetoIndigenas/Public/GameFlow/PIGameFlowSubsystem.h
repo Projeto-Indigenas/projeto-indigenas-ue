@@ -31,5 +31,5 @@ public:
     const FName& GetCurrentState() const;
     
     UFUNCTION(BlueprintCallable)
-    void TransitionTo(const FName& state);
+    void TransitionTo(const FName state);
 };
