@@ -75,3 +75,5 @@ Plugins/ExodusImport/*
 *.exp
 Binaries/Mac
 Binaries/**/*DebugGame*
+*.ignore
+*.code-workspace
