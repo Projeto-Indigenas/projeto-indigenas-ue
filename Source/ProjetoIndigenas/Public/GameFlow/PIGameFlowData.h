@@ -11,6 +11,6 @@ class PROJETOINDIGENAS_API UPIGameFlowData : public UDataAsset
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TMap<FName, TObjectPtr<UPIGameFlowStateBase>> _gameFlowStateMap;
 };

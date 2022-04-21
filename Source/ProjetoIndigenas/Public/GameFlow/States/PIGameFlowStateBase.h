@@ -5,7 +5,7 @@
 
 DECLARE_DYNAMIC_DELEGATE(FPIGameFlowStateTransitionDelegate);
 
-UCLASS(BlueprintType)
+UCLASS(Abstract, BlueprintType)
 class PROJETOINDIGENAS_API UPIGameFlowStateBase : public UDataAsset
 {
     GENERATED_BODY()

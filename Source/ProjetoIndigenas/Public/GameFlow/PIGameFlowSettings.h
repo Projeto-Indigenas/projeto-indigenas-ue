@@ -10,6 +10,15 @@ class PROJETOINDIGENAS_API UPIGameFlowSettings : public UDeveloperSettings
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditDefaultsOnly)
 	TSoftObjectPtr<UPIGameFlowData> GameFlowData;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<UWorld> TransitionLevel;
+
+	UPIGameFlowSettings()
+	{
+		CategoryName = TEXT("Projeto Indígenas");
+		SectionName = TEXT("Game Flow Settings");
+	}
 };
