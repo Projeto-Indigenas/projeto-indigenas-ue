@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "PIGameFlowData.h"
-#include "PIGameFlowDeveloperSettings.generated.h"
+#include "PIGameFlowSettings.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPIGameFlowDeveloperSettings : public UDeveloperSettings
+class PROJETOINDIGENAS_API UPIGameFlowSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 

@@ -3,13 +3,13 @@
 void UPIGameFlowStateBase::EnterTransitionCompleted()
 {
 	_completedDelegate.ExecuteIfBound();
-	_completedDelegate = nullptr;
+	_completedDelegate.Unbind();
 }
 
 void UPIGameFlowStateBase::ExitTransitionCompleted()
 {
 	_completedDelegate.ExecuteIfBound();
-	_completedDelegate = nullptr;
+	_completedDelegate.Unbind();
 }
 
 void UPIGameFlowStateBase::Enter(FPIGameFlowStateTransitionDelegate completed)
