@@ -47,5 +47,5 @@ void UPIGameFlowSubsystem::TransitionTo(const FName state)
 	_transitionController->OnTransitionCompleted.BindUObject(this,
 		&UPIGameFlowSubsystem::TransitionCompleted, _currentState, state);
 	
-	_transitionController->Transition(GetWorld(), to, _gameFlowData->SharedLevel);
+	_transitionController->Transition(GetWorld(), to);
 }

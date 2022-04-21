@@ -12,8 +12,5 @@ class PROJETOINDIGENAS_API UPIGameFlowData : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-	TSoftObjectPtr<UWorld> SharedLevel; 
-	
-	UPROPERTY(EditDefaultsOnly)
 	TMap<FName, UPIGameFlowStateData*> States;
 };

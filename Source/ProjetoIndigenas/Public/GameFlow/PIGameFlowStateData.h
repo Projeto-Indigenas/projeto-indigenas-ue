@@ -12,7 +12,4 @@ class PROJETOINDIGENAS_API UPIGameFlowStateData : public UDataAsset
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TSoftObjectPtr<UWorld> PersistentLevel;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TArray<TSoftObjectPtr<UWorld>> StreamingLevels;
 };
