@@ -6,7 +6,7 @@ void UDestroyActorStep::ExecuteStep()
 {
 	if (_targetActor == nullptr)
 	{
-		PI_LOG_MSG(TEXT("Trying to destroy nullptr actor"))
+		PI_LOG_UOBJECT(TEXT("Trying to destroy nullptr actor"))
 
 		return;
 	}

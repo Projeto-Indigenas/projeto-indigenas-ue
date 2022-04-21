@@ -43,5 +43,8 @@
 			"Name": "LiveLinkControlRig",
 			"Enabled": true
 		}
+	],
+	"TargetPlatforms": [
+		"Windows"
 	]
 }

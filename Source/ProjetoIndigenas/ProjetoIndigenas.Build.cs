@@ -13,14 +13,8 @@ public class ProjetoIndigenas : ModuleRules
 			"Engine", 
 			"InputCore",
 			"AIModule",
+			"DeveloperSettings",
+			"UMG",
 		});
-
-		if (Target.bBuildEditor)
-		{
-			// PublicDependencyModuleNames.AddRange(new[]
-			// {
-			// 	"UnrealEd"
-			// });
-		}
 	}
 }
