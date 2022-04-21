@@ -1,14 +1,16 @@
-#include "GameFlow/PIGameFlowStateBase.h"
+#include "GameFlow/States/PIGameFlowStateBase.h"
 
 void UPIGameFlowStateBase::EnterTransitionCompleted()
 {
-	_completedDelegate.ExecuteIfBound();
+	if (!_completedDelegate.ExecuteIfBound()) return;
+	
 	_completedDelegate.Unbind();
 }
 
 void UPIGameFlowStateBase::ExitTransitionCompleted()
 {
-	_completedDelegate.ExecuteIfBound();
+	if (!_completedDelegate.ExecuteIfBound()) return;
+	
 	_completedDelegate.Unbind();
 }
 
