@@ -13,7 +13,7 @@ $env:PROJECT_PATH = [Path]::Combine("$env:PROJECT_ROOT", "ProjetoIndigenas.uproj
 $env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool")
 
 if ($IsWindows) {
-    $env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UNREAL_BUILD_TOOL, ".exe")
+    $env:UNREAL_BUILD_TOOL = [Path]::ChangeExtension($env:UNREAL_BUILD_TOOL, ".exe")
 }
 
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
