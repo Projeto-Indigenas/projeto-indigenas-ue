@@ -4,21 +4,20 @@
 #include "PIGameFlowData.h"
 #include "PIGameFlowSettings.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Config = Game, DefaultConfig)
 class PROJETOINDIGENAS_API UPIGameFlowSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(Config, EditDefaultsOnly)
 	TSoftObjectPtr<UPIGameFlowData> GameFlowData;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(Config, EditDefaultsOnly)
 	TSoftObjectPtr<UWorld> TransitionLevel;
 
 	UPIGameFlowSettings()
 	{
 		CategoryName = TEXT("1 - Projeto Indígenas");
-		SectionName = TEXT("Game Flow Settings");
 	}
 };
