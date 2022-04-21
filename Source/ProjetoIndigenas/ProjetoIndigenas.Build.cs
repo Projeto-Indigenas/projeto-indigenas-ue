@@ -14,6 +14,7 @@ public class ProjetoIndigenas : ModuleRules
 			"InputCore",
 			"AIModule",
 			"DeveloperSettings",
+			"UMG",
 		});
 	}
 }
