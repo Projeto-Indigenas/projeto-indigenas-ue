@@ -3,14 +3,17 @@
 #include "CoreMinimal.h"
 #include "PIGameFlowData.generated.h"
 
-class UPIGameFlowStateBase;
+class UPIGameFlowStateData;
 
 UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UPIGameFlowData : public UDataAsset
 {
 	GENERATED_BODY()
 
-protected:
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TMap<FName, TObjectPtr<UPIGameFlowStateBase>> _gameFlowStateMap;
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<UWorld> SharedLevel; 
+	
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FName, UPIGameFlowStateData*> States;
 };

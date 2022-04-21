@@ -18,7 +18,7 @@ public:
 
 	UPIGameFlowSettings()
 	{
-		CategoryName = TEXT("Projeto Indígenas");
+		CategoryName = TEXT("1 - Projeto Indígenas");
 		SectionName = TEXT("Game Flow Settings");
 	}
 };

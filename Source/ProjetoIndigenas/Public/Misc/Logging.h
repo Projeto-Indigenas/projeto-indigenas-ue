@@ -9,19 +9,32 @@
 		GEngine->AddOnScreenDebugMessage(GetLogKey(), duration, FColor::Red, message); \
 	}
 
-#define PI_LOG_V_MSG(verbosity, message) \
-	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), __func__, message);
-#define PI_LOG_MSG(message) PI_LOG_V_MSG(Log, message)
+#define PI_LOGV(verbosity, message) \
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(*this), __func__, message)
+#define PI_LOGV_UOBJECT(verbosity, message) \
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), __func__, message)
 
-#define PI_LOG_V_FMT(verbosity, format, ...) \
-	PI_LOG_V_MSG(verbosity, *FString::Printf(format, ##__VA_ARGS__))
-#define PI_LOG_FMT(format, ...) PI_LOG_V_FMT(Log, format, ##__VA_ARGS__)
+#define PI_LOGVF(verbosity, format, ...) PI_LOGV(verbosity, *FString::Printf(format, ##__VA_ARGS__))
+#define PI_LOGVF_UOBJECT(verbosity, format, ...) PI_LOGV_UOBJECT(verbosity, *FString::Printf(format, ##__VA_ARGS__))
+
+#define PI_LOG(message) PI_LOGV(Log, message)
+#define PI_LOG_UOBJECT(message) PI_LOGV_UOBJECT(Log, message)
+
+#define PI_LOGF(format, ...) PI_LOGVF(Log, format, ##__VA_ARGS__)
+#define PI_LOGF_UOBJECT(format, ...) PI_LOGVF_UOBJECT(Log, format, ##__VA_ARGS__)
 
 #else
 
-#define PI_LOG_V_FMT(verbosity, format, ...)
-#define PI_LOG_V_MSG(message)
-#define PI_LOG_FMT(format, ...)
-#define PI_LOG_MSG(message)
+#define PI_LOGV(verbosity, message)
+#define PI_LOGV_UOBJECT(verbosity, message)
+
+#define PI_LOGVF(verbosity, format, ...)
+#define PI_LOGVF_UOBJECT(verbosity, format, ...)
+
+#define PI_LOG(message)
+#define PI_LOG_UOBJECT(message)
+
+#define PI_LOGF(format, ...)
+#define PI_LOGF_UOBJECT(format, ...)
 
 #endif
