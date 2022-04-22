@@ -81,3 +81,4 @@ Binaries/**/*DebugGame*
 *.code-workspace
 compile_commands.json
 .cache/
+**/.DS_Store

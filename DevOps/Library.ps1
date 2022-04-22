@@ -40,23 +40,41 @@ function ValidateProject
     }
 }
 
-function BuildProject([List[string]] $params)
+function RunBuildTool([Array] $params)
 {
     $unrealBuildScript = ""
     
     if ($IsWindows) {
         $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Build.bat")
-        $params.Add("-FromMsBuild")
-        $params.Add("Win64")
     } else {
         $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Mac", "Build.sh")
-        $params.Add("Mac")
     }
 
     & "$unrealBuildScript" `
-        ProjetoIndigenasEditor `
-        Development `
         -Project="$env:PROJECT_PATH" `
         -WaitMutex `
+        -FromMsBuild `
+        $params | Out-Default
+}
+
+function RunAutomationTool([Array] $params)
+{
+    $unrealAutomationTool = ""
+    if ($IsWindows) {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.bat")
+    } else {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.sh")
+    }
+    
+    & "$unrealAutomationTool" `
+        BuildCookRun `
+        -project="$env:PROJECT_PATH" `
+        -noP4 `
+        -cook `
+        -allmaps `
+        -build `
+        -stage `
+        -pak `
+        -archive `
         $params | Out-Default
 }
