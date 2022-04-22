@@ -1,3 +1,7 @@
 . ".\DevOps\Library.ps1"
 
-Start-Process "$env:PROJECT_PATH"
+if ($IsWindows) {
+    Start-Process "$env:PROJECT_PATH"
+} else {
+    open "$env:PROJECT_PATH"
+}
