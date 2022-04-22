@@ -1,4 +1,5 @@
 using namespace System.IO
+using namespace System.Collections.Generic
 
 if ([string]::IsNullOrEmpty($env:UE_ENGINE_ROOT)) {
     if ($IsMacOS) {
@@ -37,4 +38,25 @@ function ValidateProject
 
         return
     }
+}
+
+function BuildProject([List[string]] $params)
+{
+    $unrealBuildScript = ""
+    
+    if ($IsWindows) {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Build.bat")
+        $params.Add("-FromMsBuild")
+        $params.Add("Win64")
+    } else {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Mac", "Build.sh")
+        $params.Add("Mac")
+    }
+
+    & "$unrealBuildScript" `
+        ProjetoIndigenasEditor `
+        Development `
+        -Project="$env:PROJECT_PATH" `
+        -WaitMutex `
+        $params | Out-Default
 }
