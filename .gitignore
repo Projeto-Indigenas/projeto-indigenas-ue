@@ -74,6 +74,8 @@ Plugins/ExodusImport/*
 **/RiderLink/*
 *.exp
 Binaries/Mac
+Binaries/IOS
+Binaries/TVOS
 Binaries/**/*DebugGame*
 *.ignore
 *.code-workspace
