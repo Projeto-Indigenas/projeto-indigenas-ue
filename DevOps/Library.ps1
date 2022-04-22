@@ -1,4 +1,5 @@
 using namespace System.IO
+using namespace System.Collections.Generic
 
 if ([string]::IsNullOrEmpty($env:UE_ENGINE_ROOT)) {
     if ($IsMacOS) {
@@ -19,22 +20,41 @@ if ($IsWindows) {
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
 Write-Output "Using project at: $env:PROJECT_PATH"
 
-function ValidateBuildTool
+function RunBuildTool([Array] $params)
 {
-    if (![File]::Exists($unrealBuildToolPath))
-    {
-        Write-Error "Could not find solution generator at: $unrealBuildToolPath"
-
-        return
+    $unrealBuildScript = ""
+    
+    if ($IsWindows) {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Build.bat")
+    } else {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Mac", "Build.sh")
     }
+
+    & "$unrealBuildScript" `
+        -Project="$env:PROJECT_PATH" `
+        -WaitMutex `
+        -FromMsBuild `
+        $params | Out-Default
 }
 
-function ValidateProject 
+function RunAutomationTool([Array] $params)
 {
-    if (![File]::Exists($projectPath))
-    {
-        Write-Error "Could not find project at: $projectPath"
-
-        return
+    $unrealAutomationTool = ""
+    if ($IsWindows) {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.bat")
+    } else {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.sh")
     }
+    
+    & "$unrealAutomationTool" `
+        BuildCookRun `
+        -project="$env:PROJECT_PATH" `
+        -noP4 `
+        -cook `
+        -allmaps `
+        -build `
+        -stage `
+        -pak `
+        -archive `
+        $params | Out-Default
 }

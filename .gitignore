@@ -74,8 +74,16 @@ Plugins/ExodusImport/*
 **/RiderLink/*
 *.exp
 Binaries/Mac
+Binaries/IOS
+Binaries/TVOS
 Binaries/**/*DebugGame*
 *.ignore
 *.code-workspace
 compile_commands.json
 .cache/
+**/.DS_Store
+ArchivedBuilds/
+tbb*.dll
+OpenImageDenoise.dll
+D3D12/
+ProjetoIndigenas.target

@@ -45,6 +45,8 @@
 		}
 	],
 	"TargetPlatforms": [
-		"Windows"
+		"Windows",
+		"TVOS",
+		"Mac"
 	]
 }
