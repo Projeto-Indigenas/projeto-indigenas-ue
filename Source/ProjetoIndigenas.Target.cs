@@ -6,6 +6,9 @@ public class ProjetoIndigenasTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
+		MacPlatform.bUseDSYMFiles = false;
+		IOSPlatform.bGeneratedSYM = true;
+		
 		ExtraModuleNames.AddRange( new[]
 		{
 			"ProjetoIndigenas"

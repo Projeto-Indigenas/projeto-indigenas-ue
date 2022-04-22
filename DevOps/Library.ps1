@@ -20,26 +20,6 @@ if ($IsWindows) {
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
 Write-Output "Using project at: $env:PROJECT_PATH"
 
-function ValidateBuildTool
-{
-    if (![File]::Exists($unrealBuildToolPath))
-    {
-        Write-Error "Could not find solution generator at: $unrealBuildToolPath"
-
-        return
-    }
-}
-
-function ValidateProject 
-{
-    if (![File]::Exists($projectPath))
-    {
-        Write-Error "Could not find project at: $projectPath"
-
-        return
-    }
-}
-
 function RunBuildTool([Array] $params)
 {
     $unrealBuildScript = ""
