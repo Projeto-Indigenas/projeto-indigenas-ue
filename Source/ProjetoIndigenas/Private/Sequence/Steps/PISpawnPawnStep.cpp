@@ -40,13 +40,6 @@ void UPISpawnPawnStep::ExecuteStep()
 
 	switch (_spawnMode)
 	{
-	case ESpawnPawnMode::Free:
-		{
-			NotifyFinish(pawn);
-
-			break;
-		}
-		
 	case ESpawnPawnMode::AIControlled:
 		{
 			AAIController* controller = GetWorld()->SpawnActor<AAIController>(
@@ -55,6 +48,8 @@ void UPISpawnPawnStep::ExecuteStep()
 			controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
 			controller->Possess(pawn);
+
+			break;
 		}
 		
 	case ESpawnPawnMode::PlayerControlled:
@@ -67,4 +62,6 @@ void UPISpawnPawnStep::ExecuteStep()
 		}
 	default: break;
 	}
+
+	NotifyFinish(pawn);
 }
