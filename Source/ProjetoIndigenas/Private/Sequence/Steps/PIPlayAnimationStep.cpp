@@ -49,3 +49,10 @@ void UPIPlayAnimationStep::AnimationCompleted()
 	
 	Finish();
 }
+
+void UPIPlayAnimationStep::BeginPlay(UGameInstance* gameInstance)
+{
+	Super::BeginPlay(gameInstance);
+
+	_targetCharacter = GetTargetActor<ACharacter>();
+}

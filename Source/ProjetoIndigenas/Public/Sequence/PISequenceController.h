@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PISequenceStep.h"
 #include "PISequenceController.generated.h"
+
+class UPISequenceStepBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPISequenceCompletedDelegate);
 
@@ -14,7 +15,7 @@ class PROJETOINDIGENAS_API APISequenceController : public AActor
 	int _sequenceIndex = -1;
 
 	bool NextIndex();
-	void StepFinished(UPISequenceStep* step);
+	void StepFinished(UPISequenceStepBase* step);
 	
 	void DelayToStartTimerAction();
 	void SequenceCompleted() const;
@@ -30,14 +31,14 @@ protected:
 	bool _loopSteps = false;
 
 	UPROPERTY()
-	TArray<UPISequenceStep*> _steps;
+	TArray<UPISequenceStepBase*> _steps;
 
 	virtual void BeginPlay() override;
 	
 	void ExecuteNextStep();
 
 	UFUNCTION(BlueprintCallable)
-	void AddStep(UPISequenceStep* step);
+	void AddStep(UPISequenceStepBase* step);
 
 public:
 	UPROPERTY(BlueprintAssignable)

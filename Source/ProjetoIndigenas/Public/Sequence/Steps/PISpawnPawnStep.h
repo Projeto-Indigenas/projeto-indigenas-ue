@@ -6,10 +6,10 @@
 
 class APlayerStart;
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FSpawnPawnStepDelegate, APawn*, pawn);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FPISequenceStepPawnSpawnedDelegate, APawn*, pawn);
 
 UENUM(BlueprintType)
-enum class ESpawnPawnMode : uint8
+enum class EPISpawnPawnMode : uint8
 {
 	Free,
 	AIControlled,
@@ -17,7 +17,7 @@ enum class ESpawnPawnMode : uint8
 };
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPISpawnPawnStep : public UPISequenceStep
+class PROJETOINDIGENAS_API UPISpawnPawnStep : public UPISequenceStepBase
 {
 	GENERATED_BODY()
 
@@ -34,10 +34,10 @@ protected:
 	ESpawnActorCollisionHandlingMethod _spawnCollisionMethod;
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	ESpawnPawnMode _spawnMode;
+	EPISpawnPawnMode _spawnMode;
 
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	FSpawnPawnStepDelegate OnSpawnPawnDelegate;
+	UPROPERTY(BlueprintReadWrite)
+	FPISequenceStepPawnSpawnedDelegate _pawnSpawnedDelegate;
 	
 public:
 	virtual void ExecuteStep() override;

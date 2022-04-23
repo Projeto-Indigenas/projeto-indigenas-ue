@@ -74,6 +74,8 @@ void UPIWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 	Super::BeginPlay(gameInstance);
 
 	_destinationController = MakeUnique<FPIDestinationController>(_pathData->Nodes, _cycleDestinations);
+
+	_targetCharacter = GetTargetActor<APINpcCharacter>();
 }
 
 #pragma region IStepExecutor

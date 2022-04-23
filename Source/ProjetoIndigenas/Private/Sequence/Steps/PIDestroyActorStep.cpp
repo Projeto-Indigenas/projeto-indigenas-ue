@@ -4,14 +4,18 @@
 
 void UPIDestroyActorStep::ExecuteStep()
 {
-	if (_targetActor == nullptr)
+	AActor* actor = GetTargetActor<AActor>();
+	
+	if (actor == nullptr)
 	{
 		PI_LOG_UOBJECT(TEXT("Trying to destroy nullptr actor"))
+
+		Finish();
 
 		return;
 	}
 
-	_targetActor->Destroy();
+	actor->Destroy();
 
 	Finish();
 }

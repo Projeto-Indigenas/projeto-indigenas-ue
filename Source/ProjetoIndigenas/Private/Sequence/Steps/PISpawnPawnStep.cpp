@@ -6,7 +6,7 @@
 
 void UPISpawnPawnStep::NotifyFinish(APawn* pawn)
 {
-	OnSpawnPawnDelegate.ExecuteIfBound(pawn);
+	_pawnSpawnedDelegate.ExecuteIfBound(pawn);
 
 	Super::Finish();
 }
@@ -40,7 +40,7 @@ void UPISpawnPawnStep::ExecuteStep()
 
 	switch (_spawnMode)
 	{
-	case ESpawnPawnMode::AIControlled:
+	case EPISpawnPawnMode::AIControlled:
 		{
 			AAIController* controller = GetWorld()->SpawnActor<AAIController>(
 				pawn->AIControllerClass, spawnTransform, spawnParams);
@@ -52,7 +52,7 @@ void UPISpawnPawnStep::ExecuteStep()
 			break;
 		}
 		
-	case ESpawnPawnMode::PlayerControlled:
+	case EPISpawnPawnMode::PlayerControlled:
 		{
 			APlayerController* controller = GetWorld()->GetFirstPlayerController();
 

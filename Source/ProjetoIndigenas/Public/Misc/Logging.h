@@ -10,9 +10,9 @@
 	}
 
 #define PI_LOGV(verbosity, message) \
-	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(*this), __FUNCTION__, message)
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(*this), *FString(__FUNCTION__), message)
 #define PI_LOGV_UOBJECT(verbosity, message) \
-	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), __FUNCTION__, message)
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), *FString(__FUNCTION__), message)
 
 #define PI_LOGVF(verbosity, format, ...) PI_LOGV(verbosity, *FString::Printf(format, ##__VA_ARGS__))
 #define PI_LOGVF_UOBJECT(verbosity, format, ...) PI_LOGV_UOBJECT(verbosity, *FString::Printf(format, ##__VA_ARGS__))

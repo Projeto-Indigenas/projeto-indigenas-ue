@@ -1,5 +1,7 @@
 #include "Sequence/PISequenceController.h"
 
+#include "Sequence/Steps/Base/PISequenceStepBase.h"
+
 bool APISequenceController::NextIndex()
 {
 	++_sequenceIndex;
@@ -9,7 +11,7 @@ bool APISequenceController::NextIndex()
 	return true;
 }
 
-void APISequenceController::StepFinished(UPISequenceStep* step)
+void APISequenceController::StepFinished(UPISequenceStepBase* step)
 {
 	step->FinishedDelegate.Unbind();
 
@@ -46,7 +48,7 @@ void APISequenceController::ExecuteNextStep()
 		return;
 	}
 
-	UPISequenceStep* step = _steps[_sequenceIndex];
+	UPISequenceStepBase* step = _steps[_sequenceIndex];
 	if (step == nullptr) return;
 	
 	step->FinishedDelegate.BindUObject(this, &APISequenceController::StepFinished);
@@ -54,7 +56,7 @@ void APISequenceController::ExecuteNextStep()
 	step->Execute();
 }
 
-void APISequenceController::AddStep(UPISequenceStep* step)
+void APISequenceController::AddStep(UPISequenceStepBase* step)
 {
 	_steps.Add(step);
 }
@@ -64,7 +66,7 @@ void APISequenceController::StartSequence()
 	CreateSteps();
 	
 	UGameInstance* gameInstance = GetGameInstance();
-	for (UPISequenceStep* step : _steps)
+	for (UPISequenceStepBase* step : _steps)
 	{
 		if (step == nullptr) continue;
 		

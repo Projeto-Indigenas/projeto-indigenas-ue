@@ -1,18 +1,15 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/PISequenceStep.h"
+#include "Base/PISequenceStepTargetActorBase.h"
 #include "PIToggleActorVisibilityStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPIToggleActorVisibilityStep : public UPISequenceStep
+class PROJETOINDIGENAS_API UPIToggleActorVisibilityStep : public UPISequenceStepTargetActorBase
 {
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	TWeakObjectPtr<AActor> _targetActor;
-	
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	bool _visible;
 	

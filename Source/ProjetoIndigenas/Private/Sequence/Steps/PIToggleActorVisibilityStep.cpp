@@ -1,11 +1,21 @@
 ﻿#include "Sequence/Steps/PIToggleActorVisibilityStep.h"
 
+#include "Misc/Logging.h"
+
 void UPIToggleActorVisibilityStep::ExecuteStep()
 {
-	// TODO(anderson): there should be an error log here
-	if (!_targetActor.IsValid()) return;
+	AActor* actor = GetTargetActor<AActor>();
 	
-	_targetActor->SetActorHiddenInGame(!_visible);
+	if (actor == nullptr)
+	{
+		PI_LOGV_UOBJECT(Error, TEXT("Target actor is nullptr"))
+		
+		Finish();
+		
+		return;
+	}
+	
+	actor->SetActorHiddenInGame(!_visible);
 	
 	Finish();
 }

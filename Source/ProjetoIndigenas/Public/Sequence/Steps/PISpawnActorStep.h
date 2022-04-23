@@ -1,13 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/PISequenceStep.h"
+#include "Sequence/Steps/Base/PISequenceStepBase.h"
 #include "PISpawnActorStep.generated.h"
 
 class APlayerStart;
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPISpawnActorStep : public UPISequenceStep
+class PROJETOINDIGENAS_API UPISpawnActorStep : public UPISequenceStepBase
 {
 	GENERATED_BODY()
 

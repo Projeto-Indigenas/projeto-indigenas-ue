@@ -1,17 +1,14 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/PISequenceStep.h"
+#include "Base/PISequenceStepTargetActorBase.h"
 #include "PIDestroyActorStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPIDestroyActorStep : public UPISequenceStep
+class PROJETOINDIGENAS_API UPIDestroyActorStep : public UPISequenceStepTargetActorBase
 {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	TWeakObjectPtr<AActor> _targetActor;
-
 	virtual void ExecuteStep() override;
 };
