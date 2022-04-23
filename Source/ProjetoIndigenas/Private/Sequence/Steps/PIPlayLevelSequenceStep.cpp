@@ -2,6 +2,7 @@
 
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
+#include "Camera/CameraComponent.h"
 #include "Misc/Logging.h"
 
 void UPIPlayLevelSequenceStep::PlaybackFinished()
@@ -35,6 +36,17 @@ void UPIPlayLevelSequenceStep::ExecuteStep()
 	_sequenceActor->SetSequence(_levelSequenceToPlay);
 	
 	ULevelSequencePlayer* player = _sequenceActor->GetSequencePlayer();
+
+	if (_setViewTarget)
+	{
+		const UCameraComponent* cameraComponent = player->GetActiveCameraComponent();
+
+		if (cameraComponent != nullptr)
+		{
+			GetWorld()->GetFirstPlayerController()->SetViewTarget(cameraComponent->GetOwner());
+		}
+	}
+	
 	player->OnFinished.AddUniqueDynamic(this, &UPIPlayLevelSequenceStep::PlaybackFinished);
 	player->SetPlaybackPosition(FMovieSceneSequencePlaybackParams(0.f, EUpdatePositionMethod::Jump));
 	player->Play();

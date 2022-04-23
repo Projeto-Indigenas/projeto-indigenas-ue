@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	TObjectPtr<ULevelSequence> _levelSequenceToPlay;
 
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	bool _setViewTarget;
+
 public:
 	virtual void ExecuteStep() override;
 };
