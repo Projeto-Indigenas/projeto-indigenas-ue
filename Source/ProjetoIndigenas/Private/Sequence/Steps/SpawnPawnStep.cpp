@@ -3,6 +3,20 @@
 #include "AIController.h"
 #include "Misc/Logging.h"
 
+void USpawnPawnStep::NotifyFinish(APawn* pawn)
+{
+	OnSpawnPawnDelegate.ExecuteIfBound(pawn);
+
+	Super::Finish();
+}
+
+void USpawnPawnStep::Possess(AController* controller, APawn* pawn)
+{
+	controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+
+	controller->Possess(pawn);
+}
+
 void USpawnPawnStep::ExecuteStep()
 {
 	Super::ExecuteStep();
@@ -20,26 +34,28 @@ void USpawnPawnStep::ExecuteStep()
 
 	switch (_spawnMode)
 	{
+	case ESpawnPawnMode::Free:
+		{
+			NotifyFinish(pawn);
+
+			break;
+		}
+		
 	case ESpawnPawnMode::AIControlled:
 		{
 			AAIController* controller = GetWorld()->SpawnActor<AAIController>(pawn->AIControllerClass, _spawnTransform);
 
-			controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-			controller->Possess(pawn);
-			
-			break;
+			Possess(controller, pawn);
 		}
+		
 	case ESpawnPawnMode::PlayerControlled:
 		{
-			GetWorld()->GetFirstPlayerController()->Possess(pawn);
+			APlayerController* controller = GetWorld()->GetFirstPlayerController();
+
+			Possess(controller, pawn);
 			
 			break;
 		}
 	default: break;
 	}
-
-	OnSpawnPawnDelegate.ExecuteIfBound(pawn);
-
-	Finish();
 }

@@ -19,6 +19,10 @@ class PROJETOINDIGENAS_API USpawnPawnStep : public USequenceStep
 {
 	GENERATED_BODY()
 
+	void NotifyFinish(APawn* pawn);
+
+	static void Possess(AController* controller, APawn* pawn);
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	TSubclassOf<APawn> _pawnClass;
