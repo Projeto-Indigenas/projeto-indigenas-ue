@@ -1,6 +1,8 @@
 #include "Sequence/Steps/PISpawnPawnStep.h"
 
 #include "AIController.h"
+#include "Beings/Player/PICharacter.h"
+#include "Beings/Player/PIPlayerController.h"
 #include "GameFramework/PlayerStart.h"
 #include "Misc/Logging.h"
 
@@ -11,57 +13,26 @@ void UPISpawnPawnStep::NotifyFinish(APawn* pawn)
 	Super::Finish();
 }
 
-void UPISpawnPawnStep::ExecuteStep()
+void UPISpawnPawnStep::PostSpawnActor(UWorld* world, AActor* actor)
 {
-	FTransform spawnTransform = FTransform::Identity;
-	
-	if (_playerStart.IsValid())
+	if (APawn* pawn = Cast<APawn>(actor))
 	{
-		spawnTransform = _playerStart->GetActorTransform();
-	}
-	else
-	{
-		PI_LOGVF_UOBJECT(Error, TEXT("Player Start is invalid, spawning at Identity"))
-	}
-	
-	FActorSpawnParameters spawnParams;
-	spawnParams.SpawnCollisionHandlingOverride = _spawnCollisionMethod;
-	
-	APawn* pawn = GetWorld()->SpawnActor<APawn>(_pawnClass, spawnTransform, spawnParams);
-
-	if (pawn == nullptr)
-	{
-		PI_LOGVF_UOBJECT(Error, TEXT("Couldn't spawn Pawn (%s)"), *_pawnClass->GetName())
-
-		Finish();
-
-		return;
-	}
-
-	switch (_spawnMode)
-	{
-	case EPISpawnPawnMode::AIControlled:
+		if (const TSubclassOf<AController>& controllerClass = pawn->AIControllerClass)
 		{
-			AAIController* controller = GetWorld()->SpawnActor<AAIController>(
-				pawn->AIControllerClass, spawnTransform, spawnParams);
+			AAIController* controller = world->SpawnActor<AAIController>(controllerClass, pawn->GetActorTransform());
 
 			controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
 			controller->Possess(pawn);
-
-			break;
 		}
-		
-	case EPISpawnPawnMode::PlayerControlled:
-		{
-			APlayerController* controller = GetWorld()->GetFirstPlayerController();
 
-			controller->Possess(pawn);
-			
-			break;
-		}
-	default: break;
+		NotifyFinish(pawn);
+
+		return;
 	}
 
-	NotifyFinish(pawn);
+	PI_LOGVF_UOBJECT(Error, TEXT("Pawn is nullptr, actor is not a pawn (%s)"),
+		*(actor != nullptr ? actor->GetName() : FString(TEXT("nullptr"))))
+
+	Finish();
 }

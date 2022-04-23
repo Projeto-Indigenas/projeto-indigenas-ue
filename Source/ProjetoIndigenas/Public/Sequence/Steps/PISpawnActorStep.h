@@ -20,6 +20,8 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	ESpawnActorCollisionHandlingMethod _spawnCollisionMethod;
+
+	virtual void PostSpawnActor(UWorld* world, AActor* actor);
 	
 public:
 	virtual void ExecuteStep() override;

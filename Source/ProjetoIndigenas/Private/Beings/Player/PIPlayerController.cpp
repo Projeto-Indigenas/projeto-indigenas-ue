@@ -92,3 +92,18 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	const double& yaw = cameraController->GetCameraRotator().Yaw;
 	character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }
+
+void APIPlayerController::SetCameraControllerConfigureAndSetAsViewTarget(APICameraController* cameraController)
+{
+	_cameraController = cameraController;
+	
+	if (cameraController == nullptr) return;
+	
+	cameraController->SetupPlayerInputComponent(this);
+
+	cameraController->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+
+	cameraController->SetTargetActor(GetPawn());
+
+	SetViewTarget(cameraController);
+}

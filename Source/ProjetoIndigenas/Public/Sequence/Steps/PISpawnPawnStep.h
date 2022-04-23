@@ -8,37 +8,16 @@ class APlayerStart;
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FPISequenceStepPawnSpawnedDelegate, APawn*, pawn);
 
-UENUM(BlueprintType)
-enum class EPISpawnPawnMode : uint8
-{
-	Free,
-	AIControlled,
-	PlayerControlled,
-};
-
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPISpawnPawnStep : public UPISequenceStepBase
+class PROJETOINDIGENAS_API UPISpawnPawnStep : public UPISpawnActorStep
 {
 	GENERATED_BODY()
-
-	void NotifyFinish(APawn* pawn);
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	TSubclassOf<APawn> _pawnClass;
-
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	TWeakObjectPtr<APlayerStart> _playerStart;
-
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	ESpawnActorCollisionHandlingMethod _spawnCollisionMethod;
-
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	EPISpawnPawnMode _spawnMode;
-
 	UPROPERTY(BlueprintReadWrite)
 	FPISequenceStepPawnSpawnedDelegate _pawnSpawnedDelegate;
-	
-public:
-	virtual void ExecuteStep() override;
+
+	void NotifyFinish(APawn* pawn);
+
+	virtual void PostSpawnActor(UWorld* world, AActor* actor) override;
 };

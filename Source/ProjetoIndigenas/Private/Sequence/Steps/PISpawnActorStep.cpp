@@ -3,6 +3,11 @@
 #include "GameFramework/PlayerStart.h"
 #include "Misc/Logging.h"
 
+void UPISpawnActorStep::PostSpawnActor(UWorld* world, AActor* actor)
+{
+	Finish();
+}
+
 void UPISpawnActorStep::ExecuteStep()
 {
 	FTransform spawnTransform = FTransform::Identity;
@@ -18,8 +23,10 @@ void UPISpawnActorStep::ExecuteStep()
 	
 	FActorSpawnParameters spawnParams;
 	spawnParams.SpawnCollisionHandlingOverride = _spawnCollisionMethod;
-	
-	GetWorld()->SpawnActor<AActor>(_actorClass, spawnTransform, spawnParams);
 
-	Finish();
+	UWorld* world = GetWorld();
+	
+	AActor* actor = world->SpawnActor<AActor>(_actorClass, spawnTransform, spawnParams);
+
+	PostSpawnActor(world, actor);
 }
