@@ -10,13 +10,6 @@ void UPISpawnPawnStep::NotifyFinish(APawn* pawn)
 	Super::Finish();
 }
 
-void UPISpawnPawnStep::Possess(AController* controller, APawn* pawn)
-{
-	controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-	controller->Possess(pawn);
-}
-
 void UPISpawnPawnStep::ExecuteStep()
 {
 	Super::ExecuteStep();
@@ -45,14 +38,16 @@ void UPISpawnPawnStep::ExecuteStep()
 		{
 			AAIController* controller = GetWorld()->SpawnActor<AAIController>(pawn->AIControllerClass, _spawnTransform);
 
-			Possess(controller, pawn);
+			controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+
+			controller->Possess(pawn);
 		}
 		
 	case ESpawnPawnMode::PlayerControlled:
 		{
 			APlayerController* controller = GetWorld()->GetFirstPlayerController();
 
-			Possess(controller, pawn);
+			controller->Possess(pawn);
 			
 			break;
 		}
