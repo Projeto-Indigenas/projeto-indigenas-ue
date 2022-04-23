@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/SequenceStep.h"
-#include "DestroyActorStep.generated.h"
+#include "Sequence/PISequenceStep.h"
+#include "PIDestroyActorStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UDestroyActorStep : public USequenceStep
+class PROJETOINDIGENAS_API UPIDestroyActorStep : public UPISequenceStep
 {
 	GENERATED_BODY()
 

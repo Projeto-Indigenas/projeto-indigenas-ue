@@ -1,6 +1,6 @@
-#include "Sequence/Steps/SpawnActorStep.h"
+#include "Sequence/Steps/PISpawnActorStep.h"
 
-void USpawnActorStep::ExecuteStep()
+void UPISpawnActorStep::ExecuteStep()
 {
 	Super::ExecuteStep();
 

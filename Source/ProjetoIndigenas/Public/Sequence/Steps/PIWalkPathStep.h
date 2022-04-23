@@ -5,12 +5,12 @@
 #include "Beings/NPC/PINpcController.h"
 #include "Beings/NPC/Paths/PIDestinationController.h"
 #include "Beings/NPC/Paths/PIPathData.h"
-#include "Sequence/SequenceStep.h"
-#include "Sequence/SequenceStepExecutor.h"
-#include "WalkPathStep.generated.h"
+#include "Sequence/PISequenceStep.h"
+#include "Sequence/PISequenceStepExecutor.h"
+#include "PIWalkPathStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenceStepExecutor
+class PROJETOINDIGENAS_API UPIWalkPathStep : public UPISequenceStep, public IPISequenceStepExecutor
 {
 	GENERATED_BODY()
 

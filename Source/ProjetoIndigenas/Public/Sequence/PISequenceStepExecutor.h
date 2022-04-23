@@ -2,14 +2,14 @@
 
 #include "CoreMinimal.h"
 
-class USequenceExecutorComponent;
+class UPISequenceExecutorComponent;
 
-class PROJETOINDIGENAS_API ISequenceStepExecutor
+class PROJETOINDIGENAS_API IPISequenceStepExecutor
 {
 protected:
-	TWeakObjectPtr<USequenceExecutorComponent> _sequenceExecutorComponent;
+	TWeakObjectPtr<UPISequenceExecutorComponent> _sequenceExecutorComponent;
 	
-	~ISequenceStepExecutor() = default;
+	~IPISequenceStepExecutor() = default;
 	
 public:
 	virtual void SetupExecutorComponent(AActor* targetActor);

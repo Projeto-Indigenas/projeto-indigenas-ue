@@ -1,8 +1,8 @@
-﻿#include "Sequence/Steps/DestroyActorStep.h"
+﻿#include "Sequence/Steps/PIDestroyActorStep.h"
 
 #include "Misc/Logging.h"
 
-void UDestroyActorStep::ExecuteStep()
+void UPIDestroyActorStep::ExecuteStep()
 {
 	if (_targetActor == nullptr)
 	{

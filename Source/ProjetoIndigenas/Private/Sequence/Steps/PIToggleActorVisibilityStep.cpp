@@ -1,6 +1,6 @@
-﻿#include "Sequence/Steps/ToggleActorVisibilityStep.h"
+﻿#include "Sequence/Steps/PIToggleActorVisibilityStep.h"
 
-void UToggleActorVisibilityStep::ExecuteStep()
+void UPIToggleActorVisibilityStep::ExecuteStep()
 {
 	// TODO(anderson): there should be an error log here
 	if (!_targetActor.IsValid()) return;

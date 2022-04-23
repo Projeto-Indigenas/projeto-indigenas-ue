@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Sequence/SequenceStep.h"
-#include "ToggleActorVisibilityStep.generated.h"
+#include "Sequence/PISequenceStep.h"
+#include "PIToggleActorVisibilityStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UToggleActorVisibilityStep : public USequenceStep
+class PROJETOINDIGENAS_API UPIToggleActorVisibilityStep : public UPISequenceStep
 {
 	GENERATED_BODY()
 	

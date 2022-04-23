@@ -1,13 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SequenceStep.generated.h"
+#include "PISequenceStep.generated.h"
 
-DECLARE_DELEGATE_OneParam(FSequenceStepFinishedDelegate, class USequenceStep*)
-DECLARE_DELEGATE_TwoParams(FSequenceStepSpawnedActorDelegate, const FName&, AActor*)
+DECLARE_DELEGATE_OneParam(FPISequenceStepFinishedDelegate, class UPISequenceStep*)
 
 UCLASS(Abstract, BlueprintType, EditInlineNew)
-class PROJETOINDIGENAS_API USequenceStep : public UObject
+class PROJETOINDIGENAS_API UPISequenceStep : public UObject
 {
     GENERATED_BODY()
     
@@ -24,7 +23,7 @@ protected:
     virtual void Finish();
     
 public:
-    FSequenceStepFinishedDelegate FinishedDelegate;
+    FPISequenceStepFinishedDelegate FinishedDelegate;
     
     virtual void BeginPlay(UGameInstance* gameInstance);
     void Execute();

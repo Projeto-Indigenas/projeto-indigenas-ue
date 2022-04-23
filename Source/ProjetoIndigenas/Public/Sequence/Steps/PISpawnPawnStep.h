@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SpawnActorStep.h"
-#include "SpawnPawnStep.generated.h"
+#include "PISpawnActorStep.h"
+#include "PISpawnPawnStep.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FSpawnPawnStepDelegate, APawn*, pawn);
 
@@ -15,7 +15,7 @@ enum class ESpawnPawnMode : uint8
 };
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API USpawnPawnStep : public USequenceStep
+class PROJETOINDIGENAS_API UPISpawnPawnStep : public UPISequenceStep
 {
 	GENERATED_BODY()
 

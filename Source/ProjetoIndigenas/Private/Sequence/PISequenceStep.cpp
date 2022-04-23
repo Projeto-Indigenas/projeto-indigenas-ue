@@ -1,23 +1,23 @@
-#include "Sequence/SequenceStep.h"
+#include "Sequence/PISequenceStep.h"
 
 #include "Misc/Logging.h"
 
-void USequenceStep::ExecuteStep()
+void UPISequenceStep::ExecuteStep()
 {
 	PI_LOGV_UOBJECT(Error, TEXT("ExecuteStep not implemented"))
 }
 
-void USequenceStep::Finish()
+void UPISequenceStep::Finish()
 {
 	FinishedDelegate.ExecuteIfBound(this);
 }
 
-void USequenceStep::BeginPlay(UGameInstance* gameInstance)
+void UPISequenceStep::BeginPlay(UGameInstance* gameInstance)
 {
 	_gameInstance = gameInstance;
 }
 
-void USequenceStep::Execute()
+void UPISequenceStep::Execute()
 {
 	if (_skipStep)
 	{

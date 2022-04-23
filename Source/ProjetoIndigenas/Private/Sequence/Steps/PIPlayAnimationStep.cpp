@@ -1,9 +1,9 @@
-#include "Sequence/Steps/PlayAnimationStep.h"
+#include "Sequence/Steps/PIPlayAnimationStep.h"
 
 #include "GameFramework/Character.h"
 #include "Beings/NPC/PINpcAnimInstance.h"
 
-bool UPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) const
+bool UPIPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) const
 {
 	const USkeletalMeshComponent* meshComponent = _targetCharacter->GetMesh();
 	if (meshComponent == nullptr) return false;
@@ -13,7 +13,7 @@ bool UPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) c
 	return outAnimInstance != nullptr;
 }
 
-void UPlayAnimationStep::ExecuteStep()
+void UPIPlayAnimationStep::ExecuteStep()
 {
 	if (!_targetCharacter.IsValid()) return;
 
@@ -30,7 +30,7 @@ void UPlayAnimationStep::ExecuteStep()
 	
 	if (_waitForAnimationCompletedEvent)
 	{
-		animInstance->AnimationCompletedDelegate.BindDynamic(this, &UPlayAnimationStep::AnimationCompleted);
+		animInstance->AnimationCompletedDelegate.BindDynamic(this, &UPIPlayAnimationStep::AnimationCompleted);
 
 		return;
 	}
@@ -38,7 +38,7 @@ void UPlayAnimationStep::ExecuteStep()
 	Finish();
 }
 
-void UPlayAnimationStep::AnimationCompleted()
+void UPIPlayAnimationStep::AnimationCompleted()
 {
 	UPINpcAnimInstance* animInstance;
 

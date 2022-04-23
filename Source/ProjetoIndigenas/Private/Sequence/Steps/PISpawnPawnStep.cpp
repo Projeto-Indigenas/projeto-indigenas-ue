@@ -1,23 +1,23 @@
-#include "Sequence/Steps/SpawnPawnStep.h"
+#include "Sequence/Steps/PISpawnPawnStep.h"
 
 #include "AIController.h"
 #include "Misc/Logging.h"
 
-void USpawnPawnStep::NotifyFinish(APawn* pawn)
+void UPISpawnPawnStep::NotifyFinish(APawn* pawn)
 {
 	OnSpawnPawnDelegate.ExecuteIfBound(pawn);
 
 	Super::Finish();
 }
 
-void USpawnPawnStep::Possess(AController* controller, APawn* pawn)
+void UPISpawnPawnStep::Possess(AController* controller, APawn* pawn)
 {
 	controller->AttachToActor(pawn, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
 	controller->Possess(pawn);
 }
 
-void USpawnPawnStep::ExecuteStep()
+void UPISpawnPawnStep::ExecuteStep()
 {
 	Super::ExecuteStep();
 

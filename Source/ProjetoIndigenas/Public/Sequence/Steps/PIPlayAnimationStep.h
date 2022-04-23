@@ -3,11 +3,11 @@
 #include "CoreMinimal.h"
 #include "Beings/NPC/PINpcAnimationState.h"
 #include "Beings/NPC/PINpcAnimInstance.h"
-#include "Sequence/SequenceStep.h"
-#include "PlayAnimationStep.generated.h"
+#include "Sequence/PISequenceStep.h"
+#include "PIPlayAnimationStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UPlayAnimationStep : public USequenceStep
+class PROJETOINDIGENAS_API UPIPlayAnimationStep : public UPISequenceStep
 {
 	GENERATED_BODY()
 
