@@ -4,6 +4,7 @@ public class ProjetoIndigenas : ModuleRules
 {
 	public ProjetoIndigenas(ReadOnlyTargetRules Target) : base(Target)
 	{
+		PrivateDependencyModuleNames.AddRange(new string[] {"LevelSequence"});
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new[]
@@ -15,6 +16,7 @@ public class ProjetoIndigenas : ModuleRules
 			"AIModule",
 			"DeveloperSettings",
 			"UMG",
+			"LevelSequence",
 		});
 	}
 }
