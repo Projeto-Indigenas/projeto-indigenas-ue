@@ -2,10 +2,8 @@
 
 #include "Misc/Logging.h"
 
-void UPISequenceStepTargetActorBase::BeginPlay(UGameInstance* gameInstance)
+void UPISequenceStepTargetActorBase::ExecuteStep()
 {
-	Super::BeginPlay(gameInstance);
-
 	if (!_targetActorProviderDelegate.IsBound())
 	{
 		PI_LOGV_UOBJECT(Error, TEXT("Target actor provider delegate is not bound."))

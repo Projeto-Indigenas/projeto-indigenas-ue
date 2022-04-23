@@ -24,6 +24,5 @@ protected:
 		return Cast<TActorType>(_targetActor.Get());
 	}
 
-public:
-	virtual void BeginPlay(UGameInstance* gameInstance) override;
+	virtual void ExecuteStep() override;
 };

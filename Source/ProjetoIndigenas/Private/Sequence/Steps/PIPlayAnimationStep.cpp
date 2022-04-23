@@ -2,6 +2,7 @@
 
 #include "GameFramework/Character.h"
 #include "Beings/NPC/PINpcAnimInstance.h"
+#include "Misc/Logging.h"
 
 bool UPIPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance) const
 {
@@ -15,7 +16,18 @@ bool UPIPlayAnimationStep::GetAnimInstance(UPINpcAnimInstance*& outAnimInstance)
 
 void UPIPlayAnimationStep::ExecuteStep()
 {
-	if (!_targetCharacter.IsValid()) return;
+	Super::ExecuteStep();
+
+	_targetCharacter = GetTargetActor<ACharacter>();
+	
+	if (!_targetCharacter.IsValid())
+	{
+		PI_LOGV_UOBJECT(Error, TEXT("Target actor is invalid"))
+
+		Finish();
+		
+		return;
+	}
 
 	UPINpcAnimInstance* animInstance;
 	
@@ -48,11 +60,4 @@ void UPIPlayAnimationStep::AnimationCompleted()
 	}
 	
 	Finish();
-}
-
-void UPIPlayAnimationStep::BeginPlay(UGameInstance* gameInstance)
-{
-	Super::BeginPlay(gameInstance);
-
-	_targetCharacter = GetTargetActor<ACharacter>();
 }

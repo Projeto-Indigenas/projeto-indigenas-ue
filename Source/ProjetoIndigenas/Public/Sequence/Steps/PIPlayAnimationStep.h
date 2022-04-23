@@ -26,7 +26,4 @@ protected:
 
 	UFUNCTION()
 	void AnimationCompleted();
-
-public:
-	virtual void BeginPlay(UGameInstance* gameInstance) override;
 };

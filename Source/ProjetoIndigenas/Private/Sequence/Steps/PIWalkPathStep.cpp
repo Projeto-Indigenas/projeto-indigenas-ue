@@ -1,6 +1,7 @@
 ﻿#include "Sequence/Steps/PIWalkPathStep.h"
 
 #include "Beings/NPC/PINpcController.h"
+#include "Misc/Logging.h"
 
 void UPIWalkPathStep::MoveToNextNode()
 {
@@ -54,8 +55,18 @@ void UPIWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingRes
 
 void UPIWalkPathStep::ExecuteStep()
 {
-	// TODO(anderson): there should be a error log here
-	if (!_targetCharacter.IsValid()) return;
+	Super::ExecuteStep();
+
+	_targetCharacter = GetTargetActor<APINpcCharacter>();
+	
+	if (!_targetCharacter.IsValid())
+	{
+		PI_LOGV_UOBJECT(Error, TEXT("Target character is invalid"))
+
+		Finish();
+		
+		return;
+	}
 
 	_targetController = Cast<APINpcController>(_targetCharacter->GetController());
 	
@@ -74,8 +85,6 @@ void UPIWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 	Super::BeginPlay(gameInstance);
 
 	_destinationController = MakeUnique<FPIDestinationController>(_pathData->Nodes, _cycleDestinations);
-
-	_targetCharacter = GetTargetActor<APINpcCharacter>();
 }
 
 #pragma region IStepExecutor
