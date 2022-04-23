@@ -22,8 +22,6 @@ void UPIPlayLevelSequenceStep::PlaybackFinished()
 
 void UPIPlayLevelSequenceStep::ExecuteStep()
 {
-	Super::ExecuteStep();
-
 	if (!_sequenceActor.IsValid())
 	{
 		PI_LOGVF_UOBJECT(Error, TEXT("Sequence Actor is invalid"))
