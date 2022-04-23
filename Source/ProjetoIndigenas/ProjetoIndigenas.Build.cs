@@ -17,6 +17,7 @@ public class ProjetoIndigenas : ModuleRules
 			"DeveloperSettings",
 			"UMG",
 			"LevelSequence",
+			"MovieScene",
 		});
 	}
 }

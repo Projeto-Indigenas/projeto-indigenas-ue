@@ -12,7 +12,7 @@ void UPIPlayLevelSequenceStep::PlaybackFinished()
 	}
 	else
 	{
-		ULevelSequencePlayer* player = _sequenc""eActor->GetSequencePlayer();
+		ULevelSequencePlayer* player = _sequenceActor->GetSequencePlayer();
 		player->OnFinished.RemoveDynamic(this, &UPIPlayLevelSequenceStep::PlaybackFinished);
 	}
 
