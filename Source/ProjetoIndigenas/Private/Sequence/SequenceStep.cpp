@@ -1,8 +1,10 @@
 #include "Sequence/SequenceStep.h"
 
+#include "Misc/Logging.h"
+
 void USequenceStep::ExecuteStep()
 {
-	UE_LOG(LogTemp, Error, TEXT("ExecuteStep not implemented"))
+	PI_LOGV_UOBJECT(Error, TEXT("ExecuteStep not implemented"))
 }
 
 void USequenceStep::Finish()
