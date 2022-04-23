@@ -4,6 +4,8 @@
 #include "PISpawnActorStep.h"
 #include "PISpawnPawnStep.generated.h"
 
+class APlayerStart;
+
 DECLARE_DYNAMIC_DELEGATE_OneParam(FSpawnPawnStepDelegate, APawn*, pawn);
 
 UENUM(BlueprintType)
@@ -26,7 +28,10 @@ protected:
 	TSubclassOf<APawn> _pawnClass;
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	FTransform _spawnTransform;
+	TWeakObjectPtr<APlayerStart> _playerStart;
+
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	ESpawnActorCollisionHandlingMethod _spawnCollisionMethod;
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	ESpawnPawnMode _spawnMode;

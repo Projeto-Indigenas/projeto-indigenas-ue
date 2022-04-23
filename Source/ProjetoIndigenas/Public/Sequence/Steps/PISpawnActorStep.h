@@ -4,6 +4,8 @@
 #include "Sequence/PISequenceStep.h"
 #include "PISpawnActorStep.generated.h"
 
+class APlayerStart;
+
 UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UPISpawnActorStep : public UPISequenceStep
 {
@@ -14,7 +16,10 @@ protected:
 	TSubclassOf<AActor> _actorClass;
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	FTransform _spawnTransform;
+	TWeakObjectPtr<APlayerStart> _playerStart;
+
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
+	ESpawnActorCollisionHandlingMethod _spawnCollisionMethod;
 	
 public:
 	virtual void ExecuteStep() override;
