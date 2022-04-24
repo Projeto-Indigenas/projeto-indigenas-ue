@@ -32,5 +32,5 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetCameraControllerConfigureAndSetAsViewTarget(APICameraController* cameraController);
+	void SetCameraControllerAndConfigure(APICameraController* cameraController);
 };

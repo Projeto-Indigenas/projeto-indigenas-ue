@@ -25,7 +25,7 @@ void UPISpawnPlayPawnStep::PostSpawnActor(UWorld* world, AActor* actor)
 					_cameraControllerClass, pawn->GetActorTransform());
 
 				// this call setups input
-				playerController->SetCameraControllerConfigureAndSetAsViewTarget(cameraController);
+				playerController->SetCameraControllerAndConfigure(cameraController);
 			}
 			else
 			{
