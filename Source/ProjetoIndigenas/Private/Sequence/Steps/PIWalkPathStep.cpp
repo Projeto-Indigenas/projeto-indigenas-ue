@@ -1,8 +1,9 @@
-﻿#include "Sequence/Steps/WalkPathStep.h"
+﻿#include "Sequence/Steps/PIWalkPathStep.h"
 
 #include "Beings/NPC/PINpcController.h"
+#include "Misc/Logging.h"
 
-void UWalkPathStep::MoveToNextNode()
+void UPIWalkPathStep::MoveToNextNode()
 {
 	if (!_destinationController->HasDestination()) return;
 
@@ -37,7 +38,7 @@ void UWalkPathStep::MoveToNextNode()
 	}
 }
 
-void UWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResult& result)
+void UPIWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResult& result)
 {
 	if (result.IsSuccess())
 	{
@@ -52,24 +53,34 @@ void UWalkPathStep::PathRequestCompleted(FAIRequestID, const FPathFollowingResul
 	}
 }
 
-void UWalkPathStep::ExecuteStep()
+void UPIWalkPathStep::ExecuteStep()
 {
-	// TODO(anderson): there should be a error log here
-	if (!_targetCharacter.IsValid()) return;
+	Super::ExecuteStep();
+
+	_targetCharacter = GetTargetActor<APINpcCharacter>();
+	
+	if (!_targetCharacter.IsValid())
+	{
+		PI_LOGV_UOBJECT(Error, TEXT("Target character is invalid"))
+
+		Finish();
+		
+		return;
+	}
 
 	_targetController = Cast<APINpcController>(_targetCharacter->GetController());
 	
 	SetupExecutorComponent(_targetCharacter.Get());
 }
 
-void UWalkPathStep::Finish()
+void UPIWalkPathStep::Finish()
 {
 	DestroyExecutorComponent();
 	
 	Super::Finish();
 }
 
-void UWalkPathStep::BeginPlay(UGameInstance* gameInstance)
+void UPIWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 {
 	Super::BeginPlay(gameInstance);
 
@@ -78,17 +89,17 @@ void UWalkPathStep::BeginPlay(UGameInstance* gameInstance)
 
 #pragma region IStepExecutor
 
-void UWalkPathStep::BeginExecution()
+void UPIWalkPathStep::BeginExecution()
 {
 	if (!_targetController.IsValid()) return;
 	
 	UPathFollowingComponent* pathComponent = _targetController->GetPathFollowingComponent();
-	pathComponent->OnRequestFinished.AddUObject(this, &UWalkPathStep::PathRequestCompleted);
+	pathComponent->OnRequestFinished.AddUObject(this, &UPIWalkPathStep::PathRequestCompleted);
 	
 	MoveToNextNode();
 }
 
-void UWalkPathStep::Tick(float deltaTime)
+void UPIWalkPathStep::Tick(float deltaTime)
 {
 	if (!_targetController.IsValid()) return;
 	if (!_destinationController->HasDestination()) return;

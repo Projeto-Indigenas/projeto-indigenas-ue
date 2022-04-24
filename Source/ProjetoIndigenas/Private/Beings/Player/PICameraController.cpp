@@ -41,3 +41,8 @@ void APICameraController::SetCameraRotation(const FRotator& rotator)
 {
 	_cameraRotator = rotator;
 }
+
+void APICameraController::SetTargetActor(AActor* targetActor)
+{
+	_targetActor = targetActor;
+}

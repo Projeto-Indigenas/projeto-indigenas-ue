@@ -51,10 +51,12 @@ function RunAutomationTool([Array] $params)
         -project="$env:PROJECT_PATH" `
         -noP4 `
         -cook `
+        -target=ProjetoIndigenas `
         -allmaps `
-        -build `
         -stage `
-        -pak `
         -archive `
+        -package `
+        -build `
+        -pak `
         $params | Out-Default
 }

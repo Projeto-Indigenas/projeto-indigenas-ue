@@ -1,8 +1,8 @@
-﻿#include "Sequence/SequenceExecutorComponent.h"
+﻿#include "Sequence/PISequenceExecutorComponent.h"
 
-#include "Sequence/SequenceStepExecutor.h"
+#include "Sequence/PISequenceStepExecutor.h"
 
-void USequenceExecutorComponent::BeginPlay()
+void UPISequenceExecutorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -11,17 +11,17 @@ void USequenceExecutorComponent::BeginPlay()
 	_stepExecutor->BeginExecution();
 }
 
-USequenceExecutorComponent::USequenceExecutorComponent()
+UPISequenceExecutorComponent::UPISequenceExecutorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void USequenceExecutorComponent::SetupExecutor(ISequenceStepExecutor* stepExecutor)
+void UPISequenceExecutorComponent::SetupExecutor(IPISequenceStepExecutor* stepExecutor)
 {
 	_stepExecutor = stepExecutor;
 }
 
-void USequenceExecutorComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+void UPISequenceExecutorComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                                FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

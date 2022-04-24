@@ -6,37 +6,37 @@
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->ToggleRunDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::DodgeInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->DodgeDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::PositiveActionInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->PositiveActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::NegativeActionInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->NegativeActionDelegate.ExecuteIfBound();
 }
 
@@ -84,11 +84,22 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	if (!_character.IsValid()) return;
+	if (!_character->InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
 
-	const APICharacterBase* character = _character.Get();
-	const APICameraController* cameraController = _cameraController.Get();
+	const double& yaw = _cameraController->GetCameraRotator().Yaw;
+	_character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+}
 
-	const double& yaw = cameraController->GetCameraRotator().Yaw;
-	character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+void APIPlayerController::SetCameraControllerAndConfigure(APICameraController* cameraController)
+{
+	_cameraController = cameraController;
+	
+	if (cameraController == nullptr) return;
+	
+	cameraController->SetupPlayerInputComponent(this);
+
+	cameraController->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+
+	cameraController->SetTargetActor(GetPawn());
 }

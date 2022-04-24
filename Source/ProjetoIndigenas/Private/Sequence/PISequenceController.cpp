@@ -1,6 +1,8 @@
-#include "Sequence/SequenceController.h"
+#include "Sequence/PISequenceController.h"
 
-bool ASequenceController::NextIndex()
+#include "Sequence/Steps/Base/PISequenceStepBase.h"
+
+bool APISequenceController::NextIndex()
 {
 	++_sequenceIndex;
 	if (_sequenceIndex < _steps.Num()) return true;
@@ -9,26 +11,26 @@ bool ASequenceController::NextIndex()
 	return true;
 }
 
-void ASequenceController::StepFinished(USequenceStep* step)
+void APISequenceController::StepFinished(UPISequenceStepBase* step)
 {
 	step->FinishedDelegate.Unbind();
 
 	ExecuteNextStep();
 }
 
-void ASequenceController::DelayToStartTimerAction()
+void APISequenceController::DelayToStartTimerAction()
 {
 	ExecuteNextStep();
 }
 
-void ASequenceController::SequenceCompleted() const
+void APISequenceController::SequenceCompleted() const
 {
 	SequenceCompletedDelegate.Broadcast();
 
 	UE_LOG(LogTemp, Log, TEXT("Sequence Completed"))
 }
 
-void ASequenceController::BeginPlay()
+void APISequenceController::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -37,7 +39,7 @@ void ASequenceController::BeginPlay()
 	StartSequence();
 }
 
-void ASequenceController::ExecuteNextStep()
+void APISequenceController::ExecuteNextStep()
 {
 	if (!NextIndex())
 	{
@@ -46,25 +48,25 @@ void ASequenceController::ExecuteNextStep()
 		return;
 	}
 
-	USequenceStep* step = _steps[_sequenceIndex];
+	UPISequenceStepBase* step = _steps[_sequenceIndex];
 	if (step == nullptr) return;
 	
-	step->FinishedDelegate.BindUObject(this, &ASequenceController::StepFinished);
+	step->FinishedDelegate.BindUObject(this, &APISequenceController::StepFinished);
 	
 	step->Execute();
 }
 
-void ASequenceController::AddStep(USequenceStep* step)
+void APISequenceController::AddStep(UPISequenceStepBase* step)
 {
 	_steps.Add(step);
 }
 
-void ASequenceController::StartSequence()
+void APISequenceController::StartSequence()
 {
 	CreateSteps();
 	
 	UGameInstance* gameInstance = GetGameInstance();
-	for (USequenceStep* step : _steps)
+	for (UPISequenceStepBase* step : _steps)
 	{
 		if (step == nullptr) continue;
 		
@@ -75,7 +77,7 @@ void ASequenceController::StartSequence()
 	{
 		FTimerHandle handle;
 		GetGameInstance()->GetTimerManager().SetTimer(handle,
-			FTimerDelegate::CreateUObject(this, &ASequenceController::DelayToStartTimerAction),
+			FTimerDelegate::CreateUObject(this, &APISequenceController::DelayToStartTimerAction),
 			_delayToStart, false);
 		
 		return;
@@ -84,7 +86,7 @@ void ASequenceController::StartSequence()
 	ExecuteNextStep();
 }
 
-void ASequenceController::CreateSteps_Implementation()
+void APISequenceController::CreateSteps_Implementation()
 {
 	// to be overriden by blueprints
 }

@@ -1,18 +1,18 @@
-﻿#include "Sequence/SequenceStepExecutor.h"
+﻿#include "Sequence/PISequenceStepExecutor.h"
 
-#include "Sequence/SequenceExecutorComponent.h"
+#include "Sequence/PISequenceExecutorComponent.h"
 
-void ISequenceStepExecutor::SetupExecutorComponent(AActor* targetActor)
+void IPISequenceStepExecutor::SetupExecutorComponent(AActor* targetActor)
 {
-	UActorComponent* newComponent = targetActor->AddComponentByClass(USequenceExecutorComponent::StaticClass(),
+	UActorComponent* newComponent = targetActor->AddComponentByClass(UPISequenceExecutorComponent::StaticClass(),
 		false, FTransform::Identity, true);
-	_sequenceExecutorComponent = Cast<USequenceExecutorComponent>(newComponent);
+	_sequenceExecutorComponent = Cast<UPISequenceExecutorComponent>(newComponent);
 	_sequenceExecutorComponent->SetupExecutor(this);
 	targetActor->FinishAddComponent(_sequenceExecutorComponent.Get(),
 		false, FTransform::Identity);
 }
 
-void ISequenceStepExecutor::DestroyExecutorComponent()
+void IPISequenceStepExecutor::DestroyExecutorComponent()
 {
 	if (!_sequenceExecutorComponent.IsValid()) return;
 

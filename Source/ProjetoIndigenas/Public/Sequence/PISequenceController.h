@@ -1,20 +1,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SequenceStep.h"
-#include "SequenceController.generated.h"
+#include "PISequenceController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSequenceCompletedDelegate);
+class UPISequenceStepBase;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPISequenceCompletedDelegate);
 
 UCLASS(Blueprintable)
-class PROJETOINDIGENAS_API ASequenceController : public AActor
+class PROJETOINDIGENAS_API APISequenceController : public AActor
 {
 	GENERATED_BODY()
 
 	int _sequenceIndex = -1;
 
 	bool NextIndex();
-	void StepFinished(USequenceStep* step);
+	void StepFinished(UPISequenceStepBase* step);
 	
 	void DelayToStartTimerAction();
 	void SequenceCompleted() const;
@@ -30,18 +31,18 @@ protected:
 	bool _loopSteps = false;
 
 	UPROPERTY()
-	TArray<USequenceStep*> _steps;
+	TArray<UPISequenceStepBase*> _steps;
 
 	virtual void BeginPlay() override;
 	
 	void ExecuteNextStep();
 
 	UFUNCTION(BlueprintCallable)
-	void AddStep(USequenceStep* step);
+	void AddStep(UPISequenceStepBase* step);
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FSequenceCompletedDelegate SequenceCompletedDelegate;
+	FPISequenceCompletedDelegate SequenceCompletedDelegate;
 
 	UFUNCTION(BlueprintCallable)
 	void StartSequence();

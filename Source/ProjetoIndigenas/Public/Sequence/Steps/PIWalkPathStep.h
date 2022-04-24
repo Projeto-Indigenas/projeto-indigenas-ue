@@ -1,20 +1,21 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "Base/PISequenceStepTargetActorBase.h"
 #include "Beings/NPC/PINpcCharacter.h"
 #include "Beings/NPC/PINpcController.h"
 #include "Beings/NPC/Paths/PIDestinationController.h"
 #include "Beings/NPC/Paths/PIPathData.h"
-#include "Sequence/SequenceStep.h"
-#include "Sequence/SequenceStepExecutor.h"
-#include "WalkPathStep.generated.h"
+#include "Sequence/PISequenceStepExecutor.h"
+#include "PIWalkPathStep.generated.h"
 
 UCLASS(BlueprintType)
-class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenceStepExecutor
+class PROJETOINDIGENAS_API UPIWalkPathStep : public UPISequenceStepTargetActorBase, public IPISequenceStepExecutor
 {
 	GENERATED_BODY()
 
 	TWeakObjectPtr<APINpcController> _targetController;
+	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
 	
 	TUniquePtr<FPIDestinationController> _destinationController;
 
@@ -22,9 +23,6 @@ class PROJETOINDIGENAS_API UWalkPathStep : public USequenceStep, public ISequenc
 	void PathRequestCompleted(FAIRequestID requestId, const FPathFollowingResult& result);
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
-	TWeakObjectPtr<APINpcCharacter> _targetCharacter;
-	
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn))
 	UPIPathData* _pathData;
 
