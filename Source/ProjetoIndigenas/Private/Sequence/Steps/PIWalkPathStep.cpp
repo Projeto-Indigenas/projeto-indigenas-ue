@@ -119,6 +119,7 @@ void UPIWalkPathStep::Tick(float deltaTime)
 	const FVector& direction = pathComponent->GetCurrentMoveInput();
 	_targetCharacter->SetInputX(direction.Y);
 	_targetCharacter->SetInputY(direction.X);
+	_targetCharacter->SetDirectionYaw(direction.Rotation().Yaw);
 }
 
 #pragma endregion IStepExecutor

@@ -49,9 +49,7 @@ void FPIMovementState::Dodge() const
 }
 
 FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData):
-	FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>(character, stateData),
-	_run(false),
-	_directionYaw(0)
+	FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>(character, stateData)
 {
 	_acceleratedCharacterDirection.SetAcceleration(stateData.RotationAcceleration);
 	_acceleratedMovementSpeed.Acceleration = stateData.MovementSpeedAcceleration;

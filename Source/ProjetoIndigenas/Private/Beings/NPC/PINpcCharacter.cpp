@@ -13,8 +13,20 @@ void APINpcCharacter::BeginPlay()
 	CreateClimbingState(
 		_capsuleRadiusForState[EPINpcAnimationState::Climbing],
 		_movementAccelerationForState[EPINpcAnimationState::Climbing]);
+}
+
+void APINpcCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 
 	SetCurrentState(_movementState);
+}
+
+void APINpcCharacter::UnPossessed()
+{
+	Super::UnPossessed();
+
+	SetCurrentState(nullptr);
 }
 
 void APINpcCharacter::SetInputX(float x)
@@ -27,4 +39,10 @@ void APINpcCharacter::SetInputY(float y)
 {
 	if (!InputDelegates.IsValid()) return;
 	InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
+}
+
+void APINpcCharacter::SetDirectionYaw(float yaw)
+{
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }
