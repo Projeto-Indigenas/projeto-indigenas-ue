@@ -6,14 +6,16 @@
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
+	_inputX = x;
 	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
+	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(_inputX);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
+	_inputY = y;
 	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
+	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(_inputY);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
@@ -63,10 +65,6 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	_character = Cast<APICharacter>(InPawn);
-	
-	if (!_character.IsValid()) return;
-	
-	_character->InitializeFromController();
 }
 
 void APIPlayerController::OnUnPossess()
@@ -87,19 +85,14 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	if (!_character->InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
 
-	const double& yaw = _cameraController->GetCameraRotator().Yaw;
+	FVector inputVector(_inputY, _inputX, 0.f);
+	inputVector = _cameraController->GetCameraRotator().RotateVector(inputVector);
+	
+	const double& yaw = inputVector.Rotation().Yaw;
 	_character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }
 
-void APIPlayerController::SetCameraControllerAndConfigure(APICameraController* cameraController)
+void APIPlayerController::SetCameraController(APICameraController* cameraController)
 {
 	_cameraController = cameraController;
-	
-	if (cameraController == nullptr) return;
-	
-	cameraController->SetupPlayerInputComponent(this);
-
-	cameraController->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-	cameraController->SetTargetActor(GetPawn());
 }

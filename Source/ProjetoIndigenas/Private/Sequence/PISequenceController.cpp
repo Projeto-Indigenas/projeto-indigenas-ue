@@ -13,7 +13,7 @@ bool APISequenceController::NextIndex()
 
 void APISequenceController::StepFinished(UPISequenceStepBase* step)
 {
-	step->FinishedDelegate.Unbind();
+	step->OnFinished.RemoveDynamic(this, &APISequenceController::StepFinished);
 
 	ExecuteNextStep();
 }
@@ -51,7 +51,7 @@ void APISequenceController::ExecuteNextStep()
 	UPISequenceStepBase* step = _steps[_sequenceIndex];
 	if (step == nullptr) return;
 	
-	step->FinishedDelegate.BindUObject(this, &APISequenceController::StepFinished);
+	step->OnFinished.AddUniqueDynamic(this, &APISequenceController::StepFinished);
 	
 	step->Execute();
 }

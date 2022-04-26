@@ -41,9 +41,11 @@ void FPIMovementState::SetDirectionYaw(float directionYaw)
 
 void FPIMovementState::Dodge() const
 {
-	if (!_animInstance.IsValid()) return;
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
+	
+	if (animInstance == nullptr) return;
 
-	_animInstance->ShouldDodge = true;
+	animInstance->ShouldDodge = true;
 }
 
 FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData):
@@ -90,28 +92,24 @@ void FPIMovementState::Tick(float DeltaSeconds)
 	_acceleratedCharacterDirection.Tick(DeltaSeconds);
 	_acceleratedCapsuleRadius.Tick(DeltaSeconds);
 	_acceleratedMovementSpeed.Tick(DeltaSeconds);
+
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
 	
 	if (!_character.IsValid()) return;
-	if (!_animInstance.IsValid()) return;
 	if (!_capsuleComponent.IsValid()) return;
-
-	APICharacterBase* character = _character.Get();
-	UPIAnimInstanceBase* animInstance = _animInstance.Get();
-	UCapsuleComponent* capsuleComponent = _capsuleComponent.Get();
+	if (animInstance == nullptr) return;
 	
-	capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
+	_capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
 
 	animInstance->MovementSpeed = _acceleratedMovementSpeed;
 
 	if (_inputVector == FVector::ZeroVector) return;
 	
 	const FRotator& cameraRotator = FRotator(0.f, _directionYaw, 0.f);
-	const FRotator& inputRotator = _inputVector.Rotation();
-	const FRotator& targetRotator = cameraRotator + inputRotator;
-
-	_acceleratedCharacterDirection = targetRotator.Vector();
+	
+	_acceleratedCharacterDirection = cameraRotator.Vector();
 		
-	character->SetActorRelativeRotation(_acceleratedCharacterDirection);
+	_character->SetActorRelativeRotation(_acceleratedCharacterDirection);
 }
 
 

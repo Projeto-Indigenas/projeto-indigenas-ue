@@ -32,9 +32,9 @@ class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 	FAcceleratedValue _acceleratedCapsuleRadius;
 	FAcceleratedValue _acceleratedMovementSpeed;
 
-	FVector _inputVector;
-	bool _run;
-	float _directionYaw;
+	FVector _inputVector = FVector::ZeroVector;
+	bool _run = false;
+	float _directionYaw = false;
 	
 	void UpdateMovementSpeed();
 

@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "PISequenceStepBase.generated.h"
 
-DECLARE_DELEGATE_OneParam(FPISequenceStepFinishedDelegate, class UPISequenceStepBase*)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPISequenceStepFinishedDelegate, class UPISequenceStepBase*, step);
 
 UCLASS(Abstract, BlueprintType)
 class PROJETOINDIGENAS_API UPISequenceStepBase : public UObject
@@ -23,7 +23,8 @@ protected:
     virtual void Finish();
     
 public:
-    FPISequenceStepFinishedDelegate FinishedDelegate;
+    UPROPERTY(BlueprintAssignable)
+    FPISequenceStepFinishedDelegate OnFinished;
     
     virtual void BeginPlay(UGameInstance* gameInstance);
     

@@ -16,8 +16,20 @@ void APICharacter::BeginPlay()
 	CreateClimbingState(
 		_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
 		_movementAccelerationForState[EPICharacterAnimationState::Climbing]);
+}
+
+void APICharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 
 	SetCurrentState(_movementState);
+}
+
+void APICharacter::UnPossessed()
+{
+	Super::UnPossessed();
+
+	SetCurrentState(nullptr);
 }
 
 void APICharacter::StartClimbing(APIClimbableTree* tree)

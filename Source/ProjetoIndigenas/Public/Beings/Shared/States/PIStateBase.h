@@ -35,12 +35,17 @@ template <typename TAnimInstance>
 class PROJETOINDIGENAS_API FPIAnimatedStateBase : public FPIStateBase
 {
 protected:
-	TWeakObjectPtr<TAnimInstance> _animInstance;
+	TWeakObjectPtr<APICharacterBase> _character;
 
 public:
 	explicit FPIAnimatedStateBase(APICharacterBase* character);
 	
-	FORCEINLINE UPIAnimInstanceBase* GetAnimInstance() const { return _animInstance.Get(); }
+	FORCEINLINE TAnimInstance* GetAnimInstance() const
+	{
+		if (!_character.IsValid()) return nullptr;
+		if (_character->GetMesh() == nullptr) return nullptr;
+		return Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
+	}
 };
 
 template <typename TStateData>

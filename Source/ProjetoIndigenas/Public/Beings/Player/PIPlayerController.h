@@ -12,6 +12,8 @@ class PROJETOINDIGENAS_API APIPlayerController : public APlayerController
 	GENERATED_BODY()
 
 	TWeakObjectPtr<APICharacter> _character;
+	float _inputX = 0.f;
+	float _inputY = 0.f;
 
 	void MoveXInputBinding(float x);
 	void MoveYInputBinding(float y);
@@ -32,5 +34,5 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetCameraControllerAndConfigure(APICameraController* cameraController);
+	void SetCameraController(APICameraController* cameraController);
 };

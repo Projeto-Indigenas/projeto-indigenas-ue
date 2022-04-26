@@ -9,7 +9,9 @@ void UPISequenceStepBase::ExecuteStep()
 
 void UPISequenceStepBase::Finish()
 {
-	FinishedDelegate.ExecuteIfBound(this);
+	if (!OnFinished.IsBound()) return;
+
+	OnFinished.Broadcast(this);
 }
 
 void UPISequenceStepBase::BeginPlay(UGameInstance* gameInstance)

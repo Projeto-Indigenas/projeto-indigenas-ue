@@ -15,7 +15,7 @@ class PROJETOINDIGENAS_API APISequenceController : public AActor
 	int _sequenceIndex = -1;
 
 	bool NextIndex();
-	void StepFinished(UPISequenceStepBase* step);
+	UFUNCTION() void StepFinished(UPISequenceStepBase* step);
 	
 	void DelayToStartTimerAction();
 	void SequenceCompleted() const;

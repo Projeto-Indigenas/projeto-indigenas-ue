@@ -18,6 +18,8 @@ protected:
 	TMap<EPICharacterAnimationState, float> _movementAccelerationForState;
 	
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
 	
 public:
 	virtual void StartClimbing(APIClimbableTree* tree) override;
