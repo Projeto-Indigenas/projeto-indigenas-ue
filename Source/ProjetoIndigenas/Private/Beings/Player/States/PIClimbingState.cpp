@@ -122,6 +122,7 @@ void FPIClimbingState::SetTreeCameraCollision(ECollisionResponse response) const
 
 FPIClimbingState::FPIClimbingState(APICharacterBase* character, const FPIClimbingStateData& stateData):
 	FPIAnimatedStateBaseWithData<UPICharacterAnimInstance, FPIClimbingStateData>(character, stateData),
+	_characterAnimState(nullptr),
 	_currentState(EPIClimbingState::None),
 	_inputValue(0),
 	_isAtTop(false),
@@ -134,12 +135,6 @@ FPIClimbingState::FPIClimbingState(APICharacterBase* character, const FPIClimbin
 	_acceleratedMovementSpeed.Acceleration = stateData.MovementSpeedAcceleration;
 
 	_acceleratedCapsuleRadius.Acceleration = stateData.CapsuleRadiusAcceleration;
-
-	UPICharacterAnimInstance* animInstance = GetAnimInstance();
-	if (animInstance != nullptr)
-	{
-		_characterAnimState = &animInstance->State;
-	}
 }
 
 void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
@@ -159,6 +154,8 @@ void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
 
 	animInstance->ClimbingStartedDelegate.BindRaw(this, &FPIClimbingState::ClimbingStarted);
 	animInstance->ClimbingEndedDelegate.BindRaw(this, &FPIClimbingState::ClimbingEnded);
+	
+	_characterAnimState = &animInstance->State;
 	
 	_characterMovement->MovementMode = MOVE_Flying;
 	
@@ -207,6 +204,9 @@ void FPIClimbingState::Tick(float DeltaSeconds)
 	if (!_character.IsValid()) return;
 	if (!_characterMovement.IsValid()) return;
 	if (!_capsuleComponent.IsValid()) return;
+
+	UPICharacterAnimInstance* animInstance = GetAnimInstance();
+	if (animInstance == nullptr) return;
 	
 	_characterMovement->Velocity = FVector::ZeroVector;
 	_capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
@@ -268,10 +268,6 @@ void FPIClimbingState::Tick(float DeltaSeconds)
 		}
 	default: return;
 	}
-
-	UPICharacterAnimInstance* animInstance = GetAnimInstance();
-	
-	if (animInstance == nullptr) return;
 	
 	_acceleratedMovementSpeed.Tick(DeltaSeconds);
 	animInstance->MovementSpeed = _acceleratedMovementSpeed;
