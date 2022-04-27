@@ -28,6 +28,13 @@ typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData> 
 
 class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 {
+#if !UE_BUILD_SHIPPING
+	inline static int _logKey = 0;
+	TAutoConsoleVariable<bool> _movementStateScreenLogs = TAutoConsoleVariable(
+		TEXT("pi.movementstate.screenlogs"), false, TEXT("show screen logs for movement state"));
+	int GetLogKey() { return ++_logKey; }
+#endif
+	
 	FAcceleratedVector _acceleratedCharacterDirection;
 	FAcceleratedValue _acceleratedCapsuleRadius;
 	FAcceleratedValue _acceleratedMovementSpeed;
@@ -35,6 +42,7 @@ class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 	FVector _inputVector = FVector::ZeroVector;
 	bool _run = false;
 	float _directionYaw = false;
+	bool _isTurning = false;
 	
 	void UpdateMovementSpeed();
 
@@ -43,6 +51,9 @@ class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 	void ToggleRun();
 	void SetDirectionYaw(float directionYaw);
 	void Dodge() const;
+	
+	void OnTurnStarted();
+	void OnTurnEnded();
 
 public:
 	explicit FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData);
