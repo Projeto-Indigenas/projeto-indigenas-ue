@@ -36,8 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetupPlayerInputComponent(APlayerController* playerController);
+
 	UFUNCTION(BlueprintCallable)
 	void SetCameraRotation(const FRotator& rotator);
+	
 	UFUNCTION(BlueprintCallable)
 	void SetTargetActor(AActor* targetActor);
 };
