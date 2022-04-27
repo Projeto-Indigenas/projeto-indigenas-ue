@@ -96,6 +96,14 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	
 	_acceleratedCapsuleRadius.Current = _capsuleComponent->GetScaledCapsuleRadius();
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
+
+	if (_character.IsValid())
+	{
+		const FVector& currentCharacterDirection = _character->GetActorRotation().Vector();
+		_acceleratedCharacterDirection.SetCurrent(currentCharacterDirection);
+		_acceleratedCharacterDirection = currentCharacterDirection;
+		
+	}
 }
 
 void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
