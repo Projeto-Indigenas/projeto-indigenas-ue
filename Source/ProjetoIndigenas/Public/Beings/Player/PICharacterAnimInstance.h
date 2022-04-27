@@ -5,16 +5,14 @@
 #include "Beings/Shared/PIAnimInstanceBase.h"
 #include "PICharacterAnimInstance.generated.h"
 
-DECLARE_DELEGATE(FPICharacterAnimationEventDelegate)
-
 UCLASS()
 class PROJETOINDIGENAS_API UPICharacterAnimInstance : public UPIAnimInstanceBase
 {
 	GENERATED_BODY()
 
 public:
-	FPICharacterAnimationEventDelegate ClimbingStartedDelegate;
-	FPICharacterAnimationEventDelegate ClimbingEndedDelegate;
+	FPIAnimationEventDelegate ClimbingStartedDelegate;
+	FPIAnimationEventDelegate ClimbingEndedDelegate;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	EPICharacterAnimationState State;
