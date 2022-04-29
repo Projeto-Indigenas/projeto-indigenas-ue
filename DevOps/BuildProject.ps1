@@ -42,7 +42,7 @@ if ([string]::IsNullOrEmpty($platform))
     }
 }
 
-RunBuildTool($($target, $configuration, $platform) + $params)
+RunBuildTool(@($target, $configuration, $platform) + $params)
 
 if ($args.Contains("-open"))
 {
