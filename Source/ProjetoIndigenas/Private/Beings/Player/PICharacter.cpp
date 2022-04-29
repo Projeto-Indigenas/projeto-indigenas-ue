@@ -122,6 +122,7 @@ void APICharacter::SetupCharacterBody(
 	// TODO(anderson): in the future we need to know which version of the body to load
 	const TObjectPtr<UPIMetaHumanBodyConfigData>& config = configPtr->ChildBodyConfig;
 
+	bodyComponent->SetRelativeScale3D(config->CharacterBodyScale);
 	bodyComponent->SetSkeletalMesh(config->CharacterBody.LoadSynchronous());
 	faceComponent->SetSkeletalMesh(config->CharacterFace.LoadSynchronous());
 

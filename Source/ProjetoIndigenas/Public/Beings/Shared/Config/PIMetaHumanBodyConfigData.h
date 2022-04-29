@@ -27,6 +27,9 @@ class PROJETOINDIGENAS_API UPIMetaHumanBodyConfigData : public UDataAsset
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	FVector CharacterBodyScale = FVector::OneVector;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TSoftObjectPtr<USkeletalMesh> CharacterBody;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
