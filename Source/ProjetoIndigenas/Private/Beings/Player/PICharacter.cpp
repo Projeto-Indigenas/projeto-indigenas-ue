@@ -73,7 +73,7 @@ void APICharacter::SetupCharacterBody(USkeletalMeshComponent* bodyComponent, USk
 		return;
 	}
 	
-	const FPIPlayerCharacterSavedData& characterData = saveGameSubsystem->GetPlayerCharacterSavedData();
+	const FPIPlayerCharacterSavedData& characterData = saveGameSubsystem->PlayerCharacterData;
 
 	if (characterData.CharacterId.IsNone())
 	{

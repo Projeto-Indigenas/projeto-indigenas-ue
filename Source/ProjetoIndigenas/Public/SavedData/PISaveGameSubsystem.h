@@ -11,15 +11,17 @@ class PROJETOINDIGENAS_API UPISaveGameSubsystem : public UGameInstanceSubsystem
 	
 	TStrongObjectPtr<UPISaveGameData> _savedGameData; 
 	
-	static bool SaveGameInternal(USaveGame* saveGame);
+	template<typename TSaveGameClass> static bool SaveGameInternal(TSaveGameClass* saveGame);
 	template<typename TSaveGameClass> static TSaveGameClass* LoadGameInternal();
 	template<typename TSaveGameClass> static bool HasSavedGameInternal();
 	
 public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FPIPlayerCharacterSavedData PlayerCharacterData;
+	
+	static UPISaveGameSubsystem* GetSaveGameSubsystem(const UObject* worldContextObject);
+	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	UFUNCTION(BlueprintPure)
-	FPIPlayerCharacterSavedData& GetPlayerCharacterSavedData() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SaveGame();

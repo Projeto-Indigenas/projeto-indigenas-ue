@@ -10,16 +10,16 @@ struct FPIPlayerCharacterSavedData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName CharacterId;
 };
 
-UCLASS(BlueprintType)
+UCLASS()
 class PROJETOINDIGENAS_API UPISaveGameData : public USaveGame
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY()
 	FPIPlayerCharacterSavedData PlayerCharacterSavedData;
 };

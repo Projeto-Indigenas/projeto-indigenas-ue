@@ -4,7 +4,7 @@
 #include "PICharacterConfigurationData.h"
 #include "PICharacterConfigurationSettings.generated.h"
 
-UCLASS(Config=Game, DefaultConfig)
+UCLASS(Config=Game, DefaultConfig, BlueprintType)
 class PROJETOINDIGENAS_API UPICharacterConfigurationSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
