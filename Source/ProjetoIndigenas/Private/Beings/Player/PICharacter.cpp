@@ -2,9 +2,11 @@
 
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
+#include "Beings/Shared/Config/PICharacterConfigurationSettings.h"
 #include "Beings/Shared/States/PIMovementState.h"
 #include "Interactables/PIClimbableTree.h"
 #include "Misc/Logging.h"
+#include "SavedData/PISaveGameSubsystem.h"
 
 void APICharacter::BeginPlay()
 {
@@ -33,6 +35,25 @@ void APICharacter::UnPossessed()
 	SetCurrentState(nullptr);
 }
 
+void APICharacter::SetupGroomComponent(const FPIMetaHumanGroomConfig& config, UGroomComponent* component)
+{
+	if (component == nullptr)
+	{
+		PI_LOGV_UOBJECT(Warning, TEXT("Trying to setup groom with nullptr component"))
+
+		return;
+	}
+	
+	for (int index = 0; index < config.HairMaterials.Num(); ++index)
+	{
+		component->SetMaterial(index, config.HairMaterials[index].LoadSynchronous());	
+	}
+
+	component->SetGroomAsset(
+		config.GroomAsset.LoadSynchronous(),
+		config.GroomBindingAsset.LoadSynchronous());
+}
+
 void APICharacter::StartClimbing(APIClimbableTree* tree)
 {
 	_climbingState->Tree = tree;
@@ -44,7 +65,13 @@ void APICharacter::StopClimbing(APIClimbableTree* tree)
 	SetCurrentState(_movementState);
 }
 
-void APICharacter::SetupCharacterBody(USkeletalMeshComponent* bodyComponent, USkeletalMeshComponent* faceComponent)
+void APICharacter::SetupCharacterBody(
+	USkeletalMeshComponent* bodyComponent,
+	USkeletalMeshComponent* faceComponent,
+	UGroomComponent* hairComponent,
+	UGroomComponent* fuzzComponent,
+	UGroomComponent* eyelashesComponent,
+	UGroomComponent* eyebrowsComponent)
 {
 	const UPISaveGameSubsystem* saveGameSubsystem = GetGameInstance()->GetSubsystem<UPISaveGameSubsystem>();
 
@@ -97,4 +124,9 @@ void APICharacter::SetupCharacterBody(USkeletalMeshComponent* bodyComponent, USk
 
 	bodyComponent->SetSkeletalMesh(config->CharacterBody.LoadSynchronous());
 	faceComponent->SetSkeletalMesh(config->CharacterFace.LoadSynchronous());
+
+	SetupGroomComponent(config->HairConfig, hairComponent);
+	SetupGroomComponent(config->FuzzConfig, fuzzComponent);
+	SetupGroomComponent(config->EyelashesConfig, eyelashesComponent);
+	SetupGroomComponent(config->EyebrowsConfig, eyebrowsComponent);
 }

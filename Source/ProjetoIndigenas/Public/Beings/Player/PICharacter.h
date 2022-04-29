@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "GroomComponent.h"
 #include "PICharacterAnimInstance.h"
 #include "Beings/Shared/PICharacterBase.h"
-#include "Beings/Shared/Config/PICharacterConfigurationSettings.h"
-#include "SavedData/PISaveGameSubsystem.h"
+#include "Beings/Shared/Config/PIMetaHumanBodyConfigData.h"
 #include "PICharacter.generated.h"
 
 UCLASS()
@@ -22,6 +22,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
+
+	static void SetupGroomComponent(const FPIMetaHumanGroomConfig& config, UGroomComponent* component);
 	
 public:
 	virtual void StartClimbing(APIClimbableTree* tree) override;
@@ -30,5 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetupCharacterBody(
 		USkeletalMeshComponent* bodyComponent,
-		USkeletalMeshComponent* faceComponent);
+		USkeletalMeshComponent* faceComponent,
+		UGroomComponent* hairComponent,
+		UGroomComponent* fuzzComponent,
+		UGroomComponent* eyelashesComponent,
+		UGroomComponent* eyebrowsComponent);
 };

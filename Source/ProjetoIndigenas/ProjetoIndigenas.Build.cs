@@ -18,6 +18,7 @@ public class ProjetoIndigenas : ModuleRules
 			"UMG",
 			"LevelSequence",
 			"MovieScene",
+			"HairStrandsCore",
 		});
 	}
 }
