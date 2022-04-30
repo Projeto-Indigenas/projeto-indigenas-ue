@@ -122,6 +122,7 @@ void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	{
 		animInstance->TurnStartedDelegate.Unbind();
 		animInstance->TurnEndedDelegate.Unbind();
+		animInstance->MovementSpeed = 0.f;
 	}
 
 	_inputVector = FVector::ZeroVector;

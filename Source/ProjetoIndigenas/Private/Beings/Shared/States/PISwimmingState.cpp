@@ -10,13 +10,19 @@ bool FPISwimmingState::TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPI
 {
 	const FVector& characterLocation = _character->GetActorLocation();
 
-	waterBodyActor->GetWaterBodyComponent()->GetWaterSurfaceInfoAtLocation(
+	const FWaterBodyQueryResult result = waterBodyActor->GetWaterBodyComponent()->QueryWaterInfoClosestToWorldLocation(
 		characterLocation,
-		info.WaterSurfaceLocation,
-		info.WaterSurfaceNormal,
-		info.WaterVelocity,
-		info.WaterDepth,
-		true);
+		EWaterBodyQueryFlags::ComputeImmersionDepth |
+		EWaterBodyQueryFlags::ComputeLocation |
+		EWaterBodyQueryFlags::ComputeNormal |
+		EWaterBodyQueryFlags::ComputeVelocity);
+
+	if (!result.IsInWater()) return false;
+	
+	info.WaterSurfaceLocation = result.GetWaterSurfaceLocation();
+	info.WaterSurfaceNormal = result.GetWaterSurfaceNormal();
+	info.WaterVelocity = result.GetVelocity();
+	info.WaterDepth = result.GetImmersionDepth();
 
 	return true;
 }
@@ -63,8 +69,8 @@ bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor)
 	FPIWaterBodyInfo info;
 	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
 
-	const float& characterHeight = _character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2;
+	const float& characterHeight = _character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 
 	// TODO(anderson): define this percentage somewhere configurable
-	return info.WaterDepth >= characterHeight * .7f;
+	return info.WaterDepth >= characterHeight * .6f;
 }

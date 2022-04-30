@@ -69,6 +69,16 @@ void APICharacter::StopClimbing(APIClimbableTree* tree)
 	SetCurrentState(_movementState);
 }
 
+void APICharacter::StartSwimming(AWaterBody* waterBody)
+{
+	SetCurrentState(_swimmingState);
+}
+
+void APICharacter::EndSwimming(AWaterBody* waterBody)
+{
+	SetCurrentState(_movementState);
+}
+
 void APICharacter::SetupCharacterBody(
 	USkeletalMeshComponent* bodyComponent,
 	USkeletalMeshComponent* faceComponent,
