@@ -1,8 +1,10 @@
 ﻿#include "Beings/Shared/PICharacterBase.h"
 
+#include "WaterBodyActor.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Shared/States/PIMovementState.h"
 #include "Beings/Shared/States/PIStateBase.h"
+#include "Sequence/Steps/PIDestroyActorStep.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
@@ -59,6 +61,17 @@ void APICharacterBase::CreateClimbingState(const float& capsuleRadius, const flo
 		));
 }
 
+void APICharacterBase::CreateSwimmingState(const float& capsuleRadius, const float& movementAcceleration)
+{
+	_swimmingState = MakeShared<FPISwimmingState>(this,
+		FPISwimmingStateData(
+			capsuleRadius,
+			_capsuleRadiusAcceleration,
+			_rotationAcceleration,
+			movementAcceleration
+		));
+}
+
 void APICharacterBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -66,6 +79,16 @@ void APICharacterBase::Tick(float DeltaSeconds)
 	if (!_currentState.IsValid()) return;
 
 	_currentState->Tick(DeltaSeconds);
+
+	// TODO(anderson): should this really be here?
+	if (_currentState == _swimmingState) return;
+	if (!_waterBodyActor.IsValid()) return;
+
+	AWaterBody* waterBody = _waterBodyActor.Get();
+	if (_swimmingState->CanStartSwimming(waterBody))
+	{
+		StartSwimming(waterBody);
+	}
 }
 
 void APICharacterBase::SetAvailableAction(FPIActionBase* action)
@@ -80,5 +103,22 @@ void APICharacterBase::SetAvailableAction(FPIActionBase* action)
 	if (_availableAction != nullptr)
 	{
 		_availableAction->BindInput(*InputDelegates);
+	}
+}
+
+void APICharacterBase::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	_waterBodyActor = Cast<AWaterBody>(OtherActor);
+}
+
+void APICharacterBase::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	if (_waterBodyActor.Get() == OtherActor)
+	{
+		_waterBodyActor = nullptr;
 	}
 }

@@ -2,15 +2,18 @@
 
 #if !UE_BUILD_SHIPPING
 
-#define PI_SCREEN_LOG(variable, duration, format, ...) \
-	if (variable->GetBool()) \
+#define PI_SCREEN_LOG(key, duration, format, ...) \
 	{ \
 		const FString& message = FString::Printf(format, ##__VA_ARGS__); \
-		GEngine->AddOnScreenDebugMessage(GetLogKey(), duration, FColor::Red, message); \
+		GEngine->AddOnScreenDebugMessage(key, duration, FColor::Red, message); \
 	}
 
+#define PI_SCREEN_LOGV(variable, duration, format, ...) \
+	if (variable->GetBool()) \
+	PI_SCREEN_LOG(GetLogKey(), duration, format, ##__VA_ARGS__)
+
 #define PI_LOGV(verbosity, message) \
-	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(*this), *FString(__FUNCTION__), message)
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(decltype(*this)).name(), *FString(__FUNCTION__), message)
 #define PI_LOGV_UOBJECT(verbosity, message) \
 	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), *FString(__FUNCTION__), message)
 

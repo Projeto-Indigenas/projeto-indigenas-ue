@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Beings/Shared/PIAnimInstanceBase.h"
-#include "Beings/Shared/PICharacterBase.h"
 #include "Beings/Player/Input/PIInputDelegates.h"
 
 class APICharacterBase;

@@ -13,12 +13,16 @@ void APICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CreateMovementState(
-		_capsuleRadiusForState[EPICharacterAnimationState::Movement],
-		_movementAccelerationForState[EPICharacterAnimationState::Movement]);
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Movement),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Movement));
 	
 	CreateClimbingState(
-		_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
-		_movementAccelerationForState[EPICharacterAnimationState::Climbing]);
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Climbing),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Climbing));
+
+	CreateSwimmingState(
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Swimming),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Swimming));
 }
 
 void APICharacter::PossessedBy(AController* NewController)

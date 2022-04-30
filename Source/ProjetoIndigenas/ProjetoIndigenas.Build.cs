@@ -19,6 +19,7 @@ public class ProjetoIndigenas : ModuleRules
 			"LevelSequence",
 			"MovieScene",
 			"HairStrandsCore",
+			"Water",
 		});
 	}
 }
