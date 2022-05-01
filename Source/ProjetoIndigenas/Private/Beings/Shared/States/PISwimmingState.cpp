@@ -1,8 +1,12 @@
 ﻿#include "Beings/Shared/States/PISwimmingState.h"
 
+#include <GameFramework/CharacterMovementComponent.h>
+
 #include "Components/CapsuleComponent.h"
 
 #include "WaterBodyActor.h"
+#include "Beings/Player/PICharacterAnimInstance.h"
+#include "Beings/Shared/PIAnimInstanceBase.h"
 #include "Misc/Logging.h"
 #include "Beings/Shared/PICharacterBase.h"
 
@@ -37,7 +41,12 @@ void FPISwimmingState::Enter(FPIInputDelegates& inputDelegates)
 {
 	FPISwimmingStateBase::Enter(inputDelegates);
 
-	
+	if (!_character.IsValid()) return;
+
+	UPICharacterAnimInstance* animInstance = _character->GetAnimInstance<UPICharacterAnimInstance>();
+	animInstance->State = EPICharacterAnimationState::Swimming;
+
+	_character->GetCharacterMovement()->SetMovementMode(MOVE_Swimming);
 }
 
 void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)

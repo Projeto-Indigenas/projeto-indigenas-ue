@@ -103,7 +103,6 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 		const FVector& currentCharacterDirection = _character->GetActorRotation().Vector();
 		_acceleratedCharacterDirection.SetCurrent(currentCharacterDirection);
 		_acceleratedCharacterDirection = currentCharacterDirection;
-		
 	}
 }
 

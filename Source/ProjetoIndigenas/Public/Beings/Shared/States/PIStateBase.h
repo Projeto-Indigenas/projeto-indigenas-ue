@@ -38,12 +38,7 @@ protected:
 public:
 	explicit FPIAnimatedStateBase(APICharacterBase* character);
 	
-	FORCEINLINE TAnimInstance* GetAnimInstance() const
-	{
-		if (!_character.IsValid()) return nullptr;
-		if (_character->GetMesh() == nullptr) return nullptr;
-		return Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
-	}
+	TAnimInstance* GetAnimInstance() const;
 };
 
 template <typename TStateData>

@@ -6,7 +6,19 @@
 
 DECLARE_DELEGATE(FPIAnimationEventDelegate)
 
-UCLASS()
+USTRUCT(BlueprintType)
+struct PROJETOINDIGENAS_API FPISwimAnimState
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsAtSurface;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector2D SwimDirection;
+};
+
+UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UPIAnimInstanceBase : public UAnimInstance
 {
 	GENERATED_BODY()
@@ -23,6 +35,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool ShouldDodge;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FPISwimAnimState SwimAnimState;
 
 	UFUNCTION(BlueprintCallable)
 	void OnTurnStarted() { TurnStartedDelegate.ExecuteIfBound(); }

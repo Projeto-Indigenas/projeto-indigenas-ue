@@ -40,6 +40,8 @@ class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 	bool TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPIWaterBodyInfo& info) const;
 	
 public:
+	TWeakObjectPtr<AWaterBody> WaterBody;
+	
 	FPISwimmingState(APICharacterBase* character, const FPISwimmingStateData& stateData);
 
 	virtual void Enter(FPIInputDelegates& inputDelegates) override;

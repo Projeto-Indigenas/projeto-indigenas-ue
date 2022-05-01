@@ -29,6 +29,14 @@ FPIAnimatedStateBase<TAnimInstance>::FPIAnimatedStateBase(APICharacterBase* char
 	_character = character;
 }
 
+template <typename TAnimInstance>
+TAnimInstance* FPIAnimatedStateBase<TAnimInstance>::GetAnimInstance() const
+{
+	if (!_character.IsValid()) return nullptr;
+	if (_character->GetMesh() == nullptr) return nullptr;
+	return Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
+}
+
 template <typename TStateData>
 FPIStateBaseWithData<TStateData>::FPIStateBaseWithData(
 	APICharacterBase* character,
@@ -51,6 +59,7 @@ FPIAnimatedStateBaseWithData<TAnimInstance, TStateData>::FPIAnimatedStateBaseWit
 
 template class FPIStateBaseWithData<FPIMovementStateData>;
 template class FPIStateBaseWithData<FPIClimbingStateData>;
+template class FPIAnimatedStateBase<UPIAnimInstanceBase>;
 template class FPIAnimatedStateBase<UPICharacterAnimInstance>;
 template class FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>;
 template class FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPISwimmingStateData>;

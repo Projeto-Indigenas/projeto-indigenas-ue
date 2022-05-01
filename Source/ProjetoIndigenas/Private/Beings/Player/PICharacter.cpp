@@ -1,5 +1,6 @@
 ﻿#include "Beings/Player/PICharacter.h"
 
+#include "WaterBodyActor.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Shared/Config/PICharacterConfigurationSettings.h"
@@ -23,6 +24,8 @@ void APICharacter::BeginPlay()
 	CreateSwimmingState(
 		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Swimming),
 		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Swimming));
+
+	SetCurrentState(_movementState);
 }
 
 void APICharacter::PossessedBy(AController* NewController)
@@ -71,6 +74,7 @@ void APICharacter::StopClimbing(APIClimbableTree* tree)
 
 void APICharacter::StartSwimming(AWaterBody* waterBody)
 {
+	_swimmingState->WaterBody = waterBody;
 	SetCurrentState(_swimmingState);
 }
 
