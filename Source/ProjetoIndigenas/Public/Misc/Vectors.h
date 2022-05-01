@@ -25,6 +25,8 @@ struct PROJETOINDIGENAS_API FAcceleratedValue
 
 struct PROJETOINDIGENAS_API FAcceleratedVector2D
 {
+	static FAcceleratedVector2D ZeroVector2D;
+	
 	FAcceleratedValue X;
 	FAcceleratedValue Y;
 
@@ -63,6 +65,8 @@ struct PROJETOINDIGENAS_API FAcceleratedVector2D
 
 struct PROJETOINDIGENAS_API FAcceleratedVector : FAcceleratedVector2D
 {
+	static FAcceleratedVector ZeroVector;
+	
 	FAcceleratedValue Z;
 
 	FAcceleratedVector();

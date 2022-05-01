@@ -6,9 +6,10 @@
 #include "Beings/Shared/States/PISwimmingState.h"
 #include "Beings/Shared/PICharacterBase.h"
 
-void FPIStateBase::InvokeOnExitDelegate() const
+void FPIStateBase::InvokeOnExitDelegate()
 {
 	_onExitDelegate.ExecuteIfBound();
+	_onExitDelegate = nullptr;
 }
 
 FPIStateBase::FPIStateBase(APICharacterBase* character)
@@ -33,8 +34,7 @@ template <typename TAnimInstance>
 TAnimInstance* FPIAnimatedStateBase<TAnimInstance>::GetAnimInstance() const
 {
 	if (!_character.IsValid()) return nullptr;
-	if (_character->GetMesh() == nullptr) return nullptr;
-	return Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
+	return _character->GetAnimInstance<TAnimInstance>();
 }
 
 template <typename TStateData>

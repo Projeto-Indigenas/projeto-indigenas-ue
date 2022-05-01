@@ -16,7 +16,7 @@ protected:
 	TWeakObjectPtr<APICharacterBase> _character;
 	TWeakObjectPtr<UCapsuleComponent> _capsuleComponent;
 
-	void InvokeOnExitDelegate() const;
+	void InvokeOnExitDelegate();
 
 public:
 	explicit FPIStateBase(APICharacterBase* character);
