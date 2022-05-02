@@ -58,7 +58,7 @@ public:
 	virtual void StartClimbing(APIClimbableTree* tree) { }
 	virtual void StopClimbing(APIClimbableTree* tree) { }
 	virtual void StartSwimming(AWaterBody* waterBody) { }
-	virtual void EndSwimming(AWaterBody* waterBody) { }
+	virtual void EndSwimming() { }
 
 	void SetAvailableAction(FPIActionBase* action);
 

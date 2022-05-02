@@ -1,9 +1,12 @@
 ﻿#include "Beings/Shared/PICharacterBase.h"
 
+#include <GameFramework/CharacterMovementComponent.h>
+
 #include "WaterBodyActor.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Shared/States/PIMovementState.h"
 #include "Beings/Shared/States/PIStateBase.h"
+#include "Misc/Logging.h"
 #include "Sequence/Steps/PIDestroyActorStep.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
@@ -80,14 +83,52 @@ void APICharacterBase::Tick(float DeltaSeconds)
 
 	_currentState->Tick(DeltaSeconds);
 
-	// TODO(anderson): should this really be here?
-	if (_currentState == _swimmingState) return;
-	if (!_waterBodyActor.IsValid()) return;
 
+	FString mode;
+	switch (GetCharacterMovement()->MovementMode.GetValue())
+	{
+	case MOVE_Walking:
+		mode = TEXT("Walking");
+		break;
+	case MOVE_Swimming:
+		mode = TEXT("Swimming");
+		break;
+	case MOVE_Flying:
+		mode = TEXT("Flying");
+		break;
+	case MOVE_Custom:
+		mode = TEXT("Custom");
+		break;
+	case MOVE_Falling:
+		mode = TEXT("Falling");
+		break;
+	case MOVE_NavWalking:
+		mode = TEXT("NavWalking");
+		break;
+	case MOVE_None:
+		mode = TEXT("None");
+	default:
+		mode = TEXT("Unknown");
+		break;
+	}
+	
+	PI_SCREEN_LOG(0, 1.f, TEXT("MovementMode: %s"), *mode)
+
+	
+
+	// TODO(anderson): should this really be here?
 	AWaterBody* waterBody = _waterBodyActor.Get();
-	if (_swimmingState->CanStartSwimming(waterBody))
+	
+	if (_currentState != _swimmingState && _swimmingState->CanStartSwimming(waterBody))
 	{
 		StartSwimming(waterBody);
+
+		return;
+	}
+
+	if (_swimmingState->CanEndSwimming(waterBody))
+	{
+		EndSwimming();
 	}
 }
 

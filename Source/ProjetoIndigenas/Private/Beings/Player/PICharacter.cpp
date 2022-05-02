@@ -78,7 +78,7 @@ void APICharacter::StartSwimming(AWaterBody* waterBody)
 	SetCurrentState(_swimmingState);
 }
 
-void APICharacter::EndSwimming(AWaterBody* waterBody)
+void APICharacter::EndSwimming()
 {
 	SetCurrentState(_movementState);
 }
