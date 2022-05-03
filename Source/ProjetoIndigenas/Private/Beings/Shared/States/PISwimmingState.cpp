@@ -279,5 +279,5 @@ bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor)
 	FPIWaterBodyInfo info;
 	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
 	
-	return _character->GetCharacterMovement()->MovementMode != MOVE_Swimming;
+	return _character->GetActorLocation().Z >= info.WaterSurfaceLocation.Z;
 }
