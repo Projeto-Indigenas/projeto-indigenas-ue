@@ -41,7 +41,7 @@ typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPISwimmingStateData> 
 
 class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 {
-	inline static constexpr float _swimSurfaceThreshold = 5.f;
+	inline static constexpr float _swimSurfaceThreshold = 2.5f;
 	inline static constexpr float _swimUnderwaterThreshold = 10.f;
 	inline static constexpr float _horizontalLimit = 45.f;
 	inline static constexpr float _verticalLimit = 30.f;
@@ -76,7 +76,7 @@ class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 	void SetFastSwim();
 	void UpdateMovementSpeed();
 	void CalculateSwimDirection(const FRotator& targetRotation);
-	void CharacterMoveSwim(const FRotator& cameraRotation);
+	void CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation);
 	void ConstraintToWater(const FPIWaterBodyInfo& info) const;
 	
 public:

@@ -74,7 +74,7 @@ void FPISwimmingState::CalculateSwimDirection(const FRotator& targetRotation)
 	_swimAnimState->SwimDirection = _acceleratedSwimAnimDirection;
 }
 
-void FPISwimmingState::CharacterMoveSwim(const FRotator& cameraRotation)
+void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation)
 {
 	if (_swimAnimState == nullptr) return;
 
@@ -83,7 +83,7 @@ void FPISwimmingState::CharacterMoveSwim(const FRotator& cameraRotation)
 	
 	FVector swimDirection = cameraRotation.Vector();
 	swimDirection.Normalize();
-
+	
 	_character->AddMovementInput(swimDirection, _acceleratedMovementSpeed);
 }
 
@@ -91,7 +91,7 @@ void FPISwimmingState::ConstraintToWater(const FPIWaterBodyInfo& info) const
 {
 	if (!IsReturnToWaterCooldownDue()) return;
 	if (!info.IsInWater) return;
-	
+
 	FVector characterLocation = _character->GetActorLocation();
 	const float& maxHeight = info.WaterSurfaceLocation.Z - _swimSurfaceThreshold;
 	characterLocation.Z = FMath::Min(characterLocation.Z, maxHeight);
@@ -139,6 +139,7 @@ void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	}
 
 	_getOutOfWaterTime = UGameplayStatics::GetTimeSeconds(_character->GetWorld());
+	
 	_characterAnimState = nullptr;
 	_swimAnimState = nullptr;
 
@@ -185,7 +186,7 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 	);
 
 	CalculateSwimDirection(targetRotation);
-	CharacterMoveSwim(_cameraRotator);
+	CharacterMoveSwim(DeltaSeconds, _cameraRotator);
 	ConstraintToWater(info);
 
 #if !UE_BUILD_SHIPPING
