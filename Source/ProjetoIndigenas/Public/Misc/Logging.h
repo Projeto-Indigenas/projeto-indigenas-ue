@@ -13,7 +13,7 @@
 	PI_SCREEN_LOG(GetLogKey(), duration, format, ##__VA_ARGS__)
 
 #define PI_LOGV(verbosity, message) \
-	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), typeid(decltype(*this)).name(), *FString(__FUNCTION__), message)
+	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *FString(PI_LOGGING_TYPE_NAME()), *FString(__FUNCTION__), message)
 #define PI_LOGV_UOBJECT(verbosity, message) \
 	UE_LOG(LogTemp, verbosity, TEXT("[%s::%s] - %s"), *StaticClass()->GetName(), *FString(__FUNCTION__), message)
 

@@ -9,6 +9,8 @@
 #include "GameFramework/PhysicsVolume.h"
 #include "Misc/Logging.h"
 
+#define PI_LOGGING_TYPE_NAME() TEXT("FPISwimmingState")
+
 bool FPISwimmingState::TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPIWaterBodyInfo& info) const
 {
 	const FVector& characterLocation = _character->GetActorLocation();
