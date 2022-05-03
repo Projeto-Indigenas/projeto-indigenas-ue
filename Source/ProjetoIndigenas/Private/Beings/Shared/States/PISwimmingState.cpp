@@ -41,7 +41,7 @@ bool FPISwimmingState::IsReturnToWaterCooldownDue() const
 
 void FPISwimmingState::SetVerticalInput(float movementSpeed)
 {
-	_movementSpeed = FMath::Max(0.f, movementSpeed);
+	_movementSpeed = FMath::Clamp(movementSpeed, 0.f, 1.f);
 
 	UpdateMovementSpeed();
 }
@@ -83,8 +83,9 @@ void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotat
 	
 	FVector swimDirection = cameraRotation.Vector();
 	swimDirection.Normalize();
-	
-	_character->AddMovementInput(swimDirection, _acceleratedMovementSpeed);
+
+	_character->GetCharacterMovement()->MaxSwimSpeed = _acceleratedMovementSpeed * 100.f;
+	_character->AddMovementInput(swimDirection);
 }
 
 void FPISwimmingState::ConstraintToWater(const FPIWaterBodyInfo& info) const
@@ -132,6 +133,8 @@ void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	inputDelegates.VerticalInputDelegate.Unbind();
 	inputDelegates.CameraRotatorDelegate.Unbind();
 	inputDelegates.ToggleRunDelegate.Unbind();
+
+	_character->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	
 	if (_characterAnimState != nullptr)
 	{
@@ -142,8 +145,6 @@ void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	
 	_characterAnimState = nullptr;
 	_swimAnimState = nullptr;
-
-	_character->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
 	InvokeOnExitDelegate();
 }
