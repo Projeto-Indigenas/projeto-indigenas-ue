@@ -2,10 +2,12 @@
 
 #include <GameFramework/CharacterMovementComponent.h>
 
+#include "Landscape.h"
 #include "WaterBodyActor.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Shared/PIAnimInstanceBase.h"
 #include "Beings/Shared/PICharacterBase.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/PhysicsVolume.h"
 #include "Kismet/GameplayStatics.h"
 #include "Misc/Logging.h"
@@ -22,13 +24,16 @@ bool FPISwimmingState::TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPI
 		EWaterBodyQueryFlags::ComputeImmersionDepth |
 		EWaterBodyQueryFlags::ComputeLocation |
 		EWaterBodyQueryFlags::ComputeNormal |
-		EWaterBodyQueryFlags::ComputeVelocity);
+		EWaterBodyQueryFlags::ComputeVelocity |
+		EWaterBodyQueryFlags::IncludeWaves);
 	
 	info.WaterSurfaceLocation = result.GetWaterSurfaceLocation();
 	info.WaterSurfaceNormal = result.GetWaterSurfaceNormal();
 	info.WaterVelocity = result.GetVelocity();
 	info.ImmersionDepth = result.GetImmersionDepth();
 	info.IsInWater = result.IsInWater();
+	info.WaveHeight = result.GetWaveInfo().Height;
+	info.WaveNormal = result.GetWaveInfo().Normal;
 
 	return true;
 }
@@ -37,6 +42,34 @@ bool FPISwimmingState::IsReturnToWaterCooldownDue() const
 {
 	const float& now = UGameplayStatics::GetTimeSeconds(_character->GetWorld());
 	return now - _getOutOfWaterTime > _returnToWaterCooldownTime;
+}
+
+float FPISwimmingState::GetWaterSurfaceHeight(const FPIWaterBodyInfo& info)
+{
+	return info.WaterSurfaceLocation.Z;
+}
+
+void FPISwimmingState::UpdateHasLandBellowFeet()
+{
+	const float& characterHalfHeight = _character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	const FVector& characterFeetLocation = _character->GetActorLocation() + FVector::DownVector * characterHalfHeight;
+	const FVector& endLocation = characterFeetLocation + FVector::DownVector * 10.f;
+
+#if !UE_BUILD_SHIPPING
+	DrawDebugLine(_character->GetWorld(), characterFeetLocation, endLocation, FColor::Emerald);
+#endif
+	
+	FHitResult hit;
+	FCollisionQueryParams params(TEXT(""), false, WaterBody.Get());
+	if (_character->GetWorld()->LineTraceSingleByChannel(
+		hit, characterFeetLocation, endLocation, ECC_WorldStatic, params))
+	{
+		_hasLandBellowFeet = hit.GetActor()->IsA<ALandscape>();
+
+		return;
+	}
+
+	_hasLandBellowFeet = false;
 }
 
 void FPISwimmingState::SetVerticalInput(float movementSpeed)
@@ -74,7 +107,7 @@ void FPISwimmingState::CalculateSwimDirection(const FRotator& targetRotation)
 	_swimAnimState->SwimDirection = _acceleratedSwimAnimDirection;
 }
 
-void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation)
+void FPISwimmingState::CharacterMoveSwim(const FRotator& cameraRotation)
 {
 	if (_swimAnimState == nullptr) return;
 
@@ -91,10 +124,10 @@ void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotat
 void FPISwimmingState::ConstraintToWater(const FPIWaterBodyInfo& info) const
 {
 	if (!IsReturnToWaterCooldownDue()) return;
-	if (!info.IsInWater) return;
+	if (_hasLandBellowFeet) return;
 
 	FVector characterLocation = _character->GetActorLocation();
-	const float& maxHeight = info.WaterSurfaceLocation.Z - _swimSurfaceThreshold;
+	const float& maxHeight = GetWaterSurfaceHeight(info) - _swimSurfaceThreshold;
 	characterLocation.Z = FMath::Min(characterLocation.Z, maxHeight);
 	_character->SetActorLocation(characterLocation);
 }
@@ -165,11 +198,20 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 	if (animInstance == nullptr) return;
 	
 	FPIWaterBodyInfo info;
-	if (!TryGetWaterBodyInfo(WaterBody.Get(), info)) return;
+	if (TryGetWaterBodyInfo(WaterBody.Get(), info))
+	{
+		_waterBodyInfo = MakeShared<FPIWaterBodyInfo>(info);
+	}
+	else
+	{
+		_waterBodyInfo.Reset();
+		
+		return;
+	}
 
 	const FVector& characterLocation = _character->GetActorLocation();
 	const float& distanceFromSurface = FMath::Abs(FVector::Distance(info.WaterSurfaceLocation, characterLocation));
-	const float& underwaterCharacterThreshold = info.WaterSurfaceLocation.Z - _swimUnderwaterThreshold;
+	const float& underwaterCharacterThreshold = GetWaterSurfaceHeight(info) - _swimUnderwaterThreshold;
 
 	if (_swimAnimState != nullptr)
 	{
@@ -187,7 +229,8 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 	);
 
 	CalculateSwimDirection(targetRotation);
-	CharacterMoveSwim(DeltaSeconds, _cameraRotator);
+	CharacterMoveSwim(_cameraRotator);
+	UpdateHasLandBellowFeet();
 	ConstraintToWater(info);
 
 #if !UE_BUILD_SHIPPING
@@ -207,6 +250,11 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 			info.WaterSurfaceLocation,
 			info.WaterSurfaceLocation + waterVelocityNormalized * 100.f,
 			FColor::Green);
+
+		FVector waveLocation = info.WaterSurfaceLocation;
+		DrawDebugSphere(_character->GetWorld(), info.WaterSurfaceLocation, 1.f, 5, FColor::Red);
+		waveLocation.Z = GetWaterSurfaceHeight(info);
+		DrawDebugSphere(_character->GetWorld(), waveLocation, 1.f, 5, FColor::Orange);
 	}
 	
 	PI_SCREEN_LOGV(_swimmingLogsEnabled, 1.f, TEXT("Water depth: %f"), info.ImmersionDepth)
@@ -242,10 +290,10 @@ bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor) const
 	FPIWaterBodyInfo info;
 	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
 
-	return _character->GetActorLocation().Z <= info.WaterSurfaceLocation.Z;
+	return _character->GetActorLocation().Z <= GetWaterSurfaceHeight(info);
 }
 
-bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor) const
+bool FPISwimmingState::CanEndSwimming() const
 {
 	if (!_character.IsValid())
 	{
@@ -253,11 +301,8 @@ bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor) const
 
 		return false;
 	}
-
-	if (waterBodyActor == nullptr) return false;
-
-	FPIWaterBodyInfo info;
-	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
 	
-	return _character->GetActorLocation().Z >= info.WaterSurfaceLocation.Z;
+	if (!_waterBodyInfo.IsValid()) return false;
+	
+	return _hasLandBellowFeet && _character->GetActorLocation().Z >= GetWaterSurfaceHeight(*_waterBodyInfo);
 }

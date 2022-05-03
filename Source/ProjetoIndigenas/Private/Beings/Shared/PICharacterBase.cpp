@@ -1,13 +1,9 @@
 ﻿#include "Beings/Shared/PICharacterBase.h"
 
-#include <GameFramework/CharacterMovementComponent.h>
-
 #include "WaterBodyActor.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Shared/States/PIMovementState.h"
 #include "Beings/Shared/States/PIStateBase.h"
-#include "Misc/Logging.h"
-#include "Sequence/Steps/PIDestroyActorStep.h"
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
@@ -96,7 +92,7 @@ void APICharacterBase::Tick(float DeltaSeconds)
 
 	if (_currentState == _swimmingState)
 	{
-		if (waterBody == nullptr || _swimmingState->CanEndSwimming(waterBody))
+		if (_swimmingState->CanEndSwimming())
 		{
 			EndSwimming();
 		}
@@ -123,6 +119,10 @@ void APICharacterBase::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	_waterBodyActor = Cast<AWaterBody>(OtherActor);
+	if (_currentState == _swimmingState)
+	{
+		_swimmingState->WaterBody = _waterBodyActor;
+	}
 }
 
 void APICharacterBase::NotifyActorEndOverlap(AActor* OtherActor)

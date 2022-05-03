@@ -20,6 +20,7 @@ public class ProjetoIndigenas : ModuleRules
 			"MovieScene",
 			"HairStrandsCore",
 			"Water",
+			"Landscape",
 		});
 	}
 }

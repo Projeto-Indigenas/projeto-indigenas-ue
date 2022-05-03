@@ -35,6 +35,8 @@ struct PROJETOINDIGENAS_API FPIWaterBodyInfo
 	FVector WaterVelocity;
 	float ImmersionDepth;
 	bool IsInWater;
+	float WaveHeight;
+	FVector WaveNormal;
 };
 
 typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPISwimmingStateData> FPISwimmingStateBase;
@@ -63,6 +65,9 @@ class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 	EPICharacterAnimationState* _characterAnimState = nullptr;
 	FPISwimAnimState* _swimAnimState = nullptr;
 
+	TSharedPtr<FPIWaterBodyInfo> _waterBodyInfo = nullptr;
+	bool _hasLandBellowFeet = false;
+
 	float _getOutOfWaterTime = 0.f;
 	float _movementSpeed = 0.f;
 	bool _fastSwim = false;
@@ -70,13 +75,15 @@ class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 	
 	bool TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPIWaterBodyInfo& info) const;
 	bool IsReturnToWaterCooldownDue() const;
+	static float GetWaterSurfaceHeight(const FPIWaterBodyInfo& info);
+	void UpdateHasLandBellowFeet();
 
 	void SetVerticalInput(float movementSpeed);
 	void SetCameraRotator(FRotator cameraRotator);
 	void SetFastSwim();
 	void UpdateMovementSpeed();
 	void CalculateSwimDirection(const FRotator& targetRotation);
-	void CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation);
+	void CharacterMoveSwim(const FRotator& cameraRotation);
 	void ConstraintToWater(const FPIWaterBodyInfo& info) const;
 	
 public:
@@ -90,5 +97,5 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	bool CanStartSwimming(const AWaterBody* waterBodyActor) const;
-	bool CanEndSwimming(const AWaterBody* waterBodyActor) const;
+	bool CanEndSwimming() const;
 };
