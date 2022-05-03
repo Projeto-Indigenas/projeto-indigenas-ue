@@ -236,13 +236,8 @@ bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor) const
 		return false;
 	}
 
-	if (waterBodyActor == nullptr)
-	{
-		PI_LOGV(Error, TEXT("Calling swim check without water body actor"))
+	if (waterBodyActor == nullptr) return false;
 
-		return false;
-	}
-	
 	FPIWaterBodyInfo info;
 	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
 
@@ -258,12 +253,7 @@ bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor) const
 		return false;
 	}
 
-	if (waterBodyActor == nullptr)
-	{
-		PI_LOGV(Error, TEXT("Calling swim check without water body actor"))
-
-		return false;
-	}
+	if (waterBodyActor == nullptr) return false;
 
 	FPIWaterBodyInfo info;
 	if (!TryGetWaterBodyInfo(waterBodyActor, info)) return false;
