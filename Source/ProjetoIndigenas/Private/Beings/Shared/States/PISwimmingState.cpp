@@ -7,6 +7,7 @@
 #include "Beings/Shared/PIAnimInstanceBase.h"
 #include "Beings/Shared/PICharacterBase.h"
 #include "GameFramework/PhysicsVolume.h"
+#include "Kismet/GameplayStatics.h"
 #include "Misc/Logging.h"
 
 #define PI_LOGGING_TYPE_NAME() TEXT("FPISwimmingState")
@@ -22,15 +23,20 @@ bool FPISwimmingState::TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPI
 		EWaterBodyQueryFlags::ComputeLocation |
 		EWaterBodyQueryFlags::ComputeNormal |
 		EWaterBodyQueryFlags::ComputeVelocity);
-
-	if (!result.IsInWater()) return false;
 	
 	info.WaterSurfaceLocation = result.GetWaterSurfaceLocation();
 	info.WaterSurfaceNormal = result.GetWaterSurfaceNormal();
 	info.WaterVelocity = result.GetVelocity();
 	info.ImmersionDepth = result.GetImmersionDepth();
+	info.IsInWater = result.IsInWater();
 
 	return true;
+}
+
+bool FPISwimmingState::IsReturnToWaterCooldownDue() const
+{
+	const float& now = UGameplayStatics::GetTimeSeconds(_character->GetWorld());
+	return now - _getOutOfWaterTime > _returnToWaterCooldownTime;
 }
 
 void FPISwimmingState::SetVerticalInput(float movementSpeed)
@@ -68,7 +74,7 @@ void FPISwimmingState::CalculateSwimDirection(const FRotator& targetRotation)
 	_swimAnimState->SwimDirection = _acceleratedSwimAnimDirection;
 }
 
-void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation)
+void FPISwimmingState::CharacterMoveSwim(const FRotator& cameraRotation)
 {
 	if (_swimAnimState == nullptr) return;
 
@@ -78,10 +84,18 @@ void FPISwimmingState::CharacterMoveSwim(const float& deltaSeconds, const FRotat
 	FVector swimDirection = cameraRotation.Vector();
 	swimDirection.Normalize();
 
-	const float& speed = _acceleratedMovementSpeed * 100.f * deltaSeconds; // meters / second
+	_character->AddMovementInput(swimDirection, _acceleratedMovementSpeed);
+}
+
+void FPISwimmingState::ConstraintToWater(const FPIWaterBodyInfo& info) const
+{
+	if (!IsReturnToWaterCooldownDue()) return;
+	if (!info.IsInWater) return;
 	
-	FHitResult hit;
-	_character->GetCharacterMovement()->Swim(swimDirection * speed, hit);
+	FVector characterLocation = _character->GetActorLocation();
+	const float& maxHeight = info.WaterSurfaceLocation.Z - _swimSurfaceThreshold;
+	characterLocation.Z = FMath::Min(characterLocation.Z, maxHeight);
+	_character->SetActorLocation(characterLocation);
 }
 
 FPISwimmingState::FPISwimmingState(APICharacterBase* character, const FPISwimmingStateData& stateData):
@@ -123,7 +137,8 @@ void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	{
 		*_characterAnimState = EPICharacterAnimationState::Default;
 	}
-	
+
+	_getOutOfWaterTime = UGameplayStatics::GetTimeSeconds(_character->GetWorld());
 	_characterAnimState = nullptr;
 	_swimAnimState = nullptr;
 
@@ -170,37 +185,8 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 	);
 
 	CalculateSwimDirection(targetRotation);
-	CharacterMoveSwim(DeltaSeconds, _cameraRotator);
-
-	FString mode;
-	switch (_character->GetCharacterMovement()->MovementMode.GetValue())
-	{
-	case MOVE_Walking:
-		mode = TEXT("Walking");
-		break;
-	case MOVE_Swimming:
-		mode = TEXT("Swimming");
-		break;
-	case MOVE_Flying:
-		mode = TEXT("Flying");
-		break;
-	case MOVE_Custom:
-		mode = TEXT("Custom");
-		break;
-	case MOVE_Falling:
-		mode = TEXT("Falling");
-		break;
-	case MOVE_NavWalking:
-		mode = TEXT("NavWalking");
-		break;
-	case MOVE_None:
-		mode = TEXT("None");
-	default:
-		mode = TEXT("Unknown");
-		break;
-	}
-	
-	PI_SCREEN_LOG(100, 1.f, TEXT("MovementMode: %s"), *mode)
+	CharacterMoveSwim(_cameraRotator);
+	ConstraintToWater(info);
 
 #if !UE_BUILD_SHIPPING
 	if (_swimmingLogsEnabled.GetValueOnGameThread())
@@ -238,8 +224,10 @@ void FPISwimmingState::Tick(float DeltaSeconds)
 #endif
 }
 
-bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor)
+bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor) const
 {
+	if (!IsReturnToWaterCooldownDue()) return false;
+	
 	if (!_character.IsValid())
 	{
 		PI_LOGV(Error, TEXT("Cannot check for swimming without a character"))
@@ -260,7 +248,7 @@ bool FPISwimmingState::CanStartSwimming(const AWaterBody* waterBodyActor)
 	return _character->GetActorLocation().Z <= info.WaterSurfaceLocation.Z;
 }
 
-bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor)
+bool FPISwimmingState::CanEndSwimming(const AWaterBody* waterBodyActor) const
 {
 	if (!_character.IsValid())
 	{

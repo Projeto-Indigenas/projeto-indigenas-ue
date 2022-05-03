@@ -82,53 +82,24 @@ void APICharacterBase::Tick(float DeltaSeconds)
 	if (!_currentState.IsValid()) return;
 
 	_currentState->Tick(DeltaSeconds);
-
-
-	FString mode;
-	switch (GetCharacterMovement()->MovementMode.GetValue())
-	{
-	case MOVE_Walking:
-		mode = TEXT("Walking");
-		break;
-	case MOVE_Swimming:
-		mode = TEXT("Swimming");
-		break;
-	case MOVE_Flying:
-		mode = TEXT("Flying");
-		break;
-	case MOVE_Custom:
-		mode = TEXT("Custom");
-		break;
-	case MOVE_Falling:
-		mode = TEXT("Falling");
-		break;
-	case MOVE_NavWalking:
-		mode = TEXT("NavWalking");
-		break;
-	case MOVE_None:
-		mode = TEXT("None");
-	default:
-		mode = TEXT("Unknown");
-		break;
-	}
 	
-	PI_SCREEN_LOG(0, 1.f, TEXT("MovementMode: %s"), *mode)
-
-	
-
 	// TODO(anderson): should this really be here?
 	AWaterBody* waterBody = _waterBodyActor.Get();
 	
-	if (_currentState != _swimmingState && _swimmingState->CanStartSwimming(waterBody))
+	if (_currentState != _swimmingState)
 	{
-		StartSwimming(waterBody);
-
-		return;
+		if (_swimmingState->CanStartSwimming(waterBody))
+		{
+			StartSwimming(waterBody);
+		}
 	}
 
-	if (_swimmingState->CanEndSwimming(waterBody))
+	if (_currentState == _swimmingState)
 	{
-		EndSwimming();
+		if (waterBody == nullptr || _swimmingState->CanEndSwimming(waterBody))
+		{
+			EndSwimming();
+		}
 	}
 }
 

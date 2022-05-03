@@ -34,6 +34,7 @@ struct PROJETOINDIGENAS_API FPIWaterBodyInfo
 	FVector WaterSurfaceNormal;
 	FVector WaterVelocity;
 	float ImmersionDepth;
+	bool IsInWater;
 };
 
 typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPISwimmingStateData> FPISwimmingStateBase;
@@ -41,11 +42,11 @@ typedef FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPISwimmingStateData> 
 class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 {
 	inline static constexpr float _swimSurfaceThreshold = 5.f;
-	inline static constexpr float _getOutOfWaterThreshold = 6.f;
-	inline static float _swimUnderwaterThreshold = 10.f;
+	inline static constexpr float _swimUnderwaterThreshold = 10.f;
 	inline static constexpr float _horizontalLimit = 45.f;
 	inline static constexpr float _verticalLimit = 30.f;
 	inline static constexpr float _swimmingVerticalLimit = 60.f;
+	inline static constexpr float _returnToWaterCooldownTime = 1.f;
 	
 #if !UE_BUILD_SHIPPING
 	inline static int _logKey = 0;
@@ -61,19 +62,22 @@ class PROJETOINDIGENAS_API FPISwimmingState : public FPISwimmingStateBase
 
 	EPICharacterAnimationState* _characterAnimState = nullptr;
 	FPISwimAnimState* _swimAnimState = nullptr;
-	
+
+	float _getOutOfWaterTime = 0.f;
 	float _movementSpeed = 0.f;
 	bool _fastSwim = false;
 	FRotator _cameraRotator = FRotator::ZeroRotator;
 	
 	bool TryGetWaterBodyInfo(const AWaterBody* waterBodyActor, FPIWaterBodyInfo& info) const;
+	bool IsReturnToWaterCooldownDue() const;
 
 	void SetVerticalInput(float movementSpeed);
 	void SetCameraRotator(FRotator cameraRotator);
 	void SetFastSwim();
 	void UpdateMovementSpeed();
 	void CalculateSwimDirection(const FRotator& targetRotation);
-	void CharacterMoveSwim(const float& deltaSeconds, const FRotator& cameraRotation);
+	void CharacterMoveSwim(const FRotator& cameraRotation);
+	void ConstraintToWater(const FPIWaterBodyInfo& info) const;
 	
 public:
 	TWeakObjectPtr<AWaterBody> WaterBody;
@@ -85,6 +89,6 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	bool CanStartSwimming(const AWaterBody* waterBodyActor);
-	bool CanEndSwimming(const AWaterBody* waterBodyActor);
+	bool CanStartSwimming(const AWaterBody* waterBodyActor) const;
+	bool CanEndSwimming(const AWaterBody* waterBodyActor) const;
 };
