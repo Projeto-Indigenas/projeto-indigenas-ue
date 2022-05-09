@@ -18,7 +18,7 @@ class PROJETOINDIGENAS_API APICameraController : public AActor
 	void CameraYInputBinding(float value);
 
 protected:
-	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	UPROPERTY(BlueprintReadOnly)
 	TWeakObjectPtr<AActor> _targetActor;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -36,6 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetupPlayerInputComponent(APlayerController* playerController);
+
 	UFUNCTION(BlueprintCallable)
 	void SetCameraRotation(const FRotator& rotator);
+	
+	UFUNCTION(BlueprintCallable)
+	void SetTargetActor(AActor* targetActor);
 };

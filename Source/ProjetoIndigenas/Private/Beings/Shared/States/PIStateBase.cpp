@@ -24,7 +24,7 @@ template <typename TAnimInstance>
 FPIAnimatedStateBase<TAnimInstance>::FPIAnimatedStateBase(APICharacterBase* character):
 	FPIStateBase(character)
 {
-	_animInstance = Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
+	_character = character;
 }
 
 template <typename TStateData>

@@ -1,28 +1,62 @@
 using namespace System.IO
+using namespace System.Collections.Generic
+
+if ([string]::IsNullOrEmpty($env:UE_ENGINE_ROOT)) {
+    if ($IsMacOS) {
+        $env:UE_ENGINE_ROOT = "/Users/Shared/Epic Games/UE_5.0/"
+    } else {
+        $env:UE_ENGINE_ROOT = "%PROGRAMFILES%/Epic Games/UE_5.0/"
+    }
+}
 
 $env:PROJECT_ROOT = "$(Get-Location)"
 $env:PROJECT_PATH = [Path]::Combine("$env:PROJECT_ROOT", "ProjetoIndigenas.uproject")
-$env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool.exe")
+$env:UNREAL_BUILD_TOOL = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool")
+
+if ($IsWindows) {
+    $env:UNREAL_BUILD_TOOL = [Path]::ChangeExtension($env:UNREAL_BUILD_TOOL, ".exe")
+}
 
 Write-Output "Using engine at: $env:UE_ENGINE_ROOT"
 Write-Output "Using project at: $env:PROJECT_PATH"
 
-function ValidateBuildTool
+function RunBuildTool([Array] $params)
 {
-    if (![File]::Exists($unrealBuildToolPath))
-    {
-        Write-Error "Could not find solution generator at: $unrealBuildToolPath"
-
-        return
+    $unrealBuildScript = ""
+    
+    if ($IsWindows) {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Build.bat")
+    } else {
+        $unrealBuildScript = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "Mac", "Build.sh")
     }
+
+    & "$unrealBuildScript" `
+        -Project="$env:PROJECT_PATH" `
+        -WaitMutex `
+        -FromMsBuild `
+        $params | Out-Default
 }
 
-function ValidateProject 
+function RunAutomationTool([Array] $params)
 {
-    if (![File]::Exists($projectPath))
-    {
-        Write-Error "Could not find project at: $projectPath"
-
-        return
+    $unrealAutomationTool = ""
+    if ($IsWindows) {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.bat")
+    } else {
+        $unrealAutomationTool = [Path]::Combine($env:UE_ENGINE_ROOT, "Engine", "Build", "BatchFiles", "RunUAT.sh")
     }
+    
+    & "$unrealAutomationTool" `
+        BuildCookRun `
+        -project="$env:PROJECT_PATH" `
+        -noP4 `
+        -cook `
+        -target=ProjetoIndigenas `
+        -allmaps `
+        -stage `
+        -archive `
+        -package `
+        -build `
+        -pak `
+        $params | Out-Default
 }

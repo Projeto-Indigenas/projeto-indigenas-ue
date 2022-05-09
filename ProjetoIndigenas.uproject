@@ -24,6 +24,26 @@
 			"Enabled": true
 		},
 		{
+			"Name": "Water",
+			"Enabled": true
+		},
+		{
+			"Name": "Volumetrics",
+			"Enabled": true
+		},
+		{
+			"Name": "RigLogic",
+			"Enabled": true
+		},
+		{
+			"Name": "LiveLink",
+			"Enabled": true
+		},
+		{
+			"Name": "LiveLinkControlRig",
+			"Enabled": true
+		},
+		{
 			"Name": "Bridge",
 			"Enabled": true,
 			"SupportedTargetPlatforms": [
@@ -31,14 +51,11 @@
 				"Mac",
 				"Linux"
 			]
-		},
-		{
-			"Name": "Water",
-			"Enabled": true
-		},
-		{
-			"Name": "Volumetrics",
-			"Enabled": true
 		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"TVOS",
+		"Mac"
 	]
 }

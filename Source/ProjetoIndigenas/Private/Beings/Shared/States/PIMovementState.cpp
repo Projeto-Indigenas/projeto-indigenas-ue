@@ -4,6 +4,7 @@
 #include <Kismet/KismetMathLibrary.h>
 
 #include "Beings/Shared/PIAnimInstanceBase.h"
+#include "Misc/Logging.h"
 
 void FPIMovementState::UpdateMovementSpeed()
 {
@@ -41,15 +42,36 @@ void FPIMovementState::SetDirectionYaw(float directionYaw)
 
 void FPIMovementState::Dodge() const
 {
-	if (!_animInstance.IsValid()) return;
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
+	
+	if (animInstance == nullptr) return;
 
-	_animInstance->ShouldDodge = true;
+	animInstance->ShouldDodge = true;
+}
+
+void FPIMovementState::OnTurnStarted()
+{
+	_isTurning = true;
+}
+
+void FPIMovementState::OnTurnEnded()
+{
+	_isTurning = false;
+
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
+	if (animInstance != nullptr)
+	{
+		animInstance->MovementDirectionAngle = 0.f;
+	}
+	
+	if (_character.IsValid())
+	{
+		_acceleratedCharacterDirection.SetCurrent(_character->GetActorRotation().Vector());
+	}
 }
 
 FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovementStateData& stateData):
-	FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>(character, stateData),
-	_run(false),
-	_directionYaw(0)
+	FPIAnimatedStateBaseWithData<UPIAnimInstanceBase, FPIMovementStateData>(character, stateData)
 {
 	_acceleratedCharacterDirection.SetAcceleration(stateData.RotationAcceleration);
 	_acceleratedMovementSpeed.Acceleration = stateData.MovementSpeedAcceleration;
@@ -65,8 +87,23 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
 	inputDelegates.DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
 
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
+	if (animInstance != nullptr)
+	{
+		animInstance->TurnStartedDelegate.BindRaw(this, &FPIMovementState::OnTurnStarted);
+		animInstance->TurnEndedDelegate.BindRaw(this, &FPIMovementState::OnTurnEnded);
+	}
+	
 	_acceleratedCapsuleRadius.Current = _capsuleComponent->GetScaledCapsuleRadius();
 	_acceleratedCapsuleRadius = _stateData.CapsuleRadius;
+
+	if (_character.IsValid())
+	{
+		const FVector& currentCharacterDirection = _character->GetActorRotation().Vector();
+		_acceleratedCharacterDirection.SetCurrent(currentCharacterDirection);
+		_acceleratedCharacterDirection = currentCharacterDirection;
+		
+	}
 }
 
 void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
@@ -79,39 +116,69 @@ void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	inputDelegates.ToggleRunDelegate.Unbind();
 	inputDelegates.DodgeDelegate.Unbind();
 
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
+	if (animInstance != nullptr)
+	{
+		animInstance->TurnStartedDelegate.Unbind();
+		animInstance->TurnEndedDelegate.Unbind();
+	}
+
 	_inputVector = FVector::ZeroVector;
 	_run = false;
-
+	
 	InvokeOnExitDelegate();
 }
 
 void FPIMovementState::Tick(float DeltaSeconds)
 {
-	_acceleratedCharacterDirection.Tick(DeltaSeconds);
-	_acceleratedCapsuleRadius.Tick(DeltaSeconds);
-	_acceleratedMovementSpeed.Tick(DeltaSeconds);
+	UPIAnimInstanceBase* animInstance = GetAnimInstance();
 	
-	if (!_character.IsValid()) return;
-	if (!_animInstance.IsValid()) return;
-	if (!_capsuleComponent.IsValid()) return;
-
-	APICharacterBase* character = _character.Get();
-	UPIAnimInstanceBase* animInstance = _animInstance.Get();
-	UCapsuleComponent* capsuleComponent = _capsuleComponent.Get();
+	if (!_isTurning)
+	{
+		_acceleratedCharacterDirection.Tick(DeltaSeconds);
+		_acceleratedCapsuleRadius.Tick(DeltaSeconds);
+		_acceleratedMovementSpeed.Tick(DeltaSeconds);
 	
-	capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
+		if (!_character.IsValid()) return;
+		if (!_capsuleComponent.IsValid()) return;
 
-	animInstance->MovementSpeed = _acceleratedMovementSpeed;
-
-	if (_inputVector == FVector::ZeroVector) return;
+		if (animInstance != nullptr)
+		{
+			animInstance->MovementSpeed = _acceleratedMovementSpeed;
+		}
 	
-	const FRotator cameraRotator(0.f, _directionYaw, 0.f);
-	const FRotator inputRotator = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, _inputVector);
-	const FRotator targetRotator = cameraRotator + inputRotator;
-		
-	_acceleratedCharacterDirection = targetRotator.Vector();
-		
-	character->SetActorRelativeRotation(_acceleratedCharacterDirection);
+		_capsuleComponent->SetCapsuleRadius(_acceleratedCapsuleRadius);
+	
+		if (_inputVector != FVector::ZeroVector)
+		{
+			const FRotator& cameraRotator = FRotator(0.f, _directionYaw, 0.f);
+			_acceleratedCharacterDirection = cameraRotator.Vector();
+			const FRotator& currentDirectionRotator = _acceleratedCharacterDirection;
+			_character->SetActorRelativeRotation(currentDirectionRotator);
+		}
+	}
+
+	if (animInstance != nullptr)
+	{
+		const float& foundAngle = FMath::FindDeltaAngleDegrees(
+		_acceleratedCharacterDirection.GetTargetRotator().Yaw,
+		FRotator(_acceleratedCharacterDirection).Yaw);
+		animInstance->MovementDirectionAngle = FMath::Abs(foundAngle);
+	}
+
+#if !UE_BUILD_SHIPPING
+	_logKey = 0;
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("Anim Movement Speed: %f"),
+		animInstance->MovementSpeed)
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("Anim Direction Angle: %f"),
+		animInstance->MovementDirectionAngle)
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("InputVector Yaw: %f"), _inputVector.Rotation().Yaw)
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("DirectionYaw: %f"), _directionYaw)
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("AccDir Current: %f"),
+		FRotator(_acceleratedCharacterDirection).Yaw)
+	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("AccDir Target: %f"),
+		_acceleratedCharacterDirection.GetTargetRotator().Yaw)
+#endif
 }
 
 

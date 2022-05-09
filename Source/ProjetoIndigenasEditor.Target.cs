@@ -6,6 +6,9 @@ public class ProjetoIndigenasEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
+		MacPlatform.bUseDSYMFiles = false;
+		IOSPlatform.bGeneratedSYM = true;
+		
 		ExtraModuleNames.AddRange(new[]
 		{
 			"ProjetoIndigenas",
