@@ -6,37 +6,39 @@
 
 void APIPlayerController::MoveXInputBinding(float x)
 {
-	if (!_character.IsValid()) return;
-	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(x);
+	_inputX = x;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
+	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(_inputX);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
-	if (!_character.IsValid()) return;
-	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(y);
+	_inputY = y;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
+	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(_inputY);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->ToggleRunDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::DodgeInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->DodgeDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::PositiveActionInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->PositiveActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::NegativeActionInputBinding()
 {
-	if (!_character.IsValid()) return;
+	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
 	_character->InputDelegates->NegativeActionDelegate.ExecuteIfBound();
 }
 
@@ -63,10 +65,6 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	_character = Cast<APICharacter>(InPawn);
-	
-	if (!_character.IsValid()) return;
-	
-	_character->InitializeFromController();
 }
 
 void APIPlayerController::OnUnPossess()
@@ -84,11 +82,17 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	if (!_character.IsValid()) return;
+	if (!_character->InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
 
-	const APICharacterBase* character = _character.Get();
-	const APICameraController* cameraController = _cameraController.Get();
+	FVector inputVector(_inputY, _inputX, 0.f);
+	inputVector = _cameraController->GetCameraRotator().RotateVector(inputVector);
+	
+	const double& yaw = inputVector.Rotation().Yaw;
+	_character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+}
 
-	const double& yaw = cameraController->GetCameraRotator().Yaw;
-	character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+void APIPlayerController::SetCameraController(APICameraController* cameraController)
+{
+	_cameraController = cameraController;
 }

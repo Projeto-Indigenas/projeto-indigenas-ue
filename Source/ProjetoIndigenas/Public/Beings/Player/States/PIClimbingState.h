@@ -86,12 +86,5 @@ private:
 		TEXT("pi.climbing.screenLogs"),
 		false,
 		TEXT("Displays useful logs for debugging"));
-
-	#define PI_SCREEN_LOG(variable, duration, format, ...) \
-		if (variable->GetBool()) \
-		{ \
-			const FString& message = FString::Printf(format, ##__VA_ARGS__); \
-			GEngine->AddOnScreenDebugMessage(GetLogKey(), duration, FColor::Red, message); \
-		}
 #endif
 };

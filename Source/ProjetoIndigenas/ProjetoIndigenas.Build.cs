@@ -4,6 +4,7 @@ public class ProjetoIndigenas : ModuleRules
 {
 	public ProjetoIndigenas(ReadOnlyTargetRules Target) : base(Target)
 	{
+		PrivateDependencyModuleNames.AddRange(new string[] {"LevelSequence"});
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new[]
@@ -13,14 +14,11 @@ public class ProjetoIndigenas : ModuleRules
 			"Engine", 
 			"InputCore",
 			"AIModule",
+			"DeveloperSettings",
+			"UMG",
+			"LevelSequence",
+			"MovieScene",
+			"HairStrandsCore",
 		});
-
-		if (Target.bBuildEditor)
-		{
-			// PublicDependencyModuleNames.AddRange(new[]
-			// {
-			// 	"UnrealEd"
-			// });
-		}
 	}
 }

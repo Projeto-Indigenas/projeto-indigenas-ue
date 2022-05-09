@@ -42,8 +42,6 @@ protected:
 public:
 	TUniquePtr<FPIInputDelegates> InputDelegates;
 	
-	virtual void InitializeFromController() { }
-	
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void SetInputX(float x) { }

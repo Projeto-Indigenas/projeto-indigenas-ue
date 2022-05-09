@@ -24,15 +24,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "Bridge",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Mac",
-				"Linux"
-			]
-		},
-		{
 			"Name": "Water",
 			"Enabled": true
 		},
@@ -51,6 +42,20 @@
 		{
 			"Name": "LiveLinkControlRig",
 			"Enabled": true
+		},
+		{
+			"Name": "Bridge",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Mac",
+				"Linux"
+			]
 		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"TVOS",
+		"Mac"
 	]
 }
