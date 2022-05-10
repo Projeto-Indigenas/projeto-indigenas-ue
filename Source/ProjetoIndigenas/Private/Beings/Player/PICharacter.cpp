@@ -1,5 +1,6 @@
 ﻿#include "Beings/Player/PICharacter.h"
 
+#include "WaterBodyActor.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 #include "Beings/Player/States/PIClimbingState.h"
 #include "Beings/Shared/Config/PICharacterConfigurationSettings.h"
@@ -13,12 +14,18 @@ void APICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CreateMovementState(
-		_capsuleRadiusForState[EPICharacterAnimationState::Movement],
-		_movementAccelerationForState[EPICharacterAnimationState::Movement]);
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Movement),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Movement));
 	
 	CreateClimbingState(
-		_capsuleRadiusForState[EPICharacterAnimationState::Climbing],
-		_movementAccelerationForState[EPICharacterAnimationState::Climbing]);
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Climbing),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Climbing));
+
+	CreateSwimmingState(
+		_capsuleRadiusForState.FindOrAdd(EPICharacterAnimationState::Swimming),
+		_movementAccelerationForState.FindOrAdd(EPICharacterAnimationState::Swimming));
+
+	SetCurrentState(_movementState);
 }
 
 void APICharacter::PossessedBy(AController* NewController)
@@ -61,6 +68,17 @@ void APICharacter::StartClimbing(APIClimbableTree* tree)
 }
 
 void APICharacter::StopClimbing(APIClimbableTree* tree)
+{
+	SetCurrentState(_movementState);
+}
+
+void APICharacter::StartSwimming(AWaterBody* waterBody)
+{
+	_swimmingState->WaterBody = waterBody;
+	SetCurrentState(_swimmingState);
+}
+
+void APICharacter::EndSwimming()
 {
 	SetCurrentState(_movementState);
 }

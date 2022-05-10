@@ -5,6 +5,9 @@
 #include "Beings/Shared/States/PIStateBase.h"
 #include "Beings/Player/PICharacterAnimInstance.h"
 
+class UCharacterMovementComponent;
+class APIClimbableTree;
+
 struct PROJETOINDIGENAS_API FPIClimbingStateData
 {
 	const float CapsuleRadius;

@@ -1,3 +1,4 @@
 . ".\DevOps\Library.ps1"
 
-RunBuildTool("-ProjectFiles")
+[List[string]] $params = $args
+RunBuildTool(@("-ProjectFiles") + $params)
