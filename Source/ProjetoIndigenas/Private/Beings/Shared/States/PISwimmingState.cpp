@@ -53,19 +53,21 @@ void FPISwimmingState::UpdateHasLandBellowFeet()
 {
 	const float& characterHalfHeight = _character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	const FVector& characterFeetLocation = _character->GetActorLocation() + FVector::DownVector * characterHalfHeight;
-	const FVector& endLocation = characterFeetLocation + FVector::DownVector * 10.f;
+	const FVector& endLocation = characterFeetLocation + FVector::DownVector * 50.f;
 
 #if !UE_BUILD_SHIPPING
 	DrawDebugLine(_character->GetWorld(), characterFeetLocation, endLocation, FColor::Emerald);
 #endif
 	
 	FHitResult hit;
-	FCollisionQueryParams params(TEXT(""), false, WaterBody.Get());
+	FCollisionQueryParams params(TEXT(""), false);
+	params.AddIgnoredActor(_character.Get());
+	params.AddIgnoredActor(WaterBody.Get());
 	if (_character->GetWorld()->LineTraceSingleByChannel(
 		hit, characterFeetLocation, endLocation, ECC_WorldStatic, params))
 	{
-		_hasLandBellowFeet = hit.GetActor()->IsA<ALandscape>();
-
+		_hasLandBellowFeet = hit.GetActor() != nullptr;
+		
 		return;
 	}
 
