@@ -78,6 +78,9 @@ void APICharacterBase::Tick(float DeltaSeconds)
 	if (!_currentState.IsValid()) return;
 
 	_currentState->Tick(DeltaSeconds);
+
+	// fixing Npc crash while it's missing implementation
+	if (!_swimmingState.IsValid()) return;
 	
 	// TODO(anderson): should this really be here?
 	AWaterBody* waterBody = _waterBodyActor.Get();
