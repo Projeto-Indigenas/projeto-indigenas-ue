@@ -32,7 +32,7 @@ class PROJETOINDIGENAS_API FPIMovementState : public FPIMovementStateBase
 	inline static int _logKey = 0;
 	TAutoConsoleVariable<bool> _movementStateScreenLogs = TAutoConsoleVariable(
 		TEXT("pi.movementstate.screenlogs"), false, TEXT("show screen logs for movement state"));
-	int GetLogKey() { return ++_logKey; }
+	static int GetLogKey() { return ++_logKey; }
 #endif
 	
 	FAcceleratedVector _acceleratedCharacterDirection;

@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Beings/Shared/PIAnimInstanceBase.h"
-#include "Beings/Shared/PICharacterBase.h"
 #include "Beings/Player/Input/PIInputDelegates.h"
 
 class APICharacterBase;
@@ -18,7 +16,7 @@ protected:
 	TWeakObjectPtr<APICharacterBase> _character;
 	TWeakObjectPtr<UCapsuleComponent> _capsuleComponent;
 
-	void InvokeOnExitDelegate() const;
+	void InvokeOnExitDelegate();
 
 public:
 	explicit FPIStateBase(APICharacterBase* character);
@@ -40,12 +38,7 @@ protected:
 public:
 	explicit FPIAnimatedStateBase(APICharacterBase* character);
 	
-	FORCEINLINE TAnimInstance* GetAnimInstance() const
-	{
-		if (!_character.IsValid()) return nullptr;
-		if (_character->GetMesh() == nullptr) return nullptr;
-		return Cast<TAnimInstance>(_character->GetMesh()->GetAnimInstance());
-	}
+	TAnimInstance* GetAnimInstance() const;
 };
 
 template <typename TStateData>
