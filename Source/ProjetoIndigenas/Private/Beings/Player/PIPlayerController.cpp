@@ -84,11 +84,17 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	if (!_character.IsValid()) return;
 	if (!_character->InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
-
-	FVector inputVector(_inputY, _inputX, 0.f);
-	inputVector = _cameraController->GetCameraRotator().RotateVector(inputVector);
 	
-	const double& yaw = inputVector.Rotation().Yaw;
+	const FRotator& cameraRotator = _cameraController->GetCameraRotator();
+	_character->InputDelegates->CameraRotatorDelegate.ExecuteIfBound(cameraRotator);
+	
+	FVector inputVector(_inputY, _inputX, 0.f);
+	inputVector = cameraRotator.RotateVector(inputVector);
+
+	const FRotator& rotator = inputVector.Rotation();
+	const double& pitch = rotator.Pitch;
+	const double& yaw = rotator.Yaw;
+	_character->InputDelegates->DirectionPitchDelegate.ExecuteIfBound(pitch);
 	_character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }
 

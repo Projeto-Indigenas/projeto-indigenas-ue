@@ -1,9 +1,9 @@
 ﻿#include "Beings/Shared/States/PIMovementState.h"
 
 #include <Components/CapsuleComponent.h>
-#include <Kismet/KismetMathLibrary.h>
 
 #include "Beings/Shared/PIAnimInstanceBase.h"
+#include "Beings/Shared/PICharacterBase.h"
 #include "Misc/Logging.h"
 
 void FPIMovementState::UpdateMovementSpeed()
@@ -102,7 +102,6 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 		const FVector& currentCharacterDirection = _character->GetActorRotation().Vector();
 		_acceleratedCharacterDirection.SetCurrent(currentCharacterDirection);
 		_acceleratedCharacterDirection = currentCharacterDirection;
-		
 	}
 }
 
@@ -121,6 +120,7 @@ void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDel
 	{
 		animInstance->TurnStartedDelegate.Unbind();
 		animInstance->TurnEndedDelegate.Unbind();
+		animInstance->MovementSpeed = 0.f;
 	}
 
 	_inputVector = FVector::ZeroVector;
@@ -168,15 +168,15 @@ void FPIMovementState::Tick(float DeltaSeconds)
 
 #if !UE_BUILD_SHIPPING
 	_logKey = 0;
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("Anim Movement Speed: %f"),
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("Anim Movement Speed: %f"),
 		animInstance->MovementSpeed)
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("Anim Direction Angle: %f"),
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("Anim Direction Angle: %f"),
 		animInstance->MovementDirectionAngle)
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("InputVector Yaw: %f"), _inputVector.Rotation().Yaw)
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("DirectionYaw: %f"), _directionYaw)
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("AccDir Current: %f"),
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("InputVector Yaw: %f"), _inputVector.Rotation().Yaw)
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("DirectionYaw: %f"), _directionYaw)
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("AccDir Current: %f"),
 		FRotator(_acceleratedCharacterDirection).Yaw)
-	PI_SCREEN_LOG(_movementStateScreenLogs, 1.0, TEXT("AccDir Target: %f"),
+	PI_SCREEN_LOGV(_movementStateScreenLogs, 1.0, TEXT("AccDir Target: %f"),
 		_acceleratedCharacterDirection.GetTargetRotator().Yaw)
 #endif
 }

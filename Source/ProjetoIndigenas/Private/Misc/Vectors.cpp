@@ -26,6 +26,8 @@ void FAcceleratedValue::Tick(float DeltaSeconds)
 
 #pragma region FAcceleratedVector2D
 
+FAcceleratedVector2D FAcceleratedVector2D::ZeroVector2D = FAcceleratedVector2D();
+
 FAcceleratedVector2D::FAcceleratedVector2D()
 {
 	X = FAcceleratedValue::ZeroValue;
@@ -47,6 +49,8 @@ void FAcceleratedVector2D::SetAcceleration(float acceleration)
 #pragma endregion FAcceleratedVector2D
 
 #pragma region FAcceleratedVector
+
+FAcceleratedVector FAcceleratedVector::ZeroVector = FAcceleratedVector();
 
 FAcceleratedVector::FAcceleratedVector()
 {
