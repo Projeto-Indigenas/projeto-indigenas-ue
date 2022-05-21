@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
 #include "Beings/Shared/States/PIStateBase.h"
+#include "States/PISwimmingState.h"
 #include "PICharacterBase.generated.h"
 
 class FPIInputDelegates;
@@ -13,15 +14,19 @@ class UPIAnimInstanceBase;
 class APIClimbableTree;
 class FPIMovementState;
 class FPIClimbingState;
+class AWaterBody;
 
 UCLASS()
 class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 {
 	GENERATED_BODY()
+
+	TWeakObjectPtr<AWaterBody> _waterBodyActor;
 	
 protected:
 	TSharedPtr<FPIMovementState> _movementState;
 	TSharedPtr<FPIClimbingState> _climbingState;
+	TSharedPtr<FPISwimmingState> _swimmingState;
 	
 	TSharedPtr<FPIStateBase> _currentState;
 	FPIActionBase* _availableAction;
@@ -38,6 +43,7 @@ protected:
 	
 	void CreateMovementState(const float& capsuleRadius, const float& movementAcceleration);
 	void CreateClimbingState(const float& capsuleRadius, const float& movementAcceleration);
+	void CreateSwimmingState(const float& capsuleRadius, const float& movementAcceleration);
 
 public:
 	TUniquePtr<FPIInputDelegates> InputDelegates;
@@ -51,8 +57,13 @@ public:
 	virtual void SetDirectionYaw(float yaw) { }
 	virtual void StartClimbing(APIClimbableTree* tree) { }
 	virtual void StopClimbing(APIClimbableTree* tree) { }
+	virtual void StartSwimming(AWaterBody* waterBody) { }
+	virtual void EndSwimming() { }
 
 	void SetAvailableAction(FPIActionBase* action);
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
 #pragma region Templates Declarations
 	template<typename TAnimInstance> TAnimInstance* GetAnimInstance();

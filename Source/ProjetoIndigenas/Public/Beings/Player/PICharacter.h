@@ -28,6 +28,8 @@ protected:
 public:
 	virtual void StartClimbing(APIClimbableTree* tree) override;
 	virtual void StopClimbing(APIClimbableTree* tree) override;
+	virtual void StartSwimming(AWaterBody* waterBody) override;
+	virtual void EndSwimming() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void SetupCharacterBody(

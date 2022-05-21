@@ -9,4 +9,5 @@ enum class EPICharacterAnimationState : uint8
 	Default,
 	Movement,
 	Climbing,
+	Swimming,
 };

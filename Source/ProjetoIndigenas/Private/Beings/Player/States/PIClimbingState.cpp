@@ -4,6 +4,7 @@
 #include <GameFramework/CharacterMovementComponent.h>
 
 #include "Beings/Shared/PIAnimInstanceBase.h"
+#include "Beings/Shared/PICharacterBase.h"
 #include "Interactables/PIClimbableTree.h"
 #include "Misc/Logging.h"
 
@@ -34,8 +35,8 @@ void FPIClimbingState::UpdateTargetLocation()
 
 #if !UE_BUILD_SHIPPING
 	const FVector& current = _acceleratedLocation;
-	PI_SCREEN_LOG(_logsEnabled, 10, TEXT("Accelerated Location current: %s"), *current.ToString())
-	PI_SCREEN_LOG(_logsEnabled, 10, TEXT("Accelerated Location target: %s"), *_acceleratedLocation.GetTarget2D().ToString());
+	PI_SCREEN_LOGV(_logsEnabled, 10, TEXT("Accelerated Location current: %s"), *current.ToString())
+	PI_SCREEN_LOGV(_logsEnabled, 10, TEXT("Accelerated Location target: %s"), *_acceleratedLocation.GetTarget2D().ToString());
 #endif
 }
 
