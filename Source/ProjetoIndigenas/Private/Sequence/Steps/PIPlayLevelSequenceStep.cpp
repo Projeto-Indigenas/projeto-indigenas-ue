@@ -64,6 +64,6 @@ void UPIPlayLevelSequenceStep::Skip() const
 {
 	ULevelSequencePlayer* player = _sequenceActor->GetSequencePlayer();
 	const FMovieSceneSequencePlaybackParams& params = FMovieSceneSequencePlaybackParams(
-		player->GetFrameDuration(), EUpdatePositionMethod::Jump);
+		FMath::Max(player->GetFrameDuration() - 2, 0), EUpdatePositionMethod::Jump);
 	player->SetPlaybackPosition(params);
 }
