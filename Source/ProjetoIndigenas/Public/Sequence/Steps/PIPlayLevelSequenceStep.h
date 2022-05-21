@@ -6,12 +6,15 @@
 
 class ALevelSequenceActor;
 class ULevelSequence;
+class FPISkipCutsceneAction;
 
 UCLASS(BlueprintType)
 class PROJETOINDIGENAS_API UPIPlayLevelSequenceStep : public UPISequenceStepBase
 {
 	GENERATED_BODY()
 
+	TSharedPtr<FPISkipCutsceneAction> _skipCutsceneAction;
+	
 	UFUNCTION()
 	void PlaybackFinished();
 	
@@ -27,4 +30,6 @@ protected:
 
 public:
 	virtual void ExecuteStep() override;
+
+	void Skip() const;
 };

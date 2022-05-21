@@ -7,6 +7,8 @@
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
+	if (!InputDelegates.IsValid()) return;
+	
 	FPIInputDelegates& inputDelegates = *InputDelegates;
 
 	auto setCurrentLambda = [this, state]
@@ -34,8 +36,6 @@ void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 void APICharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InputDelegates = MakeUnique<FPIInputDelegates>();
 }
 
 void APICharacterBase::CreateMovementState(const float& capsuleRadius, const float& movementAcceleration)
@@ -99,21 +99,6 @@ void APICharacterBase::Tick(float DeltaSeconds)
 		{
 			EndSwimming();
 		}
-	}
-}
-
-void APICharacterBase::SetAvailableAction(FPIActionBase* action)
-{
-	if (_availableAction != nullptr)
-	{
-		_availableAction->UnbindInput(*InputDelegates);
-	}
-
-	_availableAction = action;
-	
-	if (_availableAction != nullptr)
-	{
-		_availableAction->BindInput(*InputDelegates);
 	}
 }
 

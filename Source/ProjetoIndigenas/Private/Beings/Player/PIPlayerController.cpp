@@ -7,44 +7,46 @@
 void APIPlayerController::MoveXInputBinding(float x)
 {
 	_inputX = x;
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->HorizontalInputDelegate.ExecuteIfBound(_inputX);
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->HorizontalInputDelegate.ExecuteIfBound(_inputX);
 }
 
 void APIPlayerController::MoveYInputBinding(float y)
 {
 	_inputY = y;
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->VerticalInputDelegate.ExecuteIfBound(_inputY);
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->VerticalInputDelegate.ExecuteIfBound(_inputY);
 }
 
 void APIPlayerController::ToggleRunInputBinding()
 {
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->ToggleRunDelegate.ExecuteIfBound();
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->ToggleRunDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::DodgeInputBinding()
 {
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->DodgeDelegate.ExecuteIfBound();
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->DodgeDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::PositiveActionInputBinding()
 {
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->PositiveActionDelegate.ExecuteIfBound();
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->PositiveActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::NegativeActionInputBinding()
 {
-	if (!_character.IsValid() || !_character->InputDelegates.IsValid()) return;
-	_character->InputDelegates->NegativeActionDelegate.ExecuteIfBound();
+	if (!InputDelegates.IsValid()) return;
+	InputDelegates->NegativeActionDelegate.ExecuteIfBound();
 }
 
 void APIPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
+	InputDelegates = MakeShared<FPIInputDelegates>();
 
 	InputComponent->BindAxis(TEXT("MoveX"), this,
 		&APIPlayerController::MoveXInputBinding);
@@ -65,14 +67,18 @@ void APIPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	_character = Cast<APICharacter>(InPawn);
+	if (_character.IsValid())
+	{
+		_character->InputDelegates = InputDelegates;
+	}
 }
 
 void APIPlayerController::OnUnPossess()
 {
 	Super::OnUnPossess();
-
-	if (!_character.IsValid()) return;
 	
+	if (!_character.IsValid()) return;
+
 	_character->InputDelegates = nullptr;
 	_character = nullptr;
 }
@@ -81,12 +87,11 @@ void APIPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (!_character.IsValid()) return;
-	if (!_character->InputDelegates.IsValid()) return;
+	if (InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
 	
 	const FRotator& cameraRotator = _cameraController->GetCameraRotator();
-	_character->InputDelegates->CameraRotatorDelegate.ExecuteIfBound(cameraRotator);
+	InputDelegates->CameraRotatorDelegate.ExecuteIfBound(cameraRotator);
 	
 	FVector inputVector(_inputY, _inputX, 0.f);
 	inputVector = cameraRotator.RotateVector(inputVector);
@@ -94,11 +99,26 @@ void APIPlayerController::Tick(float DeltaSeconds)
 	const FRotator& rotator = inputVector.Rotation();
 	const double& pitch = rotator.Pitch;
 	const double& yaw = rotator.Yaw;
-	_character->InputDelegates->DirectionPitchDelegate.ExecuteIfBound(pitch);
-	_character->InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
+	InputDelegates->DirectionPitchDelegate.ExecuteIfBound(pitch);
+	InputDelegates->DirectionYawDelegate.ExecuteIfBound(yaw);
 }
 
 void APIPlayerController::SetCameraController(APICameraController* cameraController)
 {
 	_cameraController = cameraController;
+}
+
+void APIPlayerController::SetAvailableAction(const TSharedPtr<FPIActionBase>& action)
+{
+	if (_availableAction.IsValid())
+	{
+		_availableAction->UnbindInput(*InputDelegates);
+	}
+
+	_availableAction = action;
+	
+	if (_availableAction.IsValid())
+	{
+		_availableAction->BindInput(*InputDelegates);
+	}
 }

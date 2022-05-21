@@ -29,7 +29,6 @@ protected:
 	TSharedPtr<FPISwimmingState> _swimmingState;
 	
 	TSharedPtr<FPIStateBase> _currentState;
-	FPIActionBase* _availableAction;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _rotationAcceleration = 1.f;
@@ -46,7 +45,7 @@ protected:
 	void CreateSwimmingState(const float& capsuleRadius, const float& movementAcceleration);
 
 public:
-	TUniquePtr<FPIInputDelegates> InputDelegates;
+	TSharedPtr<FPIInputDelegates> InputDelegates;
 	
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -59,8 +58,6 @@ public:
 	virtual void StopClimbing(APIClimbableTree* tree) { }
 	virtual void StartSwimming(AWaterBody* waterBody) { }
 	virtual void EndSwimming() { }
-
-	void SetAvailableAction(FPIActionBase* action);
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;

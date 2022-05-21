@@ -2,6 +2,8 @@
 
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
+#include "Actions/PISkipCutsceneAction.h"
+#include "Beings/Player/PIPlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Misc/Logging.h"
 
@@ -48,4 +50,21 @@ void UPIPlayLevelSequenceStep::ExecuteStep()
 	player->OnFinished.AddUniqueDynamic(this, &UPIPlayLevelSequenceStep::PlaybackFinished);
 	player->SetPlaybackPosition(FMovieSceneSequencePlaybackParams(0.f, EUpdatePositionMethod::Jump));
 	player->Play();
+
+	APIPlayerController* playerController = Cast<APIPlayerController>(
+		_gameInstance->GetFirstLocalPlayerController());
+
+	if (playerController == nullptr) return;
+	
+	_skipCutsceneAction = MakeShared<FPISkipCutsceneAction>(this);
+	_skipCutsceneAction->BindInput(*playerController->InputDelegates);
+	playerController->SetAvailableAction(_skipCutsceneAction);
+}
+
+void UPIPlayLevelSequenceStep::Skip() const
+{
+	ULevelSequencePlayer* player = _sequenceActor->GetSequencePlayer();
+	const FMovieSceneSequencePlaybackParams& params = FMovieSceneSequencePlaybackParams(
+		player->GetFrameDuration(), EUpdatePositionMethod::Jump);
+	player->SetPlaybackPosition(params);
 }
