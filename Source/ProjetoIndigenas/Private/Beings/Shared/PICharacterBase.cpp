@@ -7,9 +7,7 @@
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
-	if (!InputDelegates.IsValid()) return;
-	
-	FPIInputDelegates& inputDelegates = *InputDelegates;
+	FPIInputDelegates& inputDelegates = *_inputDelegates;
 
 	auto setCurrentLambda = [this, state]
 	{
@@ -19,7 +17,7 @@ void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 
 		if (_currentState.IsValid())
 		{
-			_currentState->Enter(*InputDelegates);
+			_currentState->Enter(*_inputDelegates);
 		}			
 	};
 	
@@ -99,6 +97,16 @@ void APICharacterBase::Tick(float DeltaSeconds)
 		{
 			EndSwimming();
 		}
+	}
+}
+
+void APICharacterBase::SetInputDelegates(const TSharedPtr<FPIInputDelegates>& inputDelegates)
+{
+	_inputDelegates = inputDelegates;
+
+	if (_currentState.IsValid())
+	{
+		_currentState->Enter(*_inputDelegates);
 	}
 }
 

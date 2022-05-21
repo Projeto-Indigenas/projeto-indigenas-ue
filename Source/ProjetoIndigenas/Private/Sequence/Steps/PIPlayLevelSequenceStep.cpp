@@ -57,7 +57,6 @@ void UPIPlayLevelSequenceStep::ExecuteStep()
 	if (playerController == nullptr) return;
 	
 	_skipCutsceneAction = MakeShared<FPISkipCutsceneAction>(this);
-	_skipCutsceneAction->BindInput(*playerController->InputDelegates);
 	playerController->SetAvailableAction(_skipCutsceneAction);
 }
 
