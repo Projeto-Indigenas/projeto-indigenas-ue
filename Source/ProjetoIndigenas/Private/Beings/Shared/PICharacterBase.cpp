@@ -7,8 +7,6 @@
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
-	FPIInputDelegates& inputDelegates = *_inputDelegates;
-
 	auto setCurrentLambda = [this, state]
 	{
 		_currentState = state;
