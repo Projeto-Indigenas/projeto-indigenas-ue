@@ -6,8 +6,6 @@ void APINpcCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_inputDelegates = MakeShared<FPIInputDelegates>();
-
 	CreateMovementState(
 		_capsuleRadiusForState[EPINpcAnimationState::Movement],
 		_movementAccelerationForState[EPINpcAnimationState::Movement]);
@@ -20,6 +18,11 @@ void APINpcCharacter::BeginPlay()
 void APINpcCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	if (!_inputDelegates.IsValid())
+	{
+		_inputDelegates = MakeShared<FPIInputDelegates>();
+	}
 
 	SetCurrentState(_movementState);
 }

@@ -142,12 +142,22 @@ FPISwimmingState::FPISwimmingState(APICharacterBase* character, const FPISwimmin
 	_acceleratedSwimAnimDirection.SetAcceleration(stateData.RotationAcceleration);
 }
 
-void FPISwimmingState::Enter(FPIInputDelegates& inputDelegates)
+void FPISwimmingState::BindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
 {
-	inputDelegates.VerticalInputDelegate.BindRaw(this, &FPISwimmingState::SetVerticalInput);
-	inputDelegates.CameraRotatorDelegate.BindRaw(this, &FPISwimmingState::SetCameraRotator);
-	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPISwimmingState::SetFastSwim);
-	
+	inputDelegates->VerticalInputDelegate.BindRaw(this, &FPISwimmingState::SetVerticalInput);
+	inputDelegates->CameraRotatorDelegate.BindRaw(this, &FPISwimmingState::SetCameraRotator);
+	inputDelegates->ToggleRunDelegate.BindRaw(this, &FPISwimmingState::SetFastSwim);
+}
+
+void FPISwimmingState::UnbindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
+{
+	inputDelegates->VerticalInputDelegate.Unbind();
+	inputDelegates->CameraRotatorDelegate.Unbind();
+	inputDelegates->ToggleRunDelegate.Unbind();
+}
+
+void FPISwimmingState::Enter()
+{
 	if (!_character.IsValid()) return;
 
 	UPICharacterAnimInstance* animInstance = _character->GetAnimInstance<UPICharacterAnimInstance>();
@@ -161,13 +171,9 @@ void FPISwimmingState::Enter(FPIInputDelegates& inputDelegates)
 	_character->GetCharacterMovement()->SetMovementMode(MOVE_Swimming);
 }
 
-void FPISwimmingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
+void FPISwimmingState::Exit(FPIStateOnExitDelegate onExitDelegate)
 {
-	FPISwimmingStateBase::Exit(inputDelegates, onExitDelegate);
-
-	inputDelegates.VerticalInputDelegate.Unbind();
-	inputDelegates.CameraRotatorDelegate.Unbind();
-	inputDelegates.ToggleRunDelegate.Unbind();
+	FPISwimmingStateBase::Exit(onExitDelegate);
 
 	_character->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	

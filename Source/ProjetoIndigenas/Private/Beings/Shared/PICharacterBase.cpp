@@ -11,19 +11,29 @@ void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 
 	auto setCurrentLambda = [this, state]
 	{
-		if (this == nullptr) return;
-			
 		_currentState = state;
 
-		if (_currentState.IsValid())
+		if (!_currentState.IsValid()) return;
+
+		if (_inputDelegates.IsValid())
 		{
-			_currentState->Enter(*_inputDelegates);
-		}			
+			_currentState->BindInput(_inputDelegates.ToSharedRef());
+		}
+			
+		_currentState->Enter();
 	};
 	
 	if (_currentState.IsValid())
 	{
-		_currentState->Exit(inputDelegates, FPIStateOnExitDelegate::CreateWeakLambda(this, setCurrentLambda));
+		if (_currentState->CanExit())
+		{
+			if (_inputDelegates.IsValid())
+			{
+				_currentState->UnbindInput(_inputDelegates.ToSharedRef());
+			}
+
+			_currentState->Exit(FPIStateOnExitDelegate::CreateLambda(setCurrentLambda));
+		}
 
 		return;
 	}
@@ -102,11 +112,16 @@ void APICharacterBase::Tick(float DeltaSeconds)
 
 void APICharacterBase::SetInputDelegates(const TSharedPtr<FPIInputDelegates>& inputDelegates)
 {
+	if (_currentState.IsValid())
+	{
+		_currentState->UnbindInput(inputDelegates.ToSharedRef());
+	}
+	
 	_inputDelegates = inputDelegates;
 
 	if (_currentState.IsValid())
 	{
-		_currentState->Enter(*_inputDelegates);
+		_currentState->BindInput(inputDelegates.ToSharedRef());
 	}
 }
 

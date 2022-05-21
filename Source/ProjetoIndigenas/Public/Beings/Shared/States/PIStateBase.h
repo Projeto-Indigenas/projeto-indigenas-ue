@@ -23,8 +23,14 @@ public:
 
 	virtual ~FPIStateBase() = default;
 
-	virtual void Enter(FPIInputDelegates& inputDelegates) { }
-	virtual void Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate = nullptr);
+	virtual void BindInput(const TSharedRef<FPIInputDelegates>& inputDelegates) { }
+	virtual void UnbindInput(const TSharedRef<FPIInputDelegates>& inputDelegates) { }
+	
+	virtual void Enter() { }
+	virtual void Exit(FPIStateOnExitDelegate onExitDelegate = nullptr);
+
+	virtual bool CanEnter();
+	virtual bool CanExit();
 
 	virtual void Tick(float DeltaSeconds) { }
 };
