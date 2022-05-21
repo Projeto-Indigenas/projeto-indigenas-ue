@@ -87,7 +87,7 @@ void APIPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (InputDelegates.IsValid()) return;
+	if (!InputDelegates.IsValid()) return;
 	if (!_cameraController.IsValid()) return;
 	
 	const FRotator& cameraRotator = _cameraController->GetCameraRotator();
