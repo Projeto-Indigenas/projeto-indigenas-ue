@@ -106,6 +106,9 @@ void APICharacterBase::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	// fixing Npc crash while it's missing implementation
+	if (!_swimmingState.IsValid()) return;
+	
 	_waterBodyActor = Cast<AWaterBody>(OtherActor);
 	if (_currentState == _swimmingState)
 	{
@@ -117,7 +120,7 @@ void APICharacterBase::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
 
-	if (_waterBodyActor.Get() == OtherActor)
+	if (_waterBodyActor == OtherActor)
 	{
 		_waterBodyActor = nullptr;
 	}
