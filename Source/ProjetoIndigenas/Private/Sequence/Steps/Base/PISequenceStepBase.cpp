@@ -7,11 +7,11 @@ void UPISequenceStepBase::ExecuteStep()
 	PI_LOGV_UOBJECT(Error, TEXT("ExecuteStep not implemented"))
 }
 
-void UPISequenceStepBase::Finish()
+void UPISequenceStepBase::Finish(const bool& skipped)
 {
 	if (!OnFinished.IsBound()) return;
 
-	OnFinished.Broadcast(this);
+	OnFinished.Broadcast(this, skipped);
 }
 
 void UPISequenceStepBase::BeginPlay(UGameInstance* gameInstance)

@@ -19,7 +19,7 @@ void UPIPlayLevelSequenceStep::PlaybackFinished()
 		player->OnFinished.RemoveDynamic(this, &UPIPlayLevelSequenceStep::PlaybackFinished);
 	}
 
-	Finish();
+	Finish(skipped);
 }
 
 void UPIPlayLevelSequenceStep::ExecuteStep()
@@ -46,6 +46,7 @@ void UPIPlayLevelSequenceStep::ExecuteStep()
 			GetWorld()->GetFirstPlayerController()->SetViewTarget(cameraComponent->GetOwner());
 		}
 	}
+
 	
 	player->OnFinished.AddUniqueDynamic(this, &UPIPlayLevelSequenceStep::PlaybackFinished);
 	player->SetPlaybackPosition(FMovieSceneSequencePlaybackParams(0.f, EUpdatePositionMethod::Jump));
@@ -60,10 +61,12 @@ void UPIPlayLevelSequenceStep::ExecuteStep()
 	playerController->SetAvailableAction(_skipCutsceneAction);
 }
 
-void UPIPlayLevelSequenceStep::Skip() const
+void UPIPlayLevelSequenceStep::Skip()
 {
+	skipped = true;
+	
 	ULevelSequencePlayer* player = _sequenceActor->GetSequencePlayer();
 	const FMovieSceneSequencePlaybackParams& params = FMovieSceneSequencePlaybackParams(
-		FMath::Max(player->GetFrameDuration() - 2, 0), EUpdatePositionMethod::Jump);
+		FMath::Max(player->GetFrameDuration(), 0), EUpdatePositionMethod::Jump);
 	player->SetPlaybackPosition(params);
 }

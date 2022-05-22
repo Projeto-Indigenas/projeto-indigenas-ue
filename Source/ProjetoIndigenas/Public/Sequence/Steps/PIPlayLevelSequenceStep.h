@@ -13,6 +13,8 @@ class PROJETOINDIGENAS_API UPIPlayLevelSequenceStep : public UPISequenceStepBase
 {
 	GENERATED_BODY()
 
+	bool skipped;
+
 	TSharedPtr<FPISkipCutsceneAction> _skipCutsceneAction;
 	
 	UFUNCTION()
@@ -31,5 +33,5 @@ protected:
 public:
 	virtual void ExecuteStep() override;
 
-	void Skip() const;
+	void Skip();
 };
