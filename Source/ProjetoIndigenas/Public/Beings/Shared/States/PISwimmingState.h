@@ -91,8 +91,11 @@ public:
 	
 	FPISwimmingState(APICharacterBase* character, const FPISwimmingStateData& stateData);
 
-	virtual void Enter(FPIInputDelegates& inputDelegates) override;
-	virtual void Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate) override;
+	virtual void BindInput(const TSharedRef<FPIInputDelegates>& inputDelegates) override;
+	virtual void UnbindInput(const TSharedRef<FPIInputDelegates>& inputDelegates) override;
+	
+	virtual void Enter() override;
+	virtual void Exit(FPIStateOnExitDelegate onExitDelegate) override;
 
 	virtual void Tick(float DeltaSeconds) override;
 

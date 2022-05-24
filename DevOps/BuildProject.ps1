@@ -44,7 +44,7 @@ if ([string]::IsNullOrEmpty($platform))
 
 RunBuildTool(@($target, $configuration, $platform) + $params)
 
-if ($? && $args.Contains("-open"))
+if ($? -and $args.Contains("-open"))
 {
     .\DevOps\OpenProject.ps1
 }

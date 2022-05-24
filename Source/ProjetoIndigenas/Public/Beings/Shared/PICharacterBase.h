@@ -22,14 +22,14 @@ class PROJETOINDIGENAS_API APICharacterBase : public ACharacter
 	GENERATED_BODY()
 
 	TWeakObjectPtr<AWaterBody> _waterBodyActor;
-	
+
 protected:
 	TSharedPtr<FPIMovementState> _movementState;
 	TSharedPtr<FPIClimbingState> _climbingState;
 	TSharedPtr<FPISwimmingState> _swimmingState;
 	
 	TSharedPtr<FPIStateBase> _currentState;
-	FPIActionBase* _availableAction;
+	TSharedPtr<FPIInputDelegates> _inputDelegates;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float _rotationAcceleration = 1.f;
@@ -46,8 +46,6 @@ protected:
 	void CreateSwimmingState(const float& capsuleRadius, const float& movementAcceleration);
 
 public:
-	TUniquePtr<FPIInputDelegates> InputDelegates;
-	
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void SetInputX(float x) { }
@@ -59,8 +57,7 @@ public:
 	virtual void StopClimbing(APIClimbableTree* tree) { }
 	virtual void StartSwimming(AWaterBody* waterBody) { }
 	virtual void EndSwimming() { }
-
-	void SetAvailableAction(FPIActionBase* action);
+	virtual void SetInputDelegates(const TSharedPtr<FPIInputDelegates>& inputDelegates);
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;

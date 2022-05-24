@@ -7,23 +7,31 @@
 
 void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 {
-	FPIInputDelegates& inputDelegates = *InputDelegates;
-
 	auto setCurrentLambda = [this, state]
 	{
-		if (this == nullptr) return;
-			
 		_currentState = state;
 
-		if (_currentState.IsValid())
+		if (!_currentState.IsValid()) return;
+
+		if (_inputDelegates.IsValid())
 		{
-			_currentState->Enter(*InputDelegates);
-		}			
+			_currentState->BindInput(_inputDelegates.ToSharedRef());
+		}
+			
+		_currentState->Enter();
 	};
 	
 	if (_currentState.IsValid())
 	{
-		_currentState->Exit(inputDelegates, FPIStateOnExitDelegate::CreateWeakLambda(this, setCurrentLambda));
+		if (_currentState->CanExit())
+		{
+			if (_inputDelegates.IsValid())
+			{
+				_currentState->UnbindInput(_inputDelegates.ToSharedRef());
+			}
+
+			_currentState->Exit(FPIStateOnExitDelegate::CreateLambda(setCurrentLambda));
+		}
 
 		return;
 	}
@@ -34,8 +42,6 @@ void APICharacterBase::SetCurrentState(const TSharedPtr<FPIStateBase>& state)
 void APICharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InputDelegates = MakeUnique<FPIInputDelegates>();
 }
 
 void APICharacterBase::CreateMovementState(const float& capsuleRadius, const float& movementAcceleration)
@@ -102,18 +108,18 @@ void APICharacterBase::Tick(float DeltaSeconds)
 	}
 }
 
-void APICharacterBase::SetAvailableAction(FPIActionBase* action)
+void APICharacterBase::SetInputDelegates(const TSharedPtr<FPIInputDelegates>& inputDelegates)
 {
-	if (_availableAction != nullptr)
+	if (_currentState.IsValid())
 	{
-		_availableAction->UnbindInput(*InputDelegates);
+		_currentState->UnbindInput(inputDelegates.ToSharedRef());
 	}
-
-	_availableAction = action;
 	
-	if (_availableAction != nullptr)
+	_inputDelegates = inputDelegates;
+
+	if (_currentState.IsValid())
 	{
-		_availableAction->BindInput(*InputDelegates);
+		_currentState->BindInput(inputDelegates.ToSharedRef());
 	}
 }
 
@@ -121,6 +127,9 @@ void APICharacterBase::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	// fixing Npc crash while it's missing implementation
+	if (!_swimmingState.IsValid()) return;
+	
 	_waterBodyActor = Cast<AWaterBody>(OtherActor);
 	if (_currentState == _swimmingState)
 	{
@@ -132,7 +141,7 @@ void APICharacterBase::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
 
-	if (_waterBodyActor.Get() == OtherActor)
+	if (_waterBodyActor == OtherActor)
 	{
 		_waterBodyActor = nullptr;
 	}

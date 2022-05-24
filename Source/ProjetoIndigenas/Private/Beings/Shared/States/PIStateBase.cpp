@@ -18,9 +18,19 @@ FPIStateBase::FPIStateBase(APICharacterBase* character)
 	_capsuleComponent = _character->GetComponent<UCapsuleComponent>();
 }
 
-void FPIStateBase::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
+void FPIStateBase::Exit(FPIStateOnExitDelegate onExitDelegate)
 {
 	_onExitDelegate = onExitDelegate;
+}
+
+bool FPIStateBase::CanEnter()
+{
+	return true;
+}
+
+bool FPIStateBase::CanExit()
+{
+	return true;
 }
 
 template <typename TAnimInstance>

@@ -79,14 +79,26 @@ FPIMovementState::FPIMovementState(APICharacterBase* character, const FPIMovemen
 	_acceleratedCapsuleRadius.Acceleration = stateData.CapsuleRadiusAcceleration;
 }
 
-void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
+void FPIMovementState::BindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
 {
-	inputDelegates.HorizontalInputDelegate.BindRaw(this, &FPIMovementState::SetXInput);
-	inputDelegates.VerticalInputDelegate.BindRaw(this, &FPIMovementState::SetYInput);
-	inputDelegates.DirectionYawDelegate.BindRaw(this, &FPIMovementState::SetDirectionYaw);
-	inputDelegates.ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
-	inputDelegates.DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
+	inputDelegates->HorizontalInputDelegate.BindRaw(this, &FPIMovementState::SetXInput);
+	inputDelegates->VerticalInputDelegate.BindRaw(this, &FPIMovementState::SetYInput);
+	inputDelegates->DirectionYawDelegate.BindRaw(this, &FPIMovementState::SetDirectionYaw);
+	inputDelegates->ToggleRunDelegate.BindRaw(this, &FPIMovementState::ToggleRun);
+	inputDelegates->DodgeDelegate.BindRaw(this, &FPIMovementState::Dodge);
+}
 
+void FPIMovementState::UnbindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
+{
+	inputDelegates->HorizontalInputDelegate.Unbind();
+	inputDelegates->VerticalInputDelegate.Unbind();
+	inputDelegates->DirectionYawDelegate.Unbind();
+	inputDelegates->ToggleRunDelegate.Unbind();
+	inputDelegates->DodgeDelegate.Unbind();
+}
+
+void FPIMovementState::Enter()
+{
 	UPIAnimInstanceBase* animInstance = GetAnimInstance();
 	if (animInstance != nullptr)
 	{
@@ -105,15 +117,9 @@ void FPIMovementState::Enter(FPIInputDelegates& inputDelegates)
 	}
 }
 
-void FPIMovementState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
+void FPIMovementState::Exit(FPIStateOnExitDelegate onExitDelegate)
 {
-	FPIMovementStateBase::Exit(inputDelegates, onExitDelegate);
-	
-	inputDelegates.HorizontalInputDelegate.Unbind();
-	inputDelegates.VerticalInputDelegate.Unbind();
-	inputDelegates.DirectionYawDelegate.Unbind();
-	inputDelegates.ToggleRunDelegate.Unbind();
-	inputDelegates.DodgeDelegate.Unbind();
+	FPIMovementStateBase::Exit(onExitDelegate);
 
 	UPIAnimInstanceBase* animInstance = GetAnimInstance();
 	if (animInstance != nullptr)
