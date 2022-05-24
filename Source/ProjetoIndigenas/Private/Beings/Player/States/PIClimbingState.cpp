@@ -138,10 +138,18 @@ FPIClimbingState::FPIClimbingState(APICharacterBase* character, const FPIClimbin
 	_acceleratedCapsuleRadius.Acceleration = stateData.CapsuleRadiusAcceleration;
 }
 
-void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
+void FPIClimbingState::BindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
 {
-	inputDelegates.VerticalInputDelegate.BindRaw(this, &FPIClimbingState::SetInputY);
+	inputDelegates->VerticalInputDelegate.BindRaw(this, &FPIClimbingState::SetInputY);
+}
 
+void FPIClimbingState::UnbindInput(const TSharedRef<FPIInputDelegates>& inputDelegates)
+{
+	inputDelegates->VerticalInputDelegate.Unbind();
+}
+
+void FPIClimbingState::Enter()
+{
 	_inputValue = 0.f;
 	_currentState = EPIClimbingState::StartClimbing;
 
@@ -180,13 +188,11 @@ void FPIClimbingState::Enter(FPIInputDelegates& inputDelegates)
 	SetTreeCameraCollision(ECR_Ignore);
 }
 
-void FPIClimbingState::Exit(FPIInputDelegates& inputDelegates, FPIStateOnExitDelegate onExitDelegate)
+void FPIClimbingState::Exit(FPIStateOnExitDelegate onExitDelegate)
 {
-	FPIClimbingStateBase::Exit(inputDelegates, onExitDelegate);
+	FPIClimbingStateBase::Exit(onExitDelegate);
 
 	if (!_isAtBottom) return;
-	
-	inputDelegates.VerticalInputDelegate.Unbind();
 	
 	_inputValue = 0.f;
 	_currentState = EPIClimbingState::EndClimbing;

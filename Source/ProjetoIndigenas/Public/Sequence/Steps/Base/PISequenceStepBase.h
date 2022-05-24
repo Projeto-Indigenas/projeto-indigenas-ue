@@ -3,7 +3,8 @@
 #include "CoreMinimal.h"
 #include "PISequenceStepBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPISequenceStepFinishedDelegate, class UPISequenceStepBase*, step);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FPISequenceStepFinishedDelegate,
+    class UPISequenceStepBase*, step, bool, skipped);
 
 UCLASS(Abstract, BlueprintType)
 class PROJETOINDIGENAS_API UPISequenceStepBase : public UObject
@@ -20,7 +21,7 @@ protected:
     float _delay;
     
     virtual void ExecuteStep();
-    virtual void Finish();
+    virtual void Finish(const bool& skipped = false);
     
 public:
     UPROPERTY(BlueprintAssignable)

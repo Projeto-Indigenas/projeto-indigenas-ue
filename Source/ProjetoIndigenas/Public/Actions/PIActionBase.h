@@ -11,7 +11,7 @@ public:
 	virtual void BindInput(FPIInputDelegates& inputDelegates);
 	virtual void UnbindInput(FPIInputDelegates& inputDelegates);
 	
-	virtual void Execute() = 0;
+	virtual void Execute();
 };
 
 class PROJETOINDIGENAS_API FPICancelableActionBase : public FPIActionBase
@@ -20,5 +20,5 @@ public:
 	virtual void BindInput(FPIInputDelegates& inputDelegates) override;
 	virtual void UnbindInput(FPIInputDelegates& inputDelegates) override;
 	
-	virtual void Cancel() = 0;
+	virtual void Cancel();
 };

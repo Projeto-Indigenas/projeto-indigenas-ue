@@ -73,7 +73,7 @@ void UPIWalkPathStep::ExecuteStep()
 	SetupExecutorComponent(_targetCharacter.Get());
 }
 
-void UPIWalkPathStep::Finish()
+void UPIWalkPathStep::Finish(const bool& skipped)
 {
 	DestroyExecutorComponent();
 	

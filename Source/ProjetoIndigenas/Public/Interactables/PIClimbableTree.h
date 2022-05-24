@@ -1,16 +1,17 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Actions/PIClimbTreeAction.h"
-#include "Beings/Player/States/PIClimbingState.h"
 #include "PIClimbableTree.generated.h"
+
+enum class EPIClimbingState : uint8;
+class FPIClimbTreeAction;
 
 UCLASS()
 class PROJETOINDIGENAS_API APIClimbableTree : public AActor
 {
 	GENERATED_BODY()
 
-	TUniquePtr<FPIClimbTreeAction> _action;
+	TSharedPtr<FPIClimbTreeAction> _action;
 	TArray<FVector> _path;
 	
 protected:
@@ -26,6 +27,6 @@ protected:
 	void OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const;
 
 public:
-	FORCEINLINE const TMap<EPIClimbingState, float>& GetPositionRadiusMap() const { return _positionRadiusMap; }
-	FORCEINLINE const TArray<FVector>& GetPath() { return _path; }
+	FORCEINLINE const TMap<EPIClimbingState, float>& GetPositionRadiusMap() const;
+	FORCEINLINE const TArray<FVector>& GetPath();
 };

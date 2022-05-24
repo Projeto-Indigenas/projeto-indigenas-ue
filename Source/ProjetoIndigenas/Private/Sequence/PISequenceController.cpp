@@ -11,7 +11,7 @@ bool APISequenceController::NextIndex()
 	return true;
 }
 
-void APISequenceController::StepFinished(UPISequenceStepBase* step)
+void APISequenceController::StepFinished(UPISequenceStepBase* step, bool skipped)
 {
 	step->OnFinished.RemoveDynamic(this, &APISequenceController::StepFinished);
 

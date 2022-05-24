@@ -30,7 +30,7 @@ protected:
 	bool _cycleDestinations = false;
 	
 	virtual void ExecuteStep() override;
-	virtual void Finish() override;
+	virtual void Finish(const bool& skipped = false) override;
 	
 public:
 	virtual void BeginPlay(UGameInstance* gameInstance) override;

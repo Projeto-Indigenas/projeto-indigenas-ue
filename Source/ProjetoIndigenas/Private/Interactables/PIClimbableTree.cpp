@@ -1,12 +1,14 @@
 ﻿#include "Interactables/PIClimbableTree.h"
 
+#include "Actions/PIClimbTreeAction.h"
+#include "Beings/Player/PIPlayerController.h"
 #include "Beings/Shared/PICharacterBase.h"
 
 void APIClimbableTree::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_action = MakeUnique<FPIClimbTreeAction>(this);
+	_action = MakeShared<FPIClimbTreeAction>(this);
 
 	const UMeshComponent* meshComponent = Cast<UMeshComponent>(GetComponentByClass(UMeshComponent::StaticClass()));
 
@@ -22,14 +24,28 @@ void APIClimbableTree::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActo
 {
 	APICharacterBase* targetCharacter = Cast<APICharacterBase>(OtherActor);
 	if (targetCharacter == nullptr) return;
+	APIPlayerController* playerController = Cast<APIPlayerController>(targetCharacter->GetController());
+	if (playerController == nullptr) return;
 	_action->TargetCharacter = targetCharacter;
-	targetCharacter->SetAvailableAction(_action.Get());
+	playerController->SetAvailableAction(_action);
 }
 
 void APIClimbableTree::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor) const
 {
-	APICharacterBase* baseCharacter = Cast<APICharacterBase>(OtherActor);
+	const APICharacterBase* baseCharacter = Cast<APICharacterBase>(OtherActor);
 	if (baseCharacter == nullptr) return;
+	APIPlayerController* playerController = Cast<APIPlayerController>(baseCharacter->GetController());
+	if (playerController == nullptr) return;
 	_action->TargetCharacter = nullptr;
-	baseCharacter->SetAvailableAction(nullptr);
+	playerController->SetAvailableAction(nullptr);
+}
+
+const TMap<EPIClimbingState, float>& APIClimbableTree::GetPositionRadiusMap() const
+{
+	return _positionRadiusMap;
+}
+
+const TArray<FVector>& APIClimbableTree::GetPath()
+{
+	return _path;
 }
