@@ -11,8 +11,8 @@
 	{
 		"MajorVersion": 5,
 		"MinorVersion": 0,
-		"PatchVersion": 1,
-		"Changelist": 19764885,
+		"PatchVersion": 2,
+		"Changelist": 20280985,
 		"CompatibleChangelist": 19505902,
 		"IsLicenseeVersion": 0,
 		"IsPromotedBuild": 0,
@@ -27,6 +27,118 @@
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/AgentInterface.pdb",
 			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_atomic-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_chrono-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_iostreams-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_program_options-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_python39-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_regex-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_system-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_thread-vc142-mt-x64-1_70.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/D3D12/D3D12Core.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/D3D12/d3d12SDKLayers.dll",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSPlatformEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSRuntimeSettings.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSRuntimeSettings.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSTargetPlatform.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-TVOSTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-TVOSTargetPlatform.pdb",
+			"Type": "SymbolFile"
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/oo2tex_win64_2.9.5.dll",
@@ -1033,6 +1145,14 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-FileUtilities.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-FileUtilities.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Foliage.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1198,6 +1318,22 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HierarchicalLODUtilities.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HoloLensPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HoloLensPlatformEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HoloLensTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HoloLensTargetPlatform.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -1406,6 +1542,14 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LandscapeEditorUtilities.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LaunchDaemonMessages.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LaunchDaemonMessages.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -1750,6 +1894,14 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MessagingRpc.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MetalShaderFormat.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MetalShaderFormat.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -2769,11 +2921,27 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -3135,6 +3303,10 @@
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Zen.pdb",
 			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/WindowsMRAssetConverter.exe",
+			"Type": "RequiredResource"
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Binaries/Win64/UnrealEditor.modules",
@@ -4305,6 +4477,82 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ModelProto.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ModelProto.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ModelProtoFileReader.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ModelProtoFileReader.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInference.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInference.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceProfiling.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceProfiling.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceQA.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceQA.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceShaders.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-NeuralNetworkInferenceShaders.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ONNXRuntime.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ONNXRuntime.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ThirdPartyHelperAndDLLLoader.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Binaries/Win64/UnrealEditor-ThirdPartyHelperAndDLLLoader.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Experimental/OpenImageDenoise/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
@@ -4510,6 +4758,90 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Importers/AlembicImporter/Binaries/Win64/UnrealEditor-AlembicLibrary.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-AutoRigService.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-AutoRigService.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanCore.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanCore.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanDNAUtils.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanDNAUtils.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanFaceContourTracker.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanFaceContourTracker.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanFrameData.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanFrameData.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanIdentity.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanIdentity.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanImageViewer.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanImageViewer.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanMeshTracker.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanMeshTracker.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanPipeline.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-MetaHumanPipeline.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-RLibV.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/Binaries/Win64/UnrealEditor-RLibV.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -5001,6 +5333,50 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/Binaries/Win64/UnrealEditor-AppleARKit.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/Binaries/Win64/UnrealEditor-AppleARKit.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/Binaries/Win64/UnrealEditor-AppleARKitPoseTrackingLiveLink.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/Binaries/Win64/UnrealEditor-AppleARKitPoseTrackingLiveLink.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKitFaceSupport/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKitFaceSupport/Binaries/Win64/UnrealEditor-AppleARKitFaceSupport.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKitFaceSupport/Binaries/Win64/UnrealEditor-AppleARKitFaceSupport.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/ARUtilities/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/ARUtilities/Binaries/Win64/UnrealEditor-ARUtilities.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/ARUtilities/Binaries/Win64/UnrealEditor-ARUtilities.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Runtime/ArchVisCharacter/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
@@ -5313,6 +5689,18 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/OpenCV/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/OpenCV/Binaries/Win64/UnrealEditor-OpenCVHelper.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/OpenCV/Binaries/Win64/UnrealEditor-OpenCVHelper.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Runtime/ProceduralMeshComponent/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
@@ -5542,6 +5930,10 @@
 		}
 	],
 	"RuntimeDependencies": [
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/ARM/Win64/astcenc-sse2.exe",
+			"Type": "NonUFS"
+		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/DbgHelp/dbghelp.dll",
 			"Type": "NonUFS"
@@ -23459,6 +23851,46 @@
 			"Type": "DebugNonUFS"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_atomic-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_chrono-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_iostreams-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_program_options-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_python39-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_regex-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_system-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/boost_thread-vc142-mt-x64-1_70.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/D3D12/D3D12Core.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/D3D12/d3d12SDKLayers.dll",
+			"Type": "NonUFS"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/EpicWebHelper.exe",
 			"Type": "NonUFS"
 		},
@@ -23472,6 +23904,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/tbb12.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/WindowsMRAssetConverter.exe",
 			"Type": "NonUFS"
 		},
 		{
@@ -25811,6 +26247,14 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/NeuralNetworkInference.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/NNI/Source/ThirdParty/DirectML_1_8_0/bin/Win64/DirectML.dll",
+			"Type": "NonUFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Experimental/OpenImageDenoise/OpenImageDenoise.uplugin",
 			"Type": "UFS"
 		},
@@ -25852,6 +26296,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Importers/AlembicImporter/AlembicImporter.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Marketplace/MetaHuman/MetaHuman.uplugin",
 			"Type": "UFS"
 		},
 		{
@@ -25967,6 +26415,18 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKit/AppleARKit.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/AppleAR/AppleARKitFaceSupport/AppleARKitFaceSupport.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/AR/ARUtilities/ARUtilities.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Runtime/ArchVisCharacter/ArchVisCharacter.uplugin",
 			"Type": "UFS"
 		},
@@ -26028,6 +26488,14 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Runtime/MobilePatchingUtils/MobilePatchingUtils.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/OpenCV/Binaries/ThirdParty/Win64/opencv_world455.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/OpenCV/OpenCV.uplugin",
 			"Type": "UFS"
 		},
 		{
