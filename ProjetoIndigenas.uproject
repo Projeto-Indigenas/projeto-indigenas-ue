@@ -51,6 +51,10 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "MetaHuman",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
